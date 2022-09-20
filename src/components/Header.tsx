@@ -18,13 +18,12 @@ const Header = (props: { isLoggedIn: boolean }) => {
       setError(JSON.stringify(e));
     }
   };
-  
+
   let buttons;
   if (props.isLoggedIn) {
     buttons = (
       <>
         <button onClick={() => navigate('/profile')}>Profile</button>
-        {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
         <button onClick={handleLogout}>Logout</button>
       </>
     );

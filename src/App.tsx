@@ -2,7 +2,8 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header';
-import Home from './components/Home';
+import LoggedInHome from './components/LoggedInHome';
+import LoggedOutHome from './components/LoggedOutHome';
 import Login from './components/Login';
 import NotFound from './components/NotFound';
 import Profile from './components/Profile';
@@ -19,11 +20,17 @@ const App = () => {
     <Route path="/profile" element={<Navigate to="/login" replace />} />
   );
 
+  const homeRoute = isLoggedIn ? (
+    <Route path="/" element={<LoggedInHome />} />
+  ) : (
+    <Route path="/" element={<LoggedOutHome />} />
+  );
+
   return (
     <div>
       <Header isLoggedIn={isLoggedIn} />
       <Routes>
-        <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+        {homeRoute}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         {profileRoute}

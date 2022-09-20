@@ -26,7 +26,6 @@ const Login = () => {
   return (
     <div>
       <h1>sign in page</h1>
-      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit}>
         <div>
           <input
