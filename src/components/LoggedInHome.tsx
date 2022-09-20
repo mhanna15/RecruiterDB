@@ -1,7 +1,9 @@
+import { Autocomplete, TextField } from '@mui/material';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { db } from '../firebase';
+import Recruiter from './Recruiter';
 
 const mockRecruiters = [
   {
@@ -41,12 +43,18 @@ const mockRecruiters = [
   },
 ];
 
-interface Recruiter {
+export interface RecruiterType {
   name: string;
   email: string;
   company: string;
   title: string;
   linkedIn: string;
+}
+
+interface Company {
+  name: string;
+  domain: string;
+  logo: string;
 }
 
 const LoggedInHome = () => {
@@ -56,7 +64,10 @@ const LoggedInHome = () => {
   const [title, setTitle] = useState<string>('');
   const [linkedIn, setLinkedIn] = useState<string>('');
   const [message, setMessage] = useState<string>('');
-  const [recruiters, setRecruiters] = useState<Recruiter[]>([]);
+  const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
+
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
 
   const clearForm = () => {
     setName('');
@@ -78,26 +89,39 @@ const LoggedInHome = () => {
     clearForm();
   };
 
+  const fetchCompanyOptions = (input: string) => {
+    console.log('companies fetched');
+    if (input !== '') {
+      fetch(
+        `https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`
+      )
+        .then(async (response) => await response.json())
+        .then((data) => setCompanies([...data]))
+        .catch((e) => console.log(e));
+    }
+  };
+
   useEffect(() => {
     const getRecruiters = async () => {
-      // const q = query(collection(db, 'recruiters'));
-      // const querySnapshot = await getDocs(q);
-      // querySnapshot.forEach((doc) => {
-      //   const recruiter = doc.data();
-      //   setRecruiters((oldArray) => [
-      //     ...oldArray,
-      //     {
-      //       name: recruiter.name,
-      //       email: recruiter.email,
-      //       company: recruiter.company,
-      //       title: recruiter.title,
-      //       linkedIn: recruiter.linkedIn,
-      //     },
-      //   ]);
-      // });
-      setTimeout(() => {
-        setRecruiters(mockRecruiters);
-      }, 200);
+      const q = query(collection(db, 'recruiters'));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const recruiter = doc.data();
+        setRecruiters((oldArray) => [
+          ...oldArray,
+          {
+            name: recruiter.name,
+            email: recruiter.email,
+            company: recruiter.company,
+            title: recruiter.title,
+            linkedIn: recruiter.linkedIn,
+          },
+        ]);
+      });
+      // setTimeout(() => {
+      //   setRecruiters(mockRecruiters);
+      //   console.log('recruiters fetched');
+      // }, 200);
     };
     getRecruiters().catch((e) => setMessage(JSON.stringify(e)));
   }, []);
@@ -117,7 +141,7 @@ const LoggedInHome = () => {
     await addRecruiter();
   };
 
-  console.log(recruiters);
+  console.log('page rerendered');
 
   return (
     <div>
@@ -130,13 +154,32 @@ const LoggedInHome = () => {
           required
           value={name}
         />
-        <input
-          onChange={(e) => {
-            setCompany(e.target.value);
+        <Autocomplete
+          disablePortal
+          options={companies}
+          inputValue={inputValue}
+          onChange={(e, value) => {
+            if (value !== null) {
+              setCompany(value.name);
+            }
           }}
-          placeholder="company"
-          required
-          value={company}
+          getOptionLabel={(option) => option.name}
+          isOptionEqualToValue={(option, value) => option.name === value.name}
+          sx={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Company" />}
+          renderOption={(props, option) => (
+            <li {...props}>
+              <p>
+                {option.name}:{' '}
+                <img src={option.logo} height="20px" width="20px" />
+              </p>
+            </li>
+          )}
+          // need to fix page rerendering
+          onInputChange={(_e, newValue) => {
+            setInputValue(newValue);
+            fetchCompanyOptions(newValue);
+          }}
         />
         <input
           onChange={(e) => {
@@ -164,15 +207,12 @@ const LoggedInHome = () => {
         />
         <button>Add recruiter!</button>
       </form>
-      {recruiters.map((recruiter) => (
+      {/* {recruiters.map((recruiter) => (
         <div key={recruiter.name}>
-          <p>name: {recruiter.name}</p>
-          <p>company: {recruiter.company}</p>
-          <p>email: {recruiter.email}</p>
-          <p>title: {recruiter.title}</p>
-          <p>linkedIn: {recruiter.linkedIn}</p>
+          <Recruiter recruiter={recruiter} />
         </div>
-      ))}
+      ))} */}
+      <Recruiter recruiters={recruiters} />
       {message}
     </div>
   );
