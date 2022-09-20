@@ -1,27 +1,30 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import Header from './components/Header';
+import Home from './components/Home';
+import Login from './components/Login';
 import NotFound from './components/NotFound';
 import Profile from './components/Profile';
-import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
 import { useAuth } from './context/AuthContext';
 
 const App = () => {
   const { currentUser } = useAuth();
+  const isLoggedIn = currentUser !== null;
 
-  const profileRoute =
-    currentUser !== null ? (
-      <Route path="/profile" element={<Profile />} />
-    ) : (
-      <Route path="/profile" element={<Navigate to="/" replace />} />
-    );
+  const profileRoute = isLoggedIn ? (
+    <Route path="/profile" element={<Profile />} />
+  ) : (
+    <Route path="/profile" element={<Navigate to="/login" replace />} />
+  );
 
   return (
     <div>
-      <h1>Firebase auth and context</h1>
+      <Header isLoggedIn={isLoggedIn} />
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         {profileRoute}
         <Route path="*" element={<NotFound />} />

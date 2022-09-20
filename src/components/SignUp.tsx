@@ -1,23 +1,31 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../context/AuthContext';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const { signup } = useAuth();
 
-  const handleSubmit = (e: any) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
-    signup(email, password);
+    try {
+      await signup(email, password);
+      navigate('/');
+    } catch (e: any) {
+      setError(JSON.stringify(e));
+    }
   };
 
   return (
     <div>
       <h1>sign up page</h1>
-      <Link to="/">sign in</Link>
+      {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -31,6 +39,7 @@ const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button>sign up</button>
+          {error}
         </div>
       </form>
     </div>
