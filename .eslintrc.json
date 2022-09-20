@@ -10,16 +10,17 @@
   ],
   "overrides": [],
   "parserOptions": {
-    "project": ["./tsconfig.json"],
     "ecmaVersion": "latest",
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
   },
   "plugins": ["react", "simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "simple-import-sort/imports": "warn",
-    "simple-import-sort/exports": "warn"
+    "simple-import-sort/exports": "warn",
+    "react/prop-types": "off"
   },
   "settings": {
     "react": {

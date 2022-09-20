@@ -1,5 +1,25 @@
-const Profile = () => {
-    console.log("hi")
-}
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default Profile
+import { useAuth } from '../context/AuthContext';
+
+const Profile = () => {
+  const { logout, currentUser } = useAuth();
+
+  const navigate = useNavigate();
+
+  const handleClick = (e: any) => {
+    e.preventDefault();
+    logout();
+    navigate('/');
+  };
+  return (
+    <div>
+      <h1>profile page</h1>
+      <p>email: {currentUser.email}</p>
+      <button onClick={handleClick}>logout</button>
+    </div>
+  );
+};
+
+export default Profile;
