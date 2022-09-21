@@ -54,7 +54,7 @@ const LoggedInHome = () => {
 
   useEffect(() => {
     const getRecruiters = async () => {
-      console.log('fetching recruiters');
+      console.log('fetching recruiters from firebase');
       const q = query(collection(db, 'recruiters'));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {

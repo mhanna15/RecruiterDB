@@ -25,12 +25,12 @@ const Companies = () => {
 
   useEffect(() => {
     const getCompanies = async () => {
+      console.log('fetching companies from firebase')
       const q = query(collection(db, 'companies'));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const companyName = doc.id;
         const data = doc.data();
-        console.log(data);
         setCompanies((oldArray) => [...oldArray, companyName]);
         setCompaniesAndRecruiters((oldArray) => ({
           ...oldArray,
@@ -39,7 +39,6 @@ const Companies = () => {
       });
       // setTimeout(() => {
       //   setcompanies(mockcompanies);
-      //   console.log('companies fetched');
       // }, 200);
     };
     getCompanies().catch((e) => setMessage(JSON.stringify(e)));
