@@ -1,10 +1,10 @@
+import './Header.css';
+
+import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Dialog from '@mui/material/Dialog';
 
 import { useAuth } from '../../context/AuthContext';
-
-import './Header.css';
 
 const Header = (props: { isLoggedIn: boolean }) => {
   const [error, setError] = useState<string>('');

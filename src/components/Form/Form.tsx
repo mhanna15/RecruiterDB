@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
 import { Autocomplete, TextField } from '@mui/material';
-
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
+import React, { useCallback, useEffect, useState } from 'react';
 
+import { db } from '../../firebase';
 import { Company, RecruiterType } from '../../interface';
 
 const Form = () => {

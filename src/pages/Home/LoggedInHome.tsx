@@ -1,15 +1,14 @@
+import './Home.css';
+
 import { Autocomplete, TextField } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import Dialog from '@mui/material/Dialog';
-import { Company, RecruiterType } from '../../interface';
-
-import { db } from '../../firebase';
-import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
 import Form from '../../components/Form/Form';
-
-import './Home.css';
+import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
+import { db } from '../../firebase';
+import { Company, RecruiterType } from '../../interface';
 
 const mockRecruiters = [
   {
@@ -56,6 +55,7 @@ const LoggedInHome = () => {
 
   useEffect(() => {
     const getRecruiters = async () => {
+      console.log('fetching recruiters')
       const q = query(collection(db, 'recruiters'));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
