@@ -1,9 +1,18 @@
 import { Autocomplete, TextField } from '@mui/material';
-import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+import {
+  arrayUnion,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { db } from '../firebase';
-import Recruiter from './Recruiter';
+import RecruiterTable from './RecruiterTable';
 
 const mockRecruiters = [
   {
@@ -51,7 +60,7 @@ export interface RecruiterType {
   linkedIn: string;
 }
 
-interface Company {
+export interface Company {
   name: string;
   domain: string;
   logo: string;
@@ -69,12 +78,15 @@ const LoggedInHome = () => {
   const [companies, setCompanies] = useState<Company[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
 
+  console.log(inputValue);
+
   const clearForm = () => {
     setName('');
     setCompany('');
     setEmail('');
     setTitle('');
     setLinkedIn('');
+    setInputValue('');
   };
 
   const addRecruiter = async () => {
@@ -85,8 +97,18 @@ const LoggedInHome = () => {
       email,
       title,
       linkedIn,
-    }).then(() => setMessage('success!'));
-    clearForm();
+    })
+      .then(async () => {
+        const companyRef = doc(db, 'companies', company);
+        const companySnap = await getDoc(companyRef);
+        if (companySnap.exists()) {
+          await updateDoc(companyRef, { recruiters: arrayUnion(name) });
+        } else {
+          await setDoc(companyRef, { recruiters: [name] });
+        }
+      })
+      .then(() => setMessage('success!'))
+      .catch((e) => setMessage(JSON.stringify(e)));
   };
 
   const fetchCompanyOptions = (input: string) => {
@@ -139,6 +161,7 @@ const LoggedInHome = () => {
       },
     ]);
     await addRecruiter();
+    clearForm();
   };
 
   console.log('page rerendered');
@@ -212,7 +235,7 @@ const LoggedInHome = () => {
           <Recruiter recruiter={recruiter} />
         </div>
       ))} */}
-      <Recruiter recruiters={recruiters} />
+      <RecruiterTable recruiters={recruiters} />
       {message}
     </div>
   );

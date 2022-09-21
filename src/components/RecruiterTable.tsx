@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 
 import { RecruiterType } from './LoggedInHome';
 
-const Recruiter = (props: { recruiters: RecruiterType[] }) => {
+const RecruiterTable = (props: { recruiters: RecruiterType[] }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>();
 
@@ -58,4 +58,4 @@ const Recruiter = (props: { recruiters: RecruiterType[] }) => {
   );
 };
 
-export default Recruiter;
+export default RecruiterTable;

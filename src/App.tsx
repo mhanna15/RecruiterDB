@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
+import Companies from './components/Companies';
 import Header from './components/Header';
 import LoggedInHome from './components/LoggedInHome';
 import LoggedOutHome from './components/LoggedOutHome';
@@ -34,6 +35,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         {profileRoute}
+        {/* TODO: Remove */}
+        <Route path="/companies" element={<Companies />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
