@@ -11,8 +11,8 @@ import {
 } from 'firebase/firestore';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { db } from '../firebase';
-import RecruiterTable from './RecruiterTable';
+import { db } from '../../firebase';
+import RecruiterTable from '../Recruiter/Recruiter';
 
 const mockRecruiters = [
   {
