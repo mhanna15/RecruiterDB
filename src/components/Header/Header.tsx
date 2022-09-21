@@ -15,7 +15,7 @@ const Header = (props: { isLoggedIn: boolean }) => {
     e.preventDefault();
     try {
       await logout();
-      navigate('/');
+      navigate('/login');
     } catch (e: any) {
       setError(JSON.stringify(e));
     }
@@ -55,7 +55,6 @@ const Header = (props: { isLoggedIn: boolean }) => {
         {buttons}
         {error}
       </div>
-      
     </div>
   );
 };

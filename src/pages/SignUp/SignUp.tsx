@@ -8,11 +8,11 @@ const SignUp = () => {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
 
-  const { signup } = useAuth();
+  const { signup, loginWithGoogle } = useAuth();
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: any) => {
+  const handleSignUp = async (e: any) => {
     e.preventDefault();
     try {
       await signup(email, password);
@@ -22,25 +22,33 @@ const SignUp = () => {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    try {
+      await loginWithGoogle();
+      navigate('/');
+    } catch (e: any) {
+      setError(JSON.stringify(e));
+    }
+  };
+
   return (
     <div>
       <h1>sign up page</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button>sign up</button>
-          {error}
-        </div>
-      </form>
+      <div>
+        <input
+          type="email"
+          placeholder="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button onClick={handleSignUp}>sign up</button> or
+        <button onClick={handleGoogleLogin}> login with google</button>
+        {error}
+      </div>
     </div>
   );
 };
