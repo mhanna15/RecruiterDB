@@ -33,7 +33,7 @@ const SignUp = () => {
           }
         >
           sign up
-        </button>{' '}
+        </button>
         or
         <button
           onClick={async (e) =>
