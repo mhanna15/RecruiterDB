@@ -4,7 +4,7 @@ import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import Header from './components/Header/Header';
-import { useAuth } from './context/AuthContext';
+import { useAuth } from './auth/AuthContext';
 import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
 import LoggedInHome from './pages/Home/LoggedInHome';

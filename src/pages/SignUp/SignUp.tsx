@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/AuthContext';
+import { handleGoogleLogin, handleSignUp } from '../../auth/authFunctions';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
@@ -11,25 +12,6 @@ const SignUp = () => {
   const { signup, loginWithGoogle } = useAuth();
 
   const navigate = useNavigate();
-
-  const handleSignUp = async (e: any) => {
-    e.preventDefault();
-    try {
-      await signup(email, password);
-      navigate('/');
-    } catch (e: any) {
-      setError(JSON.stringify(e));
-    }
-  };
-
-  const handleGoogleLogin = async () => {
-    try {
-      await loginWithGoogle();
-      navigate('/');
-    } catch (e: any) {
-      setError(JSON.stringify(e));
-    }
-  };
 
   return (
     <div>
@@ -45,8 +27,21 @@ const SignUp = () => {
           placeholder="password"
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button onClick={handleSignUp}>sign up</button> or
-        <button onClick={handleGoogleLogin}> login with google</button>
+        <button
+          onClick={async (e) =>
+            await handleSignUp(e, signup, email, password, navigate, setError)
+          }
+        >
+          sign up
+        </button>{' '}
+        or
+        <button
+          onClick={async (e) =>
+            await handleGoogleLogin(e, loginWithGoogle, navigate, setError)
+          }
+        >
+          login with google
+        </button>
         {error}
       </div>
     </div>
