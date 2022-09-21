@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { Autocomplete, TextField } from '@mui/material';
+
 import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -14,6 +16,8 @@ const Form = () => {
   const [message, setMessage] = useState<string>('');
   const [companies, setCompanies] = useState<Company[]>([]);
   const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
+
+  const [inputValue, setInputValue] = useState<string>('');
 
   const clearForm = () => {
     setName('');
@@ -58,4 +62,71 @@ const Form = () => {
     ]);
     await addRecruiter();
   };
+
+  return (
+    <form className="form" onSubmit={handleSubmit}>
+      <input
+        onChange={(e) => {
+          setName(e.target.value);
+        }}
+        placeholder="name"
+        required
+        value={name}
+      />
+      <Autocomplete
+        disablePortal
+        options={companies}
+        inputValue={inputValue}
+        onChange={(e, value) => {
+          if (value !== null) {
+            setCompany(value.name);
+          }
+        }}
+        getOptionLabel={(option) => option.name}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        sx={{ width: 300 }}
+        renderInput={(params) => <TextField {...params} label="Company" />}
+        renderOption={(props, option) => (
+          <li {...props}>
+            <p>
+              {option.name}:{' '}
+              <img src={option.logo} height="20px" width="20px" />
+            </p>
+          </li>
+        )}
+        // need to fix page rerendering
+        onInputChange={(_e, newValue) => {
+          setInputValue(newValue);
+          fetchCompanyOptions(newValue);
+        }}
+      />
+      <input
+        onChange={(e) => {
+          setEmail(e.target.value);
+        }}
+        placeholder="email"
+        required
+        value={email}
+      />
+      <input
+        onChange={(e) => {
+          setTitle(e.target.value);
+        }}
+        placeholder="title"
+        required
+        value={title}
+      />
+      <input
+        onChange={(e) => {
+          setLinkedIn(e.target.value);
+        }}
+        placeholder="LinkedIn profile"
+        required
+        value={linkedIn}
+      />
+      <button>Add recruiter!</button>
+    </form>
+  );
 };
+
+export default Form;

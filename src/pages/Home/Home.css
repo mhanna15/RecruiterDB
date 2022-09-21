@@ -1,12 +1,14 @@
 .page-root {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   max-width: 1000px;
-  min-width: 1000px;
+  min-width: 1000px; */
+  width: 100%;
 }
 
 .page-content {
   display: flex;
+  flex-direction: column;
 }
 
 .left-panel {

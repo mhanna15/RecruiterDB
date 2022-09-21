@@ -1,10 +1,7 @@
 .header-root {
   display: flex;
   align-items: center;
-  padding: 20px;
   position: sticky;
-  top: 0px;
-  /* width: 100%; */
   background-color: white;
 }
 

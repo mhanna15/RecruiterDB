@@ -55,12 +55,6 @@ const Header = (props: { isLoggedIn: boolean }) => {
         </button>
         {buttons}
         {error}
-        <button
-          className="header-link header-link-primary"
-          onClick={() => navigate('/')}
-        >
-          Add Recruiter
-        </button>
       </div>
       
     </div>
