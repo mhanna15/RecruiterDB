@@ -1,14 +1,16 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import Header from './components/Header';
-import LoggedInHome from './components/LoggedInHome';
-import LoggedOutHome from './components/LoggedOutHome';
-import Login from './components/Login';
-import NotFound from './components/NotFound';
-import Profile from './components/Profile';
-import SignUp from './components/SignUp';
+import Header from './components/Header/Header';
+import LoggedInHome from './components/Home/LoggedInHome';
+import LoggedOutHome from './components/Home/LoggedOutHome';
+import Login from './components/Login/Login';
+import NotFound from './components/NotFound/NotFound';
+import Profile from './components/Profile/Profile';
+import SignUp from './components/SignUp/SignUp';
 import { useAuth } from './context/AuthContext';
+
+import './App.css';
 
 const App = () => {
   const { currentUser } = useAuth();
@@ -27,7 +29,7 @@ const App = () => {
   );
 
   return (
-    <div>
+    <div className="app">
       <Header isLoggedIn={isLoggedIn} />
       <Routes>
         {homeRoute}

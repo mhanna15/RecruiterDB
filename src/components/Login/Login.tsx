@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../../context/AuthContext';
 
-const SignUp = () => {
+const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
   const [error, setError] = useState<string>('');
 
-  const { signup } = useAuth();
-
   const navigate = useNavigate();
+
+  const { login } = useAuth();
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      await signup(email, password);
+      await login(email, password);
       navigate('/');
     } catch (e: any) {
       setError(JSON.stringify(e));
     }
   };
-
   return (
     <div>
-      <h1>sign up page</h1>
+      <h1>sign in page</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -37,7 +37,7 @@ const SignUp = () => {
             placeholder="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button>sign up</button>
+          <button>login</button>
           {error}
         </div>
       </form>
@@ -45,4 +45,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Login;
