@@ -1,6 +1,9 @@
-.form-root {
+.form {
   display: flex;
   flex-direction: column;
-  background-color: blue;
   padding: 20px;
+}
+
+input {
+  border: solid;
 }

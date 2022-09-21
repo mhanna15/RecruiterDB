@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { db } from '../../firebase';
 import { Company, RecruiterType } from '../../interface';
+import './Form.css';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
@@ -67,16 +68,24 @@ const Form = (props: FormProps) => {
   };
 
   return (
-    <div className="form-root" onSubmit={handleSubmit}>
+    <form className="form" onSubmit={handleSubmit}>
       <input
         onChange={(e) => {
           setName(e.target.value);
         }}
-        placeholder="name"
+        placeholder="Recruiter Name"
         required
         value={name}
       />
-      <Autocomplete
+      <input
+        onChange={(e) => {
+          setCompany(e.target.value);
+        }}
+        placeholder="Company"
+        required
+        value={company}
+      />
+      {/* <Autocomplete
         disablePortal
         options={companies}
         inputValue={inputValue}
@@ -102,7 +111,7 @@ const Form = (props: FormProps) => {
           setInputValue(newValue);
           fetchCompanyOptions(newValue);
         }}
-      />
+      /> */}
       <input
         onChange={(e) => {
           setEmail(e.target.value);
@@ -128,7 +137,7 @@ const Form = (props: FormProps) => {
         value={linkedIn}
       />
       <button>Add recruiter!</button>
-    </div>
+    </form>
   );
 };
 
