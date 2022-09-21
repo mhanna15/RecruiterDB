@@ -22,9 +22,9 @@ const RecruiterTable = (props: { recruiters: RecruiterType[] }) => {
               setPopUpOpen(true);
             }}
           >
-            <p>{recruiter.name}</p>
-            <p>{recruiter.company}</p>
-            <p>{recruiter.title}</p>
+            <p className="list-row-title">{recruiter.name}</p>
+            <p className="list-row-subtitle">{recruiter.company}</p>
+            <p className="list-row-body-text">{recruiter.title}</p>
           </div>
         ))}
       </div>

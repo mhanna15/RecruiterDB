@@ -67,7 +67,7 @@ const Form = (props: FormProps) => {
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
+    <div className="form-root" onSubmit={handleSubmit}>
       <input
         onChange={(e) => {
           setName(e.target.value);
@@ -128,7 +128,7 @@ const Form = (props: FormProps) => {
         value={linkedIn}
       />
       <button>Add recruiter!</button>
-    </form>
+    </div>
   );
 };
 
