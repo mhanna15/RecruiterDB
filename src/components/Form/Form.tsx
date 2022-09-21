@@ -1,20 +1,24 @@
 import { Autocomplete, TextField } from '@mui/material';
 import { doc, setDoc } from 'firebase/firestore';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { db } from '../../firebase';
 import { Company, RecruiterType } from '../../interface';
 
-const Form = () => {
+interface FormProps {
+  setPopUpOpen: Dispatch<SetStateAction<boolean>>;
+  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
+  setMessage: Dispatch<SetStateAction<string>>;
+}
+
+const Form = (props: FormProps) => {
   const [name, setName] = useState<string>('');
   const [company, setCompany] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [title, setTitle] = useState<string>('');
   const [linkedIn, setLinkedIn] = useState<string>('');
 
-  const [message, setMessage] = useState<string>('');
   const [companies, setCompanies] = useState<Company[]>([]);
-  const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
 
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -33,7 +37,7 @@ const Form = () => {
       email,
       title,
       linkedIn,
-    }).then(() => setMessage('success!'));
+    }).then(() => props.setMessage('success!'));
     clearForm();
   };
   const fetchCompanyOptions = (input: string) => {
@@ -49,7 +53,7 @@ const Form = () => {
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-    setRecruiters((oldArray) => [
+    props.setRecruiters((oldArray) => [
       ...oldArray,
       {
         name,
@@ -59,7 +63,7 @@ const Form = () => {
         linkedIn,
       },
     ]);
-    await addRecruiter();
+    await addRecruiter().then(() => props.setPopUpOpen(false));
   };
 
   return (

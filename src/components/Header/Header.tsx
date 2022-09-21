@@ -1,6 +1,5 @@
 import './Header.css';
 
-import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

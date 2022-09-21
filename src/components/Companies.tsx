@@ -1,7 +1,5 @@
 import {
   Autocomplete,
-  Dialog,
-  DialogTitle,
   Paper,
   Table,
   TableBody,
@@ -47,7 +45,6 @@ const Companies = () => {
     getCompanies().catch((e) => setMessage(JSON.stringify(e)));
   }, []);
 
-  console.log(companiesAndRecruiters);
   return (
     <div>
       <h1>companies page</h1>
@@ -65,7 +62,6 @@ const Companies = () => {
         // need to fix page rerendering
         onInputChange={(_e, newValue) => {
           setInputValue(newValue);
-          setSelectedCompany(newValue);
         }}
       />
       {selectedCompany !== '' ? (
