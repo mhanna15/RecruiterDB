@@ -6,7 +6,6 @@ import { useAuth } from '../../context/AuthContext';
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
   const [error, setError] = useState<string>('');
 
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ const Login = () => {
   };
   return (
     <div>
-      <h1>sign in page</h1>
+      <h1>Login page</h1>
       <form onSubmit={handleSubmit}>
         <div>
           <input
