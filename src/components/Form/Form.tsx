@@ -11,6 +11,7 @@ interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   setMessage: Dispatch<SetStateAction<string>>;
+  cancel: Dispatch<SetStateAction<boolean>>;
 }
 
 const Form = (props: FormProps) => {
@@ -138,8 +139,8 @@ const Form = (props: FormProps) => {
         required
         value={linkedIn}
       />
-      <button className="button-submit" type="submit">
-        Add
+      <button className="button-default button-submit" type="submit">
+        Submit
       </button>
     </form>
   );

@@ -102,6 +102,7 @@ const LoggedInHome = () => {
           setPopUpOpen={setPopUpOpen}
           setRecruiters={setRecruiters}
           setMessage={setMessage}
+          cancel={() => setPopUpOpen(false)}
         />
       </Dialog>
     </div>
