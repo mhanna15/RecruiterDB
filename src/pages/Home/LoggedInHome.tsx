@@ -92,7 +92,12 @@ const LoggedInHome = () => {
         <RecruiterTable recruiters={recruiters} />
         {message}
       </div>
-      <Dialog open={popUpOpen} onClose={() => setPopUpOpen(false)}>
+      <Dialog
+        fullWidth={true}
+        style={{ width: '100%' }}
+        open={popUpOpen}
+        onClose={() => setPopUpOpen(false)}
+      >
         <Form
           setPopUpOpen={setPopUpOpen}
           setRecruiters={setRecruiters}

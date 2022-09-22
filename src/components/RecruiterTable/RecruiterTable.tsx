@@ -3,6 +3,7 @@ import './RecruiterTable.css';
 import { DialogTitle } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
+import ListCard from '../ListCard/ListCard';
 
 import { RecruiterType } from '../../interface';
 
@@ -29,11 +30,13 @@ const RecruiterTable = (props: { recruiters: RecruiterType[] }) => {
         ))}
       </div>
       <Dialog open={popUpOpen} onClose={() => setPopUpOpen(false)}>
-        <DialogTitle>{selectedRecruiter?.name}</DialogTitle>
-        <p>email: {selectedRecruiter?.email}</p>
-        <p>company: {selectedRecruiter?.company}</p>
-        <p>title: {selectedRecruiter?.title}</p>
-        <p>linkedIn: {selectedRecruiter?.linkedIn}</p>
+        <ListCard
+          name={selectedRecruiter?.name}
+          email={selectedRecruiter?.email}
+          company={selectedRecruiter?.company}
+          title={selectedRecruiter?.title}
+          linkedIn={selectedRecruiter?.linkedIn}
+        />
       </Dialog>
     </div>
   );

@@ -1,5 +1,6 @@
-import { Autocomplete, TextField } from '@mui/material';
 import { doc, setDoc } from 'firebase/firestore';
+
+import { Autocomplete, OutlinedInput, Button } from '@mui/material';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { db } from '../../firebase';
@@ -69,6 +70,7 @@ const Form = (props: FormProps) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
+      <p className="title">Add New Recruiter</p>
       <input
         onChange={(e) => {
           setName(e.target.value);
@@ -97,7 +99,7 @@ const Form = (props: FormProps) => {
         getOptionLabel={(option) => option.name}
         isOptionEqualToValue={(option, value) => option.name === value.name}
         sx={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Company" />}
+        renderInput={(params) => <Input {...params} label="Company" />}
         renderOption={(props, option) => (
           <li {...props}>
             <p>
@@ -116,7 +118,7 @@ const Form = (props: FormProps) => {
         onChange={(e) => {
           setEmail(e.target.value);
         }}
-        placeholder="email"
+        placeholder="Email"
         required
         value={email}
       />
@@ -124,7 +126,7 @@ const Form = (props: FormProps) => {
         onChange={(e) => {
           setTitle(e.target.value);
         }}
-        placeholder="title"
+        placeholder="Job Title"
         required
         value={title}
       />
@@ -132,11 +134,13 @@ const Form = (props: FormProps) => {
         onChange={(e) => {
           setLinkedIn(e.target.value);
         }}
-        placeholder="LinkedIn profile"
+        placeholder="LinkedIn Profile"
         required
         value={linkedIn}
       />
-      <button>Add recruiter!</button>
+      <button className="button-submit" type="submit">
+        Add
+      </button>
     </form>
   );
 };

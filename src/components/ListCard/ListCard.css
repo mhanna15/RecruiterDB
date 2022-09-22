@@ -1,0 +1,9 @@
+.list-card-root {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+p {
+  margin: 0px;
+}
