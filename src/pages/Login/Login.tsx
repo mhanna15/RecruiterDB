@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/AuthContext';
+import { handleGoogleLogin, handleLogin } from '../../auth/authFunctions';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
@@ -10,36 +11,40 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
 
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    try {
-      await login(email, password);
-      navigate('/');
-    } catch (e: any) {
-      setError(JSON.stringify(e));
-    }
-  };
   return (
     <div>
       <h1>Login page</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="email"
-            placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <button>login</button>
-          {error}
-        </div>
-      </form>
+      <div>
+        <input
+          type="email"
+          placeholder="email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="password"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          onClick={async (e) =>
+            await handleLogin(e, login, email, password, navigate, setError)
+          }
+        >
+          login
+        </button>{' '}
+        or
+        <button
+          onClick={async (e) => {
+            await handleGoogleLogin(e, loginWithGoogle, navigate, setError);
+          }}
+        >
+          {' '}
+          login with google
+        </button>
+        {error}
+      </div>
     </div>
   );
 };

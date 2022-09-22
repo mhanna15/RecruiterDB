@@ -3,23 +3,14 @@ import './Header.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../auth/AuthContext';
+import { handleLogout } from '../../auth/authFunctions';
 
 const Header = (props: { isLoggedIn: boolean }) => {
   const [error, setError] = useState<string>('');
 
   const { logout } = useAuth();
   const navigate = useNavigate();
-
-  const handleLogout = async (e: any) => {
-    e.preventDefault();
-    try {
-      await logout();
-      navigate('/');
-    } catch (e: any) {
-      setError(JSON.stringify(e));
-    }
-  };
 
   let buttons;
   if (props.isLoggedIn) {
@@ -28,7 +19,12 @@ const Header = (props: { isLoggedIn: boolean }) => {
         <button className="header-link" onClick={() => navigate('/profile')}>
           Profile
         </button>
-        <button className="header-link" onClick={handleLogout}>
+        <button
+          className="header-link"
+          onClick={async (e) =>
+            await handleLogout(e, logout, navigate, setError)
+          }
+        >
           Logout
         </button>
       </>
@@ -55,7 +51,6 @@ const Header = (props: { isLoggedIn: boolean }) => {
         {buttons}
         {error}
       </div>
-      
     </div>
   );
 };
