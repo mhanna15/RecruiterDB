@@ -1,5 +1,6 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
 import './ListCard.css';
+
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 const ListCard = (props: {
   name: string | undefined;
