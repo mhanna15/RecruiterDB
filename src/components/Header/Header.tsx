@@ -12,35 +12,32 @@ const Header = (props: { isLoggedIn: boolean }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
-  let buttons;
-  if (props.isLoggedIn) {
-    buttons = (
-      <>
-        <button className="header-link" onClick={() => navigate('/profile')}>
-          Profile
-        </button>
-        <button
-          className="header-link"
-          onClick={async (e) =>
-            await handleLogout(e, logout, navigate, setError)
-          }
-        >
-          Logout
-        </button>
-      </>
-    );
-  } else {
-    buttons = (
-      <>
-        <button className="header-link" onClick={() => navigate('/login')}>
-          Login
-        </button>
-        <button className="header-link" onClick={() => navigate('/signup')}>
-          Sign Up
-        </button>
-      </>
-    );
-  }
+  const buttons = props.isLoggedIn ? (
+    <>
+      <button className="header-link" onClick={() => navigate('/profile')}>
+        Profile
+      </button>
+      <button className="header-link" onClick={() => navigate('/templates')}>
+        Templates
+      </button>
+      <button
+        className="header-link"
+        onClick={async (e) => await handleLogout(e, logout, navigate, setError)}
+      >
+        Logout
+      </button>
+    </>
+  ) : (
+    <>
+      <button className="header-link" onClick={() => navigate('/login')}>
+        Login
+      </button>
+      <button className="header-link" onClick={() => navigate('/signup')}>
+        Sign Up
+      </button>
+    </>
+  );
+
   return (
     <div className="header-root">
       <p className="title">Header</p>
