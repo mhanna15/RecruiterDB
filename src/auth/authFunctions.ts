@@ -82,5 +82,5 @@ export const handleLogout = async (
 };
 
 const addNewUserToDb = async (email: string) => {
-  await setDoc(doc(db, 'users', email), { email });
+  await setDoc(doc(db, 'users', email), { email, templates: [] });
 };
