@@ -21,7 +21,8 @@
     "simple-import-sort/imports": "warn",
     "simple-import-sort/exports": "warn",
     "react/prop-types": "off",
-    "@typescript-eslint/no-misused-promises": "off"
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/strict-boolean-expressions": "off"
   },
   "settings": {
     "react": {

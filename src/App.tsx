@@ -5,7 +5,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/AuthContext';
 import Header from './components/Header/Header';
-import Templates from './components/Templates/Templates';
 import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
 import LoggedInHome from './pages/Home/LoggedInHome';
@@ -13,6 +12,7 @@ import LoggedOutHome from './pages/Home/LoggedOutHome';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import SignUp from './pages/SignUp/SignUp';
+import Templates from './pages/Templates/Templates';
 
 const App = () => {
   const { currentUser } = useAuth();
