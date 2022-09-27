@@ -1,39 +1,38 @@
 import Dialog from '@mui/material/Dialog';
 import {
-  arrayRemove,
-  arrayUnion,
+  collection,
+  deleteDoc,
   doc,
-  getDoc,
-  updateDoc,
+  getDocs,
+  query,
+  where,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
+import { Template } from '../../interface';
 
 const Templates = () => {
-  const [userTemplates, setUserTemplates] = useState<string[]>([]);
+  const [userTemplates, setUserTemplates] = useState<Template[]>([]);
 
   const [newTemplatePopUpOpen, setNewTemplatePopUpOpen] =
     useState<boolean>(false);
   const [editTemplatePopUpOpen, setEditTemplatePopUpOpen] =
     useState<boolean>(false);
 
-  const [templateToEdit, setTemplateToEdit] = useState<string>('');
+  const [templateToEdit, setTemplateToEdit] = useState<Template>();
 
   const [message, setMessage] = useState<string>('');
 
   const { currentUser } = useAuth();
 
-  const deleteTemplate = async (template: string) => {
-    const userRef = doc(db, 'users', currentUser.email);
-    await updateDoc(userRef, {
-      templates: arrayRemove(template),
-    })
+  const deleteTemplate = async (template: Template) => {
+    await deleteDoc(doc(db, 'templates', template.id))
       .then(() =>
         setUserTemplates(
-          userTemplates.filter((templateI) => templateI !== template)
+          userTemplates.filter((templateI) => templateI.id !== template.id)
         )
       )
       .catch((e) => setMessage(JSON.stringify(e)));
@@ -42,13 +41,16 @@ const Templates = () => {
   useEffect(() => {
     console.log('fetching templates');
     const getTemplates = async () => {
-      const userRef = doc(db, 'users', currentUser.email);
-      const userSnap = await getDoc(userRef);
-      return userSnap.data()?.templates;
+      const q = query(
+        collection(db, 'templates'),
+        where('user', '==', currentUser.email)
+      );
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setUserTemplates((current) => [...current, doc.data() as Template]);
+      });
     };
-    getTemplates()
-      .then((templates) => setUserTemplates(templates))
-      .catch((e) => setMessage(JSON.stringify(e)));
+    getTemplates().catch((e) => setMessage(JSON.stringify(e)));
     // setUserTemplates(['template 1 here', 'template 2 here']);
   }, []);
 
@@ -63,8 +65,8 @@ const Templates = () => {
         create a new template
       </button>
       {userTemplates.map((template) => (
-        <div key={template}>
-          <div>{template}</div>
+        <div key={template.id}>
+          <div>{template.template}</div>
           <button onClick={async () => await deleteTemplate(template)}>
             delete template
           </button>
@@ -84,10 +86,10 @@ const Templates = () => {
       >
         <TemplateInput
           currentUser={currentUser}
+          userTemplates={userTemplates}
           setUserTemplates={setUserTemplates}
           setPopUpOpen={setNewTemplatePopUpOpen}
           setMessage={setMessage}
-          deleteTemplate={deleteTemplate}
         />
       </Dialog>
       <Dialog
@@ -96,10 +98,10 @@ const Templates = () => {
       >
         <TemplateInput
           currentUser={currentUser}
+          userTemplates={userTemplates}
           setUserTemplates={setUserTemplates}
           setPopUpOpen={setEditTemplatePopUpOpen}
           setMessage={setMessage}
-          deleteTemplate={deleteTemplate}
           existingTemplate={templateToEdit}
         />
       </Dialog>

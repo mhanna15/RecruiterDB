@@ -1,68 +1,164 @@
 import './TemplateInput.css';
 
-import { arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import {
+  collection,
+  doc,
+  setDoc,
+  updateDoc,
+} from 'firebase/firestore';
+import { isEmpty, isEqual, xorWith } from 'lodash';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { db } from '../../firebase';
+import {
+  emptyTemplate,
+  emptyVariable,
+  Template,
+  Variable,
+} from '../../interface';
 
 interface TemplateInputProps {
   currentUser: any;
-  existingTemplate?: string;
-  setUserTemplates: Dispatch<SetStateAction<string[]>>;
-  deleteTemplate: (template: string) => Promise<void>;
+  existingTemplate?: Template;
+  setUserTemplates: Dispatch<SetStateAction<Template[]>>;
+  userTemplates: Template[];
   setPopUpOpen?: Dispatch<SetStateAction<boolean>>;
   setMessage: Dispatch<SetStateAction<string>>;
 }
 
 const TemplateInput = (props: TemplateInputProps) => {
-  const [currentTemplate, setCurrentTemplate] = useState<string>(
-    props.existingTemplate ? props.existingTemplate : ''
+  const [currentTemplate, setCurrentTemplate] = useState<Template>(
+    props.existingTemplate ? props.existingTemplate : emptyTemplate
   );
+  const [newVariable, setNewVariable] = useState<Variable>(emptyVariable);
+
+  const varsEqaul = (
+    var1: Variable[] | undefined,
+    var2: Variable[] | undefined
+  ): boolean => {
+    return isEmpty(xorWith(var1, var2, isEqual));
+  };
 
   const addTemplate = async (template: string) => {
-    const userRef = doc(db, 'users', props.currentUser.email);
-    await updateDoc(userRef, {
-      templates: arrayUnion(template),
-    })
+    const templateRef = doc(collection(db, 'templates'));
+    const templateToAdd: Template = {
+      id: templateRef.id,
+      template,
+      user: props.currentUser.email,
+      variables: currentTemplate.variables,
+    };
+
+    await setDoc(templateRef, templateToAdd)
       .then(() => {
         props.setUserTemplates((oldUserTemplates) => [
           ...oldUserTemplates,
-          template,
+          templateToAdd,
         ]);
         props.setPopUpOpen?.(false);
       })
       .catch((e) => props.setMessage(JSON.stringify(e)));
   };
 
-  const editTemplate = async (template: string, editedTemplate: string) => {
-    await props
-      .deleteTemplate(template)
-      .then(async () => {
-        await addTemplate(editedTemplate);
+  const editTemplate = async (template: Template, editedTemplate: string) => {
+    const templateRef = doc(db, 'templates', template.id);
+    await updateDoc(templateRef, {
+      template: editedTemplate,
+      variables: currentTemplate.variables,
+    })
+      .then(() => {
+        props.setUserTemplates([
+          ...props.userTemplates.map((templateI) => {
+            if (templateI.id === template.id) {
+              return {
+                ...templateI,
+                template: editedTemplate,
+                variables: currentTemplate.variables,
+              };
+            }
+            return templateI;
+          }),
+        ]);
+        props.setPopUpOpen?.(false);
       })
       .catch((e) => props.setMessage(JSON.stringify(e)));
   };
 
   return (
     <div>
+      <div>
+        <input
+          placeholder="Variable Name"
+          value={newVariable.varName}
+          onChange={(e) =>
+            setNewVariable({ ...newVariable, varName: e.target.value })
+          }
+        />
+        =
+        <input
+          placeholder="Value"
+          value={newVariable.value}
+          onChange={(e) =>
+            setNewVariable({ ...newVariable, value: e.target.value })
+          }
+        />
+        <button
+          onClick={() => {
+            setCurrentTemplate((oldCurrentTemplate) => ({
+              ...oldCurrentTemplate,
+              variables: [...oldCurrentTemplate.variables, newVariable],
+            }));
+            setNewVariable({ varName: '', value: '' });
+          }}
+        >
+          add variable
+        </button>
+      </div>
+      {/* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */}
+      {currentTemplate.variables.map((variable) => (
+        <div key={variable.varName}>
+          <p>
+            {variable.varName}: {variable.value}
+          </p>
+          <button
+            onClick={() => {
+              setCurrentTemplate((oldCurrentTemplate) => ({
+                ...oldCurrentTemplate,
+                variables: oldCurrentTemplate.variables.filter(
+                  (variableI) =>
+                    variableI.varName !== variable.varName &&
+                    variableI.value !== variable.value
+                ),
+              }));
+            }}
+          >
+            remove
+          </button>
+        </div>
+      ))}
       <textarea
         placeholder={
           props.existingTemplate ? 'edit template' : 'add a template'
         }
         onChange={(e) => {
-          setCurrentTemplate(e.target.value);
+          setCurrentTemplate({ ...currentTemplate, template: e.target.value });
         }}
-        value={currentTemplate}
+        value={currentTemplate.template}
       />
       <button
         onClick={async () =>
           props.existingTemplate
-            ? await editTemplate(props.existingTemplate, currentTemplate)
-            : await addTemplate(currentTemplate)
+            ? await editTemplate(
+                props.existingTemplate,
+                currentTemplate?.template
+              )
+            : await addTemplate(currentTemplate.template)
         }
-        disabled={currentTemplate === props.existingTemplate}
+        disabled={
+          currentTemplate.template === props.existingTemplate?.template &&
+          varsEqaul(props.existingTemplate.variables, currentTemplate.variables)
+        }
       >
-        {props.existingTemplate ? 'edit template!' : 'add template!'}
+        {props.existingTemplate?.template ? 'edit template!' : 'add template!'}
       </button>
     </div>
   );

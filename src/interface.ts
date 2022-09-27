@@ -11,3 +11,27 @@ export interface Company {
   domain: string;
   logo: string;
 }
+
+export interface Variable {
+  varName?: string;
+  value?: string;
+}
+
+export interface Template {
+  id: string;
+  template: string;
+  variables: Variable[];
+  user: string;
+}
+
+export const emptyVariable = {
+  varName: '',
+  value: '',
+};
+
+export const emptyTemplate = {
+  id: '',
+  template: '',
+  user: '',
+  variables: []
+};
