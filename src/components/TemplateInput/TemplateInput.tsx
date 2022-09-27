@@ -72,8 +72,6 @@ const TemplateInput = (props: TemplateInputProps) => {
       .catch((e) => props.setMessage(JSON.stringify(e)));
   };
 
-  console.log(currentTemplate.variables);
-
   return (
     <div>
       <div>
