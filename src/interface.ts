@@ -13,7 +13,7 @@ export interface Company {
 }
 
 export interface Variable {
-  varName?: string;
+  name?: string;
   value?: string;
 }
 
@@ -26,7 +26,7 @@ export interface Template {
 }
 
 export const emptyVariable = {
-  varName: '',
+  name: '',
   value: '',
 };
 

@@ -87,9 +87,9 @@ const TemplateInput = (props: TemplateInputProps) => {
         />
         <input
           placeholder="Variable Name"
-          value={newVariable.varName}
+          value={newVariable.name}
           onChange={(e) =>
-            setNewVariable({ ...newVariable, varName: e.target.value })
+            setNewVariable({ ...newVariable, name: e.target.value })
           }
         />
         =
@@ -106,17 +106,18 @@ const TemplateInput = (props: TemplateInputProps) => {
               ...oldCurrentTemplate,
               variables: [...oldCurrentTemplate.variables, newVariable],
             }));
-            setNewVariable({ varName: '', value: '' });
+            setNewVariable({ name: '', value: '' });
           }}
+          disabled={newVariable.value === '' || newVariable.name === ''}
         >
           add variable
         </button>
       </div>
       {/* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */}
       {currentTemplate.variables.map((variable) => (
-        <div key={variable.varName}>
+        <div key={variable.name}>
           <p>
-            {variable.varName}: {variable.value}
+            {variable.name}: {variable.value}
           </p>
           <button
             onClick={() => {
@@ -124,7 +125,7 @@ const TemplateInput = (props: TemplateInputProps) => {
                 ...oldCurrentTemplate,
                 variables: oldCurrentTemplate.variables.filter(
                   (variableI) =>
-                    variableI.varName !== variable.varName &&
+                    variableI.name !== variable.name &&
                     variableI.value !== variable.value
                 ),
               }));
@@ -153,12 +154,14 @@ const TemplateInput = (props: TemplateInputProps) => {
             : await addTemplate()
         }
         disabled={
-          currentTemplate.template === props.existingTemplate?.template &&
-          varsEqaul(
-            props.existingTemplate?.variables,
-            currentTemplate.variables
-          ) &&
-          currentTemplate.name === props.existingTemplate?.name
+          (currentTemplate.template === props.existingTemplate?.template &&
+            varsEqaul(
+              props.existingTemplate?.variables,
+              currentTemplate.variables
+            ) &&
+            currentTemplate.name === props.existingTemplate?.name) ||
+          currentTemplate.name === '' ||
+          currentTemplate.template === ''
         }
       >
         {props.existingTemplate?.template ? 'edit template!' : 'add template!'}
