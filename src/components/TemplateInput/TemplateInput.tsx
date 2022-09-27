@@ -1,11 +1,6 @@
 import './TemplateInput.css';
 
-import {
-  collection,
-  doc,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { isEmpty, isEqual, xorWith } from 'lodash';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
@@ -39,11 +34,12 @@ const TemplateInput = (props: TemplateInputProps) => {
     return isEmpty(xorWith(var1, var2, isEqual));
   };
 
-  const addTemplate = async (template: string) => {
+  const addTemplate = async () => {
     const templateRef = doc(collection(db, 'templates'));
     const templateToAdd: Template = {
       id: templateRef.id,
-      template,
+      name: currentTemplate.name,
+      template: currentTemplate.template,
       user: props.currentUser.email,
       variables: currentTemplate.variables,
     };
@@ -61,19 +57,12 @@ const TemplateInput = (props: TemplateInputProps) => {
 
   const editTemplate = async (template: Template, editedTemplate: string) => {
     const templateRef = doc(db, 'templates', template.id);
-    await updateDoc(templateRef, {
-      template: editedTemplate,
-      variables: currentTemplate.variables,
-    })
+    await updateDoc(templateRef, { ...currentTemplate })
       .then(() => {
         props.setUserTemplates([
           ...props.userTemplates.map((templateI) => {
             if (templateI.id === template.id) {
-              return {
-                ...templateI,
-                template: editedTemplate,
-                variables: currentTemplate.variables,
-              };
+              return { ...currentTemplate };
             }
             return templateI;
           }),
@@ -83,9 +72,21 @@ const TemplateInput = (props: TemplateInputProps) => {
       .catch((e) => props.setMessage(JSON.stringify(e)));
   };
 
+  console.log(currentTemplate.variables);
+
   return (
     <div>
       <div>
+        <input
+          placeholder="Template Name"
+          value={currentTemplate.name}
+          onChange={(e) => {
+            setCurrentTemplate((oldCurrentTemplate) => ({
+              ...oldCurrentTemplate,
+              name: e.target.value,
+            }));
+          }}
+        />
         <input
           placeholder="Variable Name"
           value={newVariable.varName}
@@ -151,11 +152,15 @@ const TemplateInput = (props: TemplateInputProps) => {
                 props.existingTemplate,
                 currentTemplate?.template
               )
-            : await addTemplate(currentTemplate.template)
+            : await addTemplate()
         }
         disabled={
           currentTemplate.template === props.existingTemplate?.template &&
-          varsEqaul(props.existingTemplate.variables, currentTemplate.variables)
+          varsEqaul(
+            props.existingTemplate?.variables,
+            currentTemplate.variables
+          ) &&
+          currentTemplate.name === props.existingTemplate?.name
         }
       >
         {props.existingTemplate?.template ? 'edit template!' : 'add template!'}

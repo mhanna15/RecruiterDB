@@ -19,6 +19,7 @@ export interface Variable {
 
 export interface Template {
   id: string;
+  name: string;
   template: string;
   variables: Variable[];
   user: string;
@@ -31,7 +32,8 @@ export const emptyVariable = {
 
 export const emptyTemplate = {
   id: '',
+  name: '',
   template: '',
   user: '',
-  variables: []
+  variables: [],
 };

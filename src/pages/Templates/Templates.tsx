@@ -66,6 +66,7 @@ const Templates = () => {
       </button>
       {userTemplates.map((template) => (
         <div key={template.id}>
+          <div>{template.name}</div>
           <div>{template.template}</div>
           <button onClick={async () => await deleteTemplate(template)}>
             delete template
