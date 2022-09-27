@@ -3,8 +3,8 @@ import './App.css';
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { useAuth } from './auth/AuthContext';
 import Header from './components/Header/Header';
+import { useAuth } from './auth/AuthContext';
 import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
 import LoggedInHome from './pages/Home/LoggedInHome';
@@ -39,8 +39,8 @@ const App = () => {
           <Route path="/signup" element={<SignUp />} />
           {profileRoute}
           {/* TODO: Remove */}
-        <Route path="/companies" element={<Companies />} />
-        <Route path="*" element={<NotFound />} />
+          <Route path="/companies" element={<Companies />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>
