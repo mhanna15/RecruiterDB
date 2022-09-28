@@ -40,8 +40,6 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          {profileRoute}
-          {/* TODO: Remove */}
           <Route path="/companies" element={<Companies />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
