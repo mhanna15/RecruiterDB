@@ -77,8 +77,6 @@ const LoggedInHome = () => {
     // }, 200);
   }, []);
 
-  console.log('page rerendered');
-
   return (
     <div className="page-root">
       <div className="page-content">

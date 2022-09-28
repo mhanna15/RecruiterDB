@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  getAdditionalUserInfo,
   GoogleAuthProvider,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
@@ -30,7 +31,11 @@ export const AuthProvider = ({ children }) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    return signInWithPopup(auth, provider).then((result) => {
+      const details = getAdditionalUserInfo(result);
+      const email = result.user.email;
+      return { email, isNewUser: details.isNewUser };
+    });
   };
 
   const logout = () => {
