@@ -1,5 +1,14 @@
+import {
+  AdditionalUserInfo,
+  getAdditionalUserInfo,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
+
+import { auth, db } from '../firebase';
 
 export const handleSignUp = async (
   e: any,
@@ -12,6 +21,7 @@ export const handleSignUp = async (
   e.preventDefault();
   try {
     await signup(email, password);
+    await addNewUserToDb(email);
     navigate('/');
   } catch (e: any) {
     setError(JSON.stringify(e));
@@ -43,7 +53,13 @@ export const handleGoogleLogin = async (
 ) => {
   e.preventDefault();
   try {
-    await loginWithGoogle();
+    await loginWithGoogle().then(
+      async (data: { email: string; isNewUser: boolean }) => {
+        if (data.isNewUser) {
+          await addNewUserToDb(data.email);
+        }
+      }
+    );
     navigate('/');
   } catch (e: any) {
     setError(JSON.stringify(e));
@@ -63,4 +79,8 @@ export const handleLogout = async (
   } catch (e: any) {
     setError(JSON.stringify(e));
   }
+};
+
+const addNewUserToDb = async (email: string) => {
+  await setDoc(doc(db, 'users', email), { email, templates: [] });
 };
