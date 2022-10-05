@@ -1,46 +1,63 @@
 import './RecruiterTable.css';
 
-import { DialogTitle } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
+
+import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import ListCard from '../ListCard/ListCard';
 
-import { RecruiterType } from '../../interface';
-
-const RecruiterTable = (props: { recruiters: RecruiterType[] }) => {
+const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Template[] }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
-  const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>();
+  const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
+  const [selectedTemplateID, setSelectedTemplateID] = useState<string>();
+
+  const copyTemplate = (recruiter: RecruiterType) => {
+    const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
+    if (selectedTemplate) {
+      console.log(selectedTemplate);
+      let temp = selectedTemplate.template.replace('RECRUITER', recruiter.firstName);
+      temp = temp.replace('COMPANY', recruiter.company);
+      navigator.clipboard.writeText(temp).catch(console.log);
+    }
+  };
 
   return (
     <div className="list-root">
       <div className="list-container">
         {props.recruiters.map((recruiter) => (
-          <div className="list-row" key={recruiter.name}>
+          <div className="list-row" key={recruiter.id}>
             <div
               className="list-row-content"
-              onClick={(e) => {
+              onClick={() => {
                 setSelectedRecruiter(recruiter);
                 setPopUpOpen(true);
               }}
             >
-              <p className="list-row-title">{recruiter.name}</p>
+              <p className="list-row-title">
+                {recruiter.firstName} {recruiter.lastName}
+              </p>
               <p className="list-row-subtitle">{recruiter.company}</p>
               <p className="list-row-body-text">{recruiter.title}</p>
             </div>
             <div className="list-row-button-group">
-              <button>Email</button>
+              <button onClick={() => copyTemplate(recruiter)}>Copy Template</button>
+              <select
+                name="template"
+                onChange={(e) => setSelectedTemplateID(e.target.value)}
+                value={selectedTemplateID}
+              >
+                {props.templates.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         ))}
       </div>
       <Dialog open={popUpOpen} onClose={() => setPopUpOpen(false)}>
-        <ListCard
-          name={selectedRecruiter?.name}
-          email={selectedRecruiter?.email}
-          company={selectedRecruiter?.company}
-          title={selectedRecruiter?.title}
-          linkedIn={selectedRecruiter?.linkedIn}
-        />
+        <ListCard recruiter={selectedRecruiter} />
       </Dialog>
     </div>
   );

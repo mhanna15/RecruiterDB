@@ -1,10 +1,10 @@
+import './Profile.css';
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { useAuth } from '../../auth/AuthContext';
 import { handleLogout } from '../../auth/authFunctions';
-import { useNavigate } from 'react-router-dom';
-
-import './Profile.css';
 
 const Profile = () => {
   const { currentUser } = useAuth();

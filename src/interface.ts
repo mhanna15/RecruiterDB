@@ -1,5 +1,7 @@
 export interface RecruiterType {
-  name: string;
+  id: string;
+  firstName: string;
+  lastName: string;
   email: string;
   company: string;
   title: string;
@@ -12,28 +14,26 @@ export interface Company {
   logo: string;
 }
 
-export interface Variable {
-  name?: string;
-  value?: string;
-}
-
 export interface Template {
   id: string;
   name: string;
   template: string;
-  variables: Variable[];
   user: string;
 }
-
-export const emptyVariable = {
-  name: '',
-  value: '',
-};
 
 export const emptyTemplate = {
   id: '',
   name: '',
   template: '',
   user: '',
-  variables: [],
+};
+
+export const emptyRecruiter = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  company: '',
+  title: '',
+  linkedIn: '',
 };

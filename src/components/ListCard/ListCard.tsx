@@ -1,21 +1,19 @@
 import './ListCard.css';
 
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React from 'react';
 
-const ListCard = (props: {
-  name: string | undefined;
-  email: string | undefined;
-  company: string | undefined;
-  title: string | undefined;
-  linkedIn: string | undefined;
-}) => {
+import { RecruiterType } from '../../interface';
+
+const ListCard = (props: { recruiter: RecruiterType }) => {
   return (
     <div className="list-card-root">
-      <p>{props?.name}</p>
-      <p>email: {props?.email}</p>
-      <p>company: {props?.company}</p>
-      <p>title: {props?.title}</p>
-      <p>linkedIn: {props?.linkedIn}</p>
+      <p>
+        {props.recruiter.firstName} {props.recruiter.lastName}
+      </p>
+      <p>email: {props.recruiter.email}</p>
+      <p>company: {props.recruiter.company}</p>
+      <p>title: {props.recruiter.title}</p>
+      <p>linkedIn: {props.recruiter.linkedIn}</p>
     </div>
   );
 };

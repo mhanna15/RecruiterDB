@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import Form from '../../components/Form/Form';
 import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
 import { db } from '../../firebase';
-import { RecruiterType } from '../../interface';
+import { RecruiterType, Template } from '../../interface';
 
 const mockRecruiters = [
   {
@@ -47,7 +47,7 @@ const mockRecruiters = [
   },
 ];
 
-const LoggedInHome = () => {
+const LoggedInHome = (props: { templates: Template[] }) => {
   const [message, setMessage] = useState<string>('');
   const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
@@ -62,7 +62,9 @@ const LoggedInHome = () => {
         setRecruiters((oldArray) => [
           ...oldArray,
           {
-            name: recruiter.name,
+            id: recruiter.id,
+            firstName: recruiter.firstName,
+            lastName: recruiter.lastName,
             email: recruiter.email,
             company: recruiter.company,
             title: recruiter.title,
@@ -88,15 +90,10 @@ const LoggedInHome = () => {
         >
           Add Recruiter
         </button>
-        <RecruiterTable recruiters={recruiters} />
+        <RecruiterTable recruiters={recruiters} templates={props.templates} />
         {message}
       </div>
-      <Dialog
-        fullWidth={true}
-        style={{ width: '100%' }}
-        open={popUpOpen}
-        onClose={() => setPopUpOpen(false)}
-      >
+      <Dialog fullWidth={true} style={{ width: '100%' }} open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <Form
           setPopUpOpen={setPopUpOpen}
           setRecruiters={setRecruiters}

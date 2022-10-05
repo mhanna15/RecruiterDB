@@ -1,9 +1,10 @@
-import { doc, setDoc } from 'firebase/firestore';
+import './Form.css';
+
+import { collection, doc, setDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { db } from '../../firebase';
 import { Company, RecruiterType } from '../../interface';
-import './Form.css';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
@@ -13,7 +14,9 @@ interface FormProps {
 }
 
 const Form = (props: FormProps) => {
-  const [name, setName] = useState<string>('');
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+
   const [company, setCompany] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [title, setTitle] = useState<string>('');
@@ -24,7 +27,8 @@ const Form = (props: FormProps) => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const clearForm = () => {
-    setName('');
+    setFirstName('');
+    setLastName('');
     setCompany('');
     setEmail('');
     setTitle('');
@@ -32,21 +36,11 @@ const Form = (props: FormProps) => {
   };
   const addRecruiter = async () => {
     // TODO: sanitize name or id input
-    await setDoc(doc(db, 'recruiters', name), {
-      name,
-      company,
-      email,
-      title,
-      linkedIn,
-    }).then(() => props.setMessage('success!'));
-    clearForm();
   };
   const fetchCompanyOptions = (input: string) => {
     console.log('companies fetched');
     if (input !== '') {
-      fetch(
-        `https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`
-      )
+      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`)
         .then(async (response) => await response.json())
         .then((data) => setCompanies([...data]))
         .catch((e) => console.log(e));
@@ -54,17 +48,32 @@ const Form = (props: FormProps) => {
   };
   const handleSubmit = async (e: any) => {
     e.preventDefault();
+    const newRecruiterRef = doc(collection(db, 'recruiters'));
     props.setRecruiters((oldArray) => [
       ...oldArray,
       {
-        name,
+        id: newRecruiterRef.id,
+        firstName,
+        lastName,
         email,
         company,
         title,
         linkedIn,
       },
     ]);
-    await addRecruiter().then(() => props.setPopUpOpen(false));
+    await setDoc(newRecruiterRef, {
+      id: newRecruiterRef.id,
+      firstName,
+      lastName,
+      company,
+      email,
+      title,
+      linkedIn,
+    }).then(() => {
+      props.setMessage('success!');
+      props.setPopUpOpen(false);
+    });
+    clearForm();
   };
 
   return (
@@ -72,11 +81,19 @@ const Form = (props: FormProps) => {
       <p className="form-title">Add Recruiter</p>
       <input
         onChange={(e) => {
-          setName(e.target.value);
+          setFirstName(e.target.value);
         }}
-        placeholder="Recruiter Name"
+        placeholder="Recruiter First Name"
         required
-        value={name}
+        value={firstName}
+      />
+      <input
+        onChange={(e) => {
+          setLastName(e.target.value);
+        }}
+        placeholder="Recruiter Last Name"
+        required
+        value={lastName}
       />
       <input
         onChange={(e) => {
