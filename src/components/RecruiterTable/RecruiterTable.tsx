@@ -40,8 +40,8 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
               <p className="list-row-body-text">{recruiter.title}</p>
             </div>
             <div className="list-row-button-group">
-              <button onClick={() => copyTemplate(recruiter)}>Copy Template</button>
               <select
+                className="list-row-button"
                 name="template"
                 onChange={(e) => setSelectedTemplateID(e.target.value)}
                 value={selectedTemplateID}
@@ -52,6 +52,9 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
                   </option>
                 ))}
               </select>
+              <button className="list-row-button" onClick={() => copyTemplate(recruiter)}>
+                Copy
+              </button>
             </div>
           </div>
         ))}
