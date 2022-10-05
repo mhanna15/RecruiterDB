@@ -1,4 +1,4 @@
-.header-root {
+/* .header-root {
   display: flex;
   align-items: center;
   position: sticky;
@@ -43,4 +43,57 @@
 
 .header-link:hover {
   text-decoration: underline;
+} */
+
+.header-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.header-linksGroup {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.header-link {
+  margin-left: 1em;
+}
+
+@media (max-width: 600px) {
+  .header-root {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .header-linksGroup {
+    display: flex;
+    justify-content: space-between;
+  }
+  .header-link {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 350px) {
+  .header-root {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .header-linksGroup {
+    display: flex;
+    flex-direction: column;
+  }
+  .header-link {
+    margin-left: 0;
+  }
 }
