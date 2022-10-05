@@ -7,11 +7,10 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuth } from './auth/AuthContext';
 import Header from './components/Header/Header';
 import { db } from './firebase';
-import { Template } from './interface';
+import { RecruiterType, Template } from './interface';
 import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
-import LoggedInHome from './pages/Home/LoggedInHome';
-import LoggedOutHome from './pages/Home/LoggedOutHome';
+import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import SignUp from './pages/SignUp/SignUp';
@@ -20,44 +19,58 @@ import Templates from './pages/Templates/Templates';
 const App = () => {
   const { currentUser } = useAuth();
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
 
   const isLoggedIn = currentUser !== null;
 
   useEffect(() => {
-    console.log('fetching templates');
-    const getTemplates = async () => {
-      const q = query(
-        collection(db, 'templates'),
-        where('user', '==', currentUser.email)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setTemplates((current) => [...current, doc.data() as Template]);
-      });
-    };
-    getTemplates().catch((e) => console.log(JSON.stringify(e)));
-    // setUserTemplates(['template 1 here', 'template 2 here']);
+    if (isLoggedIn) {
+      console.log('fetching templates');
+      const getTemplates = async () => {
+        const q = query(collection(db, 'templates'), where('user', '==', currentUser.email));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setTemplates((current) => [...current, doc.data() as Template]);
+        });
+      };
+
+      const getRecruiters = async () => {
+        console.log('fetching recruiters from firebase');
+        const q = query(collection(db, 'recruiters'));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          const recruiter = doc.data();
+          setRecruiters((oldArray) => [
+            ...oldArray,
+            {
+              id: recruiter.id,
+              firstName: recruiter.firstName,
+              lastName: recruiter.lastName,
+              email: recruiter.email,
+              company: recruiter.company,
+              title: recruiter.title,
+              linkedIn: recruiter.linkedIn,
+            },
+          ]);
+        });
+      };
+
+      getRecruiters().catch((e) => console.log(JSON.stringify(e)));
+      getTemplates().catch((e) => console.log(JSON.stringify(e)));
+    }
   }, []);
 
   const authenticatedRoutes = isLoggedIn ? (
     <>
-      <Route path="/" element={<LoggedInHome templates={templates} />} />
+      <Route path="/" element={<Home templates={templates} recruiters={recruiters} setRecruiters={setRecruiters} />} />
       <Route path="/profile" element={<Profile />} />
-      <Route
-        path="/templates"
-        element={
-          <Templates
-            userTemplates={templates}
-            setUserTemplates={setTemplates}
-          />
-        }
-      />
+      <Route path="/templates" element={<Templates userTemplates={templates} setUserTemplates={setTemplates} />} />
       {/* TODO: Remove */}
       <Route path="/companies" element={<Companies />} />
     </>
   ) : (
     <>
-      <Route path="/" element={<LoggedOutHome />} />
+      <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="/profile" element={<Navigate to="/login" replace />} />
     </>
   );
