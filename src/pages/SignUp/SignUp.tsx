@@ -15,7 +15,7 @@ const SignUp = () => {
 
   return (
     <div>
-      <h1>sign up page</h1>
+      <h1>Sign Up</h1>
       <div>
         <input
           type="email"
@@ -32,7 +32,7 @@ const SignUp = () => {
             await handleSignUp(e, signup, email, password, navigate, setError)
           }
         >
-          sign up
+          Sign Up
         </button>
         or
         <button
@@ -40,7 +40,7 @@ const SignUp = () => {
             await handleGoogleLogin(e, loginWithGoogle, navigate, setError)
           }
         >
-          login with google
+          Login with Google
         </button>
         {error}
       </div>

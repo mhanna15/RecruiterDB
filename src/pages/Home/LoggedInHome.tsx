@@ -81,6 +81,7 @@ const LoggedInHome = () => {
     <div className="page-root">
       <div className="page-content">
         <button
+          className="submit-button home-submit-button "
           onClick={(e) => {
             setPopUpOpen(true);
           }}

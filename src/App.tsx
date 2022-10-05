@@ -16,6 +16,7 @@ import Templates from './pages/Templates/Templates';
 
 const App = () => {
   const { currentUser } = useAuth();
+
   const isLoggedIn = currentUser !== null;
 
   const authenticatedRoutes = isLoggedIn ? (

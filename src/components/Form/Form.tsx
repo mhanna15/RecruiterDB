@@ -69,7 +69,7 @@ const Form = (props: FormProps) => {
 
   return (
     <form className="form" onSubmit={handleSubmit}>
-      <p className="title">Add New Recruiter</p>
+      <p className="form-title">Add Recruiter</p>
       <input
         onChange={(e) => {
           setName(e.target.value);
@@ -110,7 +110,7 @@ const Form = (props: FormProps) => {
         required
         value={linkedIn}
       />
-      <button className="button-default button-submit" type="submit">
+      <button className="submit-button" type="submit">
         Submit
       </button>
     </form>

@@ -3,50 +3,36 @@ import './Header.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from '../../auth/AuthContext';
-import { handleLogout } from '../../auth/authFunctions';
-
 const Header = (props: { isLoggedIn: boolean }) => {
-  const [error, setError] = useState<string>('');
-
-  const { logout } = useAuth();
   const navigate = useNavigate();
-
   const buttons = props.isLoggedIn ? (
     <>
-      <button className="header-link" onClick={() => navigate('/profile')}>
-        Profile
-      </button>
-      <button className="header-link" onClick={() => navigate('/templates')}>
+      <a className="header-link" onClick={() => navigate('/templates')}>
         Templates
-      </button>
-      <button
-        className="header-link"
-        onClick={async (e) => await handleLogout(e, logout, navigate, setError)}
-      >
-        Logout
-      </button>
+      </a>
+      <a className="header-link" onClick={() => navigate('/profile')}>
+        Profile
+      </a>
     </>
   ) : (
     <>
-      <button className="header-link" onClick={() => navigate('/login')}>
+      <a className="header-link" onClick={() => navigate('/login')}>
         Login
-      </button>
-      <button className="header-link" onClick={() => navigate('/signup')}>
+      </a>
+      <a className="header-link" onClick={() => navigate('/signup')}>
         Sign Up
-      </button>
+      </a>
     </>
   );
 
   return (
     <div className="header-root">
-      <p className="title">Header</p>
+      <p className="header-title">reverse.io</p>
       <div className="header-linksGroup">
-        <button className="header-link" onClick={() => navigate('/')}>
+        <a className="header-link" onClick={() => navigate('/')}>
           Home
-        </button>
+        </a>
         {buttons}
-        {error}
       </div>
     </div>
   );
