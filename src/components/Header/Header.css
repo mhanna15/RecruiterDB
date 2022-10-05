@@ -49,10 +49,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .header-title {
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: bold;
 }
 
@@ -71,29 +73,34 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-bottom: 1em;
   }
 
   .header-linksGroup {
     display: flex;
     justify-content: space-between;
+    margin-top: 1em;
   }
   .header-link {
     margin-left: 0;
   }
 }
 
-@media (max-width: 350px) {
+@media (max-width: 200px) {
   .header-root {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-bottom: 0;
   }
 
   .header-linksGroup {
     display: flex;
     flex-direction: column;
+    align-items: space-between;
   }
   .header-link {
     margin-left: 0;
+    margin-bottom: 1em;
   }
 }

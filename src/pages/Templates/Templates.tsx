@@ -13,6 +13,7 @@ import { useAuth } from '../../auth/AuthContext';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
+import './Templates.css';
 
 const Templates = () => {
   const [userTemplates, setUserTemplates] = useState<Template[]>([]);
@@ -56,29 +57,41 @@ const Templates = () => {
 
   return (
     <div>
-      <h1>Templates pages</h1>
-      <button
-        onClick={() => {
-          setNewTemplatePopUpOpen(true);
-        }}
-      >
-        create a new template
-      </button>
+      <div className="page-header">
+        <h1 className="page-header-title">My Templates</h1>
+        <button
+          className="submit-button"
+          onClick={() => {
+            setNewTemplatePopUpOpen(true);
+          }}
+        >
+          New Template
+        </button>
+      </div>
+
       {userTemplates.map((template) => (
-        <div key={template.id}>
-          <div>{template.name}</div>
-          <div>{template.template}</div>
-          <button onClick={async () => await deleteTemplate(template)}>
-            delete template
-          </button>
-          <button
-            onClick={() => {
-              setEditTemplatePopUpOpen(true);
-              setTemplateToEdit(template);
-            }}
-          >
-            edit template
-          </button>
+        <div className="list-row" key={template.id}>
+          <div className="list-row-content">
+            <p className="list-row-title">{template.name}</p>
+            <p>{template.template}</p>
+          </div>
+          <div className="list-row-button-group">
+            <button
+              className="list-row-button"
+              onClick={() => {
+                setEditTemplatePopUpOpen(true);
+                setTemplateToEdit(template);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              className="list-row-button"
+              onClick={async () => await deleteTemplate(template)}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
       <Dialog

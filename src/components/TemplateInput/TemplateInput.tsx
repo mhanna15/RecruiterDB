@@ -73,34 +73,68 @@ const TemplateInput = (props: TemplateInputProps) => {
   };
 
   return (
-    <div>
-      <div>
-        <input
-          placeholder="Template Name"
-          value={currentTemplate.name}
-          onChange={(e) => {
-            setCurrentTemplate((oldCurrentTemplate) => ({
-              ...oldCurrentTemplate,
-              name: e.target.value,
-            }));
-          }}
-        />
-        <input
-          placeholder="Variable Name"
-          value={newVariable.name}
-          onChange={(e) =>
-            setNewVariable({ ...newVariable, name: e.target.value })
-          }
-        />
-        =
-        <input
-          placeholder="Value"
-          value={newVariable.value}
-          onChange={(e) =>
-            setNewVariable({ ...newVariable, value: e.target.value })
-          }
-        />
+    <div className="template-form-root">
+      <p className="form-title">
+        {props.existingTemplate ? 'Edit Template' : 'New Template'}
+      </p>
+      <input
+        placeholder="Template Name"
+        value={currentTemplate.name}
+        onChange={(e) => {
+          setCurrentTemplate((oldCurrentTemplate) => ({
+            ...oldCurrentTemplate,
+            name: e.target.value,
+          }));
+        }}
+      />
+      <div className="template-form-sub-container">
+        <p className="form-subtitle">Create Variables</p>
+        {/* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */}
+        {currentTemplate.variables.map((variable) => (
+          <div className="tag" key={variable.name}>
+            <div className="tag-text">
+              <p>{variable.name} </p>
+              <p>=</p>
+              <p> {variable.value}</p>
+            </div>
+
+            <button
+              className="template-form-button"
+              onClick={() => {
+                setCurrentTemplate((oldCurrentTemplate) => ({
+                  ...oldCurrentTemplate,
+                  variables: oldCurrentTemplate.variables.filter(
+                    (variableI) =>
+                      variableI.name !== variable.name &&
+                      variableI.value !== variable.value
+                  ),
+                }));
+              }}
+            >
+              Delete
+            </button>
+          </div>
+        ))}
+        <div className="template-form-sub-container-list">
+          <input
+            className="template-form-special"
+            placeholder="New Variable Name"
+            value={newVariable.name}
+            onChange={(e) =>
+              setNewVariable({ ...newVariable, name: e.target.value })
+            }
+          />
+          <input
+            placeholder="New Value"
+            value={newVariable.value}
+            onChange={(e) =>
+              setNewVariable({ ...newVariable, value: e.target.value })
+            }
+          />
+        </div>
+
         <button
+          className="template-form-button"
           onClick={() => {
             setCurrentTemplate((oldCurrentTemplate) => ({
               ...oldCurrentTemplate,
@@ -110,34 +144,15 @@ const TemplateInput = (props: TemplateInputProps) => {
           }}
           disabled={newVariable.value === '' || newVariable.name === ''}
         >
-          add variable
+          Add Variable
         </button>
       </div>
-      {/* eslint-disable-next-line @typescript-eslint/prefer-optional-chain */}
-      {currentTemplate.variables.map((variable) => (
-        <div key={variable.name}>
-          <p>
-            {variable.name}: {variable.value}
-          </p>
-          <button
-            onClick={() => {
-              setCurrentTemplate((oldCurrentTemplate) => ({
-                ...oldCurrentTemplate,
-                variables: oldCurrentTemplate.variables.filter(
-                  (variableI) =>
-                    variableI.name !== variable.name &&
-                    variableI.value !== variable.value
-                ),
-              }));
-            }}
-          >
-            remove
-          </button>
-        </div>
-      ))}
+
+      <p className="form-subtitle">Edit Template</p>
       <textarea
+        className="template-form-text-area"
         placeholder={
-          props.existingTemplate ? 'edit template' : 'add a template'
+          props.existingTemplate ? 'Edit Template' : 'Start Writing Here...'
         }
         onChange={(e) => {
           setCurrentTemplate({ ...currentTemplate, template: e.target.value });
@@ -145,6 +160,7 @@ const TemplateInput = (props: TemplateInputProps) => {
         value={currentTemplate.template}
       />
       <button
+        className="template-form-button"
         onClick={async () =>
           props.existingTemplate
             ? await editTemplate(
@@ -164,7 +180,7 @@ const TemplateInput = (props: TemplateInputProps) => {
           currentTemplate.template === ''
         }
       >
-        {props.existingTemplate?.template ? 'edit template!' : 'add template!'}
+        Done
       </button>
     </div>
   );

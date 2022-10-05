@@ -38,8 +38,8 @@ table {
   display: flex;
   justify-content: center;
   margin-top: 1em;
-  width: 12em;
-  align-self: flex-end;
+  /* width: 12em;
+  align-self: flex-end; */
 }
 
 @media (max-width: 600px) {
