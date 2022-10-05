@@ -46,7 +46,7 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
                 value={selectedTemplateID}
               >
                 <option disabled selected>
-                  pick a template
+                  Pick Template
                 </option>
                 {props.templates.map((template) => (
                   <option key={template.id} value={template.id}>
