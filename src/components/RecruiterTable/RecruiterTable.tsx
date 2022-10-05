@@ -14,7 +14,6 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
     if (selectedTemplate) {
-      console.log(selectedTemplate);
       let temp = selectedTemplate.template.replace('RECRUITER', recruiter.firstName);
       temp = temp.replace('COMPANY', recruiter.company);
       navigator.clipboard.writeText(temp).catch(console.log);
@@ -46,6 +45,9 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
                 onChange={(e) => setSelectedTemplateID(e.target.value)}
                 value={selectedTemplateID}
               >
+                <option disabled selected>
+                  pick a template
+                </option>
                 {props.templates.map((template) => (
                   <option key={template.id} value={template.id}>
                     {template.name}
