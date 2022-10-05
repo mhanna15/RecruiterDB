@@ -14,8 +14,8 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
     if (selectedTemplate) {
-      let temp = selectedTemplate.template.replace('RECRUITER', recruiter.firstName);
-      temp = temp.replace('COMPANY', recruiter.company);
+      let temp = selectedTemplate.template.replace('{recruiter}', recruiter.firstName);
+      temp = temp.replace('{company}', recruiter.company);
       navigator.clipboard.writeText(temp).catch(console.log);
     }
   };
