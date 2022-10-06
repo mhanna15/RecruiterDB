@@ -13,7 +13,21 @@
 } */
 
 .list-card-root {
+  display: flex;
+  flex-direction: column;
   padding: 1em;
   border-radius: 0.375rem;
-  width: 100%;
+}
+
+.list-card-title {
+  margin-bottom: 0.5em;
+}
+
+.list-card-subtitle {
+  /* font-weight: bold; */
+}
+
+.list-card-row {
+  display: flex;
+  flex-direction: column;
 }

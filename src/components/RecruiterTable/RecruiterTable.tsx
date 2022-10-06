@@ -10,6 +10,7 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
   const [selectedTemplateID, setSelectedTemplateID] = useState<string>();
+  const [copied, setCopied] = useState<boolean>(false);
 
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
@@ -61,7 +62,7 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
           </div>
         ))}
       </div>
-      <Dialog open={popUpOpen} onClose={() => setPopUpOpen(false)}>
+      <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <ListCard recruiter={selectedRecruiter} />
       </Dialog>
     </div>

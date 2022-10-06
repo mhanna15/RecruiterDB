@@ -81,6 +81,7 @@ const LoggedInHome = (props: { templates: Template[] }) => {
 
   return (
     <div className="page-root">
+      {}
       <div className="page-content">
         <button
           className="submit-button home-submit-button"
@@ -90,10 +91,22 @@ const LoggedInHome = (props: { templates: Template[] }) => {
         >
           Add Recruiter
         </button>
-        <RecruiterTable recruiters={recruiters} templates={props.templates} />
-        {message}
+        {recruiters.length === 0 ? (
+          <div className="loader" />
+        ) : (
+          <>
+            <RecruiterTable recruiters={recruiters} templates={props.templates} />
+            {message}
+          </>
+        )}
       </div>
-      <Dialog fullWidth={true} style={{ width: '100%' }} open={popUpOpen} onClose={() => setPopUpOpen(false)}>
+      <Dialog
+        sx={{ width: 1 }}
+        fullWidth={true}
+        style={{ width: '100%' }}
+        open={popUpOpen}
+        onClose={() => setPopUpOpen(false)}
+      >
         <Form
           setPopUpOpen={setPopUpOpen}
           setRecruiters={setRecruiters}

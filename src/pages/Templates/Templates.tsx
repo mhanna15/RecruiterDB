@@ -9,14 +9,9 @@ import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
 
-const Templates = (props: {
-  userTemplates: Template[];
-  setUserTemplates: Dispatch<SetStateAction<Template[]>>;
-}) => {
-  const [newTemplatePopUpOpen, setNewTemplatePopUpOpen] =
-    useState<boolean>(false);
-  const [editTemplatePopUpOpen, setEditTemplatePopUpOpen] =
-    useState<boolean>(false);
+const Templates = (props: { userTemplates: Template[]; setUserTemplates: Dispatch<SetStateAction<Template[]>> }) => {
+  const [newTemplatePopUpOpen, setNewTemplatePopUpOpen] = useState<boolean>(false);
+  const [editTemplatePopUpOpen, setEditTemplatePopUpOpen] = useState<boolean>(false);
 
   const [templateToEdit, setTemplateToEdit] = useState<Template>();
 
@@ -26,18 +21,12 @@ const Templates = (props: {
 
   const deleteTemplate = async (template: Template) => {
     await deleteDoc(doc(db, 'templates', template.id))
-      .then(() =>
-        props.setUserTemplates(
-          props.userTemplates.filter(
-            (templateI) => templateI.id !== template.id
-          )
-        )
-      )
+      .then(() => props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id)))
       .catch((e) => setMessage(JSON.stringify(e)));
   };
 
   return (
-    <div>
+    <div className="page-root">
       <div className="page-header">
         <h1 className="page-header-title">My Templates</h1>
         <button
@@ -49,7 +38,6 @@ const Templates = (props: {
           New Template
         </button>
       </div>
-
       {props.userTemplates.map((template) => (
         <div className="list-row" key={template.id}>
           <div className="list-row-content">
@@ -66,19 +54,14 @@ const Templates = (props: {
             >
               Edit
             </button>
-            <button
-              className="list-row-button"
-              onClick={async () => await deleteTemplate(template)}
-            >
+            <button className="list-row-button" onClick={async () => await deleteTemplate(template)}>
               Delete
             </button>
           </div>
         </div>
       ))}
-      <Dialog
-        open={newTemplatePopUpOpen}
-        onClose={() => setNewTemplatePopUpOpen(false)}
-      >
+
+      <Dialog fullWidth sx={{ width: 1 }} open={newTemplatePopUpOpen} onClose={() => setNewTemplatePopUpOpen(false)}>
         <TemplateInput
           currentUser={currentUser}
           userTemplates={props.userTemplates}
@@ -87,10 +70,7 @@ const Templates = (props: {
           setMessage={setMessage}
         />
       </Dialog>
-      <Dialog
-        open={editTemplatePopUpOpen}
-        onClose={() => setEditTemplatePopUpOpen(false)}
-      >
+      <Dialog fullWidth sx={{ width: 1 }} open={editTemplatePopUpOpen} onClose={() => setEditTemplatePopUpOpen(false)}>
         <TemplateInput
           currentUser={currentUser}
           userTemplates={props.userTemplates}

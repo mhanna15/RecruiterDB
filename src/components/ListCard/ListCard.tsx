@@ -7,13 +7,25 @@ import { RecruiterType } from '../../interface';
 const ListCard = (props: { recruiter: RecruiterType }) => {
   return (
     <div className="list-card-root">
-      <p>
+      <h1 className="list-card-title">
         {props.recruiter.firstName} {props.recruiter.lastName}
-      </p>
-      <p>email: {props.recruiter.email}</p>
-      <p>company: {props.recruiter.company}</p>
-      <p>title: {props.recruiter.title}</p>
-      <p>linkedIn: {props.recruiter.linkedIn}</p>
+      </h1>
+      <div className="list-card-row">
+        <p className="list-card-subtitle">Email</p>
+        <p className="tag-text">{props.recruiter.email}</p>
+      </div>
+      <div className="list-card-row">
+        <p className="list-card-subtitle">Company</p>
+        <p className="tag-text">{props.recruiter.company}</p>
+      </div>
+      <div className="list-card-row">
+        <p className="list-card-subtitle">Job Title</p>
+        <p className="tag-text">{props.recruiter.title}</p>
+      </div>
+      <div className="list-card-row">
+        <p className="list-card-subtitle">LinkedIn</p>
+        <p className="tag-text">{props.recruiter.linkedIn}</p>
+      </div>
     </div>
   );
 };
