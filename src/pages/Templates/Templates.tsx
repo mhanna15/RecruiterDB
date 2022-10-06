@@ -9,7 +9,11 @@ import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
 
-const Templates = (props: { userTemplates: Template[]; setUserTemplates: Dispatch<SetStateAction<Template[]>> }) => {
+const Templates = (props: {
+  userTemplates: Template[];
+  setUserTemplates: Dispatch<SetStateAction<Template[]>>;
+  loading: boolean;
+}) => {
   const [newTemplatePopUpOpen, setNewTemplatePopUpOpen] = useState<boolean>(false);
   const [editTemplatePopUpOpen, setEditTemplatePopUpOpen] = useState<boolean>(false);
 
@@ -38,28 +42,32 @@ const Templates = (props: { userTemplates: Template[]; setUserTemplates: Dispatc
           New Template
         </button>
       </div>
-      {props.userTemplates.map((template) => (
-        <div className="list-row" key={template.id}>
-          <div className="list-row-content">
-            <p className="list-row-title">{template.name}</p>
-            <p>{template.template}</p>
+      {props.loading ? (
+        <div className="loader" />
+      ) : (
+        props.userTemplates.map((template) => (
+          <div className="list-row" key={template.id}>
+            <div className="list-row-content">
+              <p className="list-row-title">{template.name}</p>
+              <p>{template.template}</p>
+            </div>
+            <div className="list-row-button-group">
+              <button
+                className="list-row-button"
+                onClick={() => {
+                  setEditTemplatePopUpOpen(true);
+                  setTemplateToEdit(template);
+                }}
+              >
+                Edit
+              </button>
+              <button className="list-row-button" onClick={async () => await deleteTemplate(template)}>
+                Delete
+              </button>
+            </div>
           </div>
-          <div className="list-row-button-group">
-            <button
-              className="list-row-button"
-              onClick={() => {
-                setEditTemplatePopUpOpen(true);
-                setTemplateToEdit(template);
-              }}
-            >
-              Edit
-            </button>
-            <button className="list-row-button" onClick={async () => await deleteTemplate(template)}>
-              Delete
-            </button>
-          </div>
-        </div>
-      ))}
+        ))
+      )}
 
       <Dialog fullWidth sx={{ width: 1 }} open={newTemplatePopUpOpen} onClose={() => setNewTemplatePopUpOpen(false)}>
         <TemplateInput

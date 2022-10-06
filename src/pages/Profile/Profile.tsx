@@ -19,7 +19,7 @@ const Profile = () => {
         <h1>Profile</h1>
       </div>
       <div className="profile-content">
-        <p className="profile-field">Email: {currentUser.email}</p>
+        <p className="profile-field">Email: {currentUser?.email}</p>
       </div>
       <button onClick={async (e) => await handleLogout(e, logout, navigate, setError)}>Sign Out</button>
       {error}
