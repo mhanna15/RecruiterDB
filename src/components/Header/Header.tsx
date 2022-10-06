@@ -10,7 +10,7 @@ const Header = (props: { isLoggedIn: boolean }) => {
       <a className="header-link" onClick={() => navigate('/')}>
         Home
       </a>
-      <a className="header-link input" onClick={() => navigate('/templates')}>
+      <a className="header-link" onClick={() => navigate('/templates')}>
         Templates
       </a>
       <a className="header-link input" onClick={() => navigate('/profile')}>

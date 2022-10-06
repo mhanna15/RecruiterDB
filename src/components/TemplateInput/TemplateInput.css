@@ -20,7 +20,7 @@
 .template-form-text-area {
   resize: vertical;
   height: 100px;
-  max-height: 250px;
+  max-height: 500px;
   min-height: 20px;
 }
 
