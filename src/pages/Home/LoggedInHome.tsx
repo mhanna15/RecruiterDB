@@ -81,10 +81,14 @@ const LoggedInHome = (props: { templates: Template[] }) => {
 
   return (
     <div className="page-root">
-      {}
       <div className="page-content">
+        <div className="page-header">
+          <h1 className="page-header-title" style={{ marginBottom: '1em' }}>
+            Dashboard
+          </h1>
+        </div>
         <button
-          className="submit-button home-submit-button"
+          className="submit-button "
           onClick={(e) => {
             setPopUpOpen(true);
           }}
