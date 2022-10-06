@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import { handleGoogleLogin, handleLogin } from '../../auth/authFunctions';
 
+import './Login.css';
+
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -14,33 +16,23 @@ const Login = () => {
   const { login, loginWithGoogle } = useAuth();
 
   return (
-    <div>
-      <h1>Login</h1>
-      <div>
-        <input
-          type="email"
-          placeholder="email"
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="password"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+    <div className="login-content">
+      <div className="login-field">
+        <h1 className="login-title">Login</h1>
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
+        <input type="text" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <button
-          onClick={async (e) =>
-            await handleLogin(e, login, email, password, navigate, setError)
-          }
+          className="submit-button"
+          onClick={async (e) => await handleLogin(e, login, email, password, navigate, setError)}
         >
           Login
-        </button>{' '}
-        or
+        </button>
+        <h1 style={{ display: 'flex', alignSelf: 'center', marginTop: '1em', marginBottom: '1em' }}>or</h1>
         <button
           onClick={async (e) => {
             await handleGoogleLogin(e, loginWithGoogle, navigate, setError);
           }}
         >
-          {' '}
           Login with Google
         </button>
         {error}

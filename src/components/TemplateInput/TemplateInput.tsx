@@ -67,7 +67,11 @@ const TemplateInput = (props: TemplateInputProps) => {
           }));
         }}
       />
-      <p className="form-subtitle">Edit Template</p>
+      <p>
+        {'{recruiter}'}: Selected Recruiter First Name
+        <br />
+        {'{company}'}: Selected Recruiter Company Name
+      </p>
       <textarea
         className="template-form-text-area"
         placeholder={props.existingTemplate ? 'Edit Template' : 'Start Writing Here...'}

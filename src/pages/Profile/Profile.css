@@ -1,3 +1,16 @@
+.page-root {
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: solid;
+  padding: 2em;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: lightgray;
+  color: black;
+}
+
 .profile-content {
   margin-top: 2em;
   margin-bottom: 2em;

@@ -1,5 +1,7 @@
 import './RecruiterTable.css';
 
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 
@@ -10,13 +12,16 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
   const [selectedTemplateID, setSelectedTemplateID] = useState<string>();
+  const [copied, setCopied] = useState<boolean>(false);
 
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
     if (selectedTemplate) {
-      let temp = selectedTemplate.template.replace('{recruiter}', recruiter.firstName);
-      temp = temp.replace('{company}', recruiter.company);
-      navigator.clipboard.writeText(temp).catch(console.log);
+      let temp = selectedTemplate.template.replaceAll('{recruiter}', recruiter.firstName);
+      temp = temp.replaceAll('{company}', recruiter.company);
+      navigator.clipboard.writeText(temp).catch((e) => console.log(e));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 750);
     }
   };
 
@@ -61,9 +66,12 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
           </div>
         ))}
       </div>
-      <Dialog open={popUpOpen} onClose={() => setPopUpOpen(false)}>
+      <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <ListCard recruiter={selectedRecruiter} />
       </Dialog>
+      <Collapse in={copied}>
+        <Alert severity="success">Copied</Alert>
+      </Collapse>
     </div>
   );
 };

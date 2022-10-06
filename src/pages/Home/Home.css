@@ -37,9 +37,6 @@ table {
 .home-submit-button {
   display: flex;
   justify-content: center;
-  margin-top: 1em;
-  /* width: 12em;
-  align-self: flex-end; */
 }
 
 @media (max-width: 600px) {
