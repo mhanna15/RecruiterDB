@@ -1,4 +1,4 @@
-import { doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
 
@@ -15,7 +15,6 @@ export const handleSignUp = async (
   e.preventDefault();
   try {
     await signup(email, password);
-    await addNewUserToDb(email);
     navigate('/home');
   } catch (e: any) {
     setError(JSON.stringify(e));
@@ -46,13 +45,7 @@ export const handleGoogleLogin = async (
   setError: Dispatch<SetStateAction<string>>
 ) => {
   e.preventDefault();
-  await loginWithGoogle()
-    .then(async (data: { email: string; isNewUser: boolean }) => {
-      if (data.isNewUser) {
-        await addNewUserToDb(data.email);
-      }
-    })
-    .catch((e: any) => setError(JSON.stringify(e)));
+  await loginWithGoogle().catch((e: any) => setError(JSON.stringify(e)));
   navigate('/home');
 };
 
@@ -69,8 +62,4 @@ export const handleLogout = async (
   } catch (e: any) {
     setError(JSON.stringify(e));
   }
-};
-
-const addNewUserToDb = async (email: string) => {
-  await setDoc(doc(db, 'users', email), { email, templates: [] });
 };

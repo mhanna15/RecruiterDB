@@ -6,12 +6,17 @@ import firebase, {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import { auth } from '../firebase';
+import { auth, db } from '../firebase';
+
+interface User extends firebase.User {
+  role?: string;
+}
 
 interface Context {
-  currentUser: firebase.User | undefined;
+  currentUser: User | undefined;
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<any>;
   signup: (email: string, password: string) => Promise<void>;
@@ -20,12 +25,28 @@ interface Context {
 
 const AuthContext = createContext<Context | null>(null);
 
+const getUserRoleFromDb = async (uid: string) => {
+  console.log(uid);
+  const userRef = doc(db, 'users', uid);
+  const userSnap = await getDoc(userRef);
+  console.log(userSnap.data());
+  if (userSnap.exists()) {
+    return userSnap.data().role;
+  }
+};
+
 export const AuthProvider = ({ children }: any) => {
-  const [currentUser, setCurrentUser] = useState<firebase.User>();
+  const [currentUser, setCurrentUser] = useState<User>();
+
+  const addNewUserToDb = async (uid: string, email: string) => {
+    await setDoc(doc(db, 'users', uid), { email, templates: [], role: 'user', uid });
+  };
 
   const signup = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password);
+      await createUserWithEmailAndPassword(auth, email, password).then(
+        async (res) => await addNewUserToDb(res.user.uid, email)
+      );
     } catch (e: any) {
       return e.code;
     }
@@ -41,15 +62,13 @@ export const AuthProvider = ({ children }: any) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    try {
-      await signInWithPopup(auth, provider).then((result) => {
-        const details = getAdditionalUserInfo(result);
-        const email = result.user.email;
-        return { email, isNewUser: details?.isNewUser };
-      });
-    } catch (e: any) {
-      return e.code;
-    }
+    await signInWithPopup(auth, provider).then(async (res) => {
+      const details = getAdditionalUserInfo(res);
+      const email = res.user.email;
+      if (details?.isNewUser && email) {
+        await addNewUserToDb(res.user.uid, email);
+      }
+    });
   };
 
   const logout = async () => {
@@ -61,11 +80,12 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if (!user) {
         setCurrentUser(undefined);
       } else {
-        setCurrentUser(user);
+        const role = await getUserRoleFromDb(user.uid);
+        setCurrentUser({ ...user, role });
       }
     });
 

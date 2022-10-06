@@ -3,18 +3,33 @@ import './RecruiterTable.css';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
-import React, { useState } from 'react';
+import { deleteDoc, doc } from 'firebase/firestore';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
+import CopyIcon from '../../assets/CopyIcon';
+import { useAuth } from '../../auth/AuthContext';
+import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import ListCard from '../ListCard/ListCard';
 
-import CopyIcon from '../../assets/CopyIcon';
-
-const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Template[] }) => {
+const RecruiterTable = (props: {
+  recruiters: RecruiterType[];
+  templates: Template[];
+  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
+}) => {
+  const { currentUser } = useAuth();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
   const [selectedTemplateID, setSelectedTemplateID] = useState<string>();
   const [copied, setCopied] = useState<boolean>(false);
+
+  const deleteRecruiter = async (recruiterId: string) => {
+    if (currentUser?.role === 'admin') {
+      await deleteDoc(doc(db, 'recruiters', recruiterId)).then(() =>
+        props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId))
+      );
+    }
+  };
 
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
@@ -64,6 +79,11 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
               <button className="list-row-button" onClick={() => copyTemplate(recruiter)}>
                 Copy
               </button>
+              {currentUser?.role === 'admin' ? (
+                <button onClick={async () => await deleteRecruiter(recruiter.id)}>delete</button>
+              ) : (
+                <></>
+              )}
             </div>
           </div>
         ))}

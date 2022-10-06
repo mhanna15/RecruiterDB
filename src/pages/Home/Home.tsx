@@ -37,7 +37,11 @@ const Home = (props: {
           <div className="loader" />
         ) : (
           <>
-            <RecruiterTable recruiters={props.recruiters} templates={props.templates} />
+            <RecruiterTable
+              recruiters={props.recruiters}
+              templates={props.templates}
+              setRecruiters={props.setRecruiters}
+            />
             {message}
           </>
         )}
