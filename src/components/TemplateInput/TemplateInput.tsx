@@ -59,7 +59,8 @@ const TemplateInput = (props: TemplateInputProps) => {
     <div className="template-form-root">
       <p className="form-title">{props.existingTemplate ? 'Edit Template' : 'New Template'}</p>
       <div className="form-description-container">
-        <p></p>
+        <p style={{ marginBottom: '1em' }}>Recruiter First Name: {'{recruiter}'}</p>
+        <p>Company Name: {'{company}'}</p>
       </div>
       <input
         placeholder="Template Name"
@@ -71,11 +72,7 @@ const TemplateInput = (props: TemplateInputProps) => {
           }));
         }}
       />
-      <p>
-        {'{recruiter}'}: Selected Recruiter First Name
-        <br />
-        {'{company}'}: Selected Recruiter Company Name
-      </p>
+
       <textarea
         className="template-form-text-area"
         placeholder={props.existingTemplate ? 'Edit Template' : 'Start Writing Here...'}
