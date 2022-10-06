@@ -1,5 +1,7 @@
 import './RecruiterTable.css';
 
+import Alert from '@mui/material/Alert';
+import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
 import React, { useState } from 'react';
 
@@ -17,7 +19,9 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
     if (selectedTemplate) {
       let temp = selectedTemplate.template.replaceAll('{recruiter}', recruiter.firstName);
       temp = temp.replaceAll('{company}', recruiter.company);
-      navigator.clipboard.writeText(temp).catch(console.log);
+      navigator.clipboard.writeText(temp).catch((e) => console.log(e));
+      setCopied(true);
+      setTimeout(() => setCopied(false), 750);
     }
   };
 
@@ -65,6 +69,9 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
       <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <ListCard recruiter={selectedRecruiter} />
       </Dialog>
+      <Collapse in={copied}>
+        <Alert severity="success">Copied</Alert>
+      </Collapse>
     </div>
   );
 };
