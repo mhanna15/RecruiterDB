@@ -8,6 +8,8 @@ import React, { useState } from 'react';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import ListCard from '../ListCard/ListCard';
 
+import CopyIcon from '../../assets/CopyIcon';
+
 const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Template[] }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);

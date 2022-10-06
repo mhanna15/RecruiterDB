@@ -2,6 +2,7 @@ import './TemplateInput.css';
 
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import ListCard from '../ListCard/ListCard';
 
 import { db } from '../../firebase';
 import { emptyTemplate, Template } from '../../interface';
@@ -57,6 +58,10 @@ const TemplateInput = (props: TemplateInputProps) => {
   return (
     <div className="template-form-root">
       <p className="form-title">{props.existingTemplate ? 'Edit Template' : 'New Template'}</p>
+      <div className="form-description-container">
+        <p style={{ marginBottom: '1em' }}>Recruiter First Name: {'{recruiter}'}</p>
+        <p>Company Name: {'{company}'}</p>
+      </div>
       <input
         placeholder="Template Name"
         value={currentTemplate.name}
@@ -67,11 +72,7 @@ const TemplateInput = (props: TemplateInputProps) => {
           }));
         }}
       />
-      <p>
-        {'{recruiter}'}: Selected Recruiter First Name
-        <br />
-        {'{company}'}: Selected Recruiter Company Name
-      </p>
+
       <textarea
         className="template-form-text-area"
         placeholder={props.existingTemplate ? 'Edit Template' : 'Start Writing Here...'}
