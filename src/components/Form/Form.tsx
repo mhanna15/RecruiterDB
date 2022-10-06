@@ -132,7 +132,13 @@ const Form = (props: FormProps) => {
         required
         value={linkedIn}
       />
-      <button className="submit-button" type="submit">
+      <button
+        className="submit-button"
+        type="submit"
+        disabled={
+          firstName === '' || lastName === '' || email === '' || company === '' || title === '' || linkedIn === ''
+        }
+      >
         Submit
       </button>
     </form>

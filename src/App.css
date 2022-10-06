@@ -110,6 +110,10 @@ button:hover {
   background-color: #349c84;
 }
 
+.submit-button:disabled {
+  background-color: grey;
+}
+
 /* LIST ITEMS */
 .list-row {
   display: flex;
