@@ -6,6 +6,8 @@ import React, { useState } from 'react';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import ListCard from '../ListCard/ListCard';
 
+import CopyIcon from '../../assets/CopyIcon';
+
 const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Template[] }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
@@ -18,6 +20,7 @@ const RecruiterTable = (props: { recruiters: RecruiterType[]; templates: Templat
       let temp = selectedTemplate.template.replaceAll('{recruiter}', recruiter.firstName);
       temp = temp.replaceAll('{company}', recruiter.company);
       navigator.clipboard.writeText(temp).catch(console.log);
+      alert('Copied to Clipboard');
     }
   };
 

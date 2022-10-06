@@ -3,6 +3,8 @@ import './Header.css';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import ProfileIcon from '../../assets/ProfileIcon';
+
 const Header = (props: { isLoggedIn: boolean }) => {
   const navigate = useNavigate();
   const buttons = props.isLoggedIn ? (

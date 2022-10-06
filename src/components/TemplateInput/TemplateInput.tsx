@@ -2,6 +2,7 @@ import './TemplateInput.css';
 
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import ListCard from '../ListCard/ListCard';
 
 import { db } from '../../firebase';
 import { emptyTemplate, Template } from '../../interface';
@@ -57,6 +58,9 @@ const TemplateInput = (props: TemplateInputProps) => {
   return (
     <div className="template-form-root">
       <p className="form-title">{props.existingTemplate ? 'Edit Template' : 'New Template'}</p>
+      <div className="form-description-container">
+        <p></p>
+      </div>
       <input
         placeholder="Template Name"
         value={currentTemplate.name}
