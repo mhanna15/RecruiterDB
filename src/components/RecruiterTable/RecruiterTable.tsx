@@ -45,6 +45,9 @@ const RecruiterTable = (props: {
   return (
     <div className="list-root">
       <div className="list-container">
+        <Collapse className="list-row-alert" in={copied}>
+          <Alert severity="success">Copied</Alert>
+        </Collapse>
         {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
             <div
@@ -88,12 +91,10 @@ const RecruiterTable = (props: {
           </div>
         ))}
       </div>
+
       <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <ListCard recruiter={selectedRecruiter} />
       </Dialog>
-      <Collapse in={copied}>
-        <Alert severity="success">Copied</Alert>
-      </Collapse>
     </div>
   );
 };
