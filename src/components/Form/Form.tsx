@@ -79,21 +79,33 @@ const Form = (props: FormProps) => {
   return (
     <form className="form" onSubmit={handleSubmit}>
       <p className="form-title">Add Recruiter</p>
+      <div className="form-row">
+        <input
+          className="form-row-col form-row-col-left"
+          onChange={(e) => {
+            setFirstName(e.target.value);
+          }}
+          placeholder="Recruiter First Name"
+          required
+          value={firstName}
+        />
+        <input
+          className="form-row-col"
+          onChange={(e) => {
+            setLastName(e.target.value);
+          }}
+          placeholder="Recruiter Last Name"
+          required
+          value={lastName}
+        />
+      </div>
       <input
         onChange={(e) => {
-          setFirstName(e.target.value);
+          setEmail(e.target.value);
         }}
-        placeholder="Recruiter First Name"
+        placeholder="Email"
         required
-        value={firstName}
-      />
-      <input
-        onChange={(e) => {
-          setLastName(e.target.value);
-        }}
-        placeholder="Recruiter Last Name"
-        required
-        value={lastName}
+        value={email}
       />
       <input
         onChange={(e) => {
@@ -103,14 +115,7 @@ const Form = (props: FormProps) => {
         required
         value={company}
       />
-      <input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        placeholder="Email"
-        required
-        value={email}
-      />
+
       <input
         onChange={(e) => {
           setTitle(e.target.value);

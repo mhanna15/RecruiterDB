@@ -47,6 +47,19 @@
   border-radius: 0.375rem;
 }
 
+.form-row {
+  display: flex;
+  width: 100%;
+}
+
+.form-row-col {
+  width: 100%;
+}
+
+.form-row-col-left {
+  margin-right: 1em;
+}
+
 .form-title {
   font-size: 2rem;
   margin-bottom: 1rem;
