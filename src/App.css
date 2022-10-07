@@ -91,7 +91,7 @@ button {
   cursor: pointer;
 }
 
-button:hover {
+button:hover:enabled {
   background-color: #bdbdbd;
 }
 
@@ -111,7 +111,7 @@ button:hover {
 }
 
 .submit-button:disabled {
-  background-color: grey;
+  background-color: lightgray;
 }
 
 /* LIST ITEMS */
