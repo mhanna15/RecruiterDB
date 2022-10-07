@@ -1,26 +1,28 @@
 import './Form.css';
 
 import { collection, doc, setDoc } from 'firebase/firestore';
+import _ from 'lodash';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
+import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { Company, RecruiterType } from '../../interface';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
-  setMessage: Dispatch<SetStateAction<string>>;
-  cancel: Dispatch<SetStateAction<boolean>>;
+  existingRecruiter?: RecruiterType;
 }
 
 const Form = (props: FormProps) => {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
-
-  const [company, setCompany] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [linkedIn, setLinkedIn] = useState<string>('');
+  const { currentUser } = useAuth();
+  const [id, setID] = useState<string>(props.existingRecruiter ? props.existingRecruiter.id : '');
+  const [firstName, setFirstName] = useState<string>(props.existingRecruiter ? props.existingRecruiter.firstName : '');
+  const [lastName, setLastName] = useState<string>(props.existingRecruiter ? props.existingRecruiter.lastName : '');
+  const [company, setCompany] = useState<string>(props.existingRecruiter ? props.existingRecruiter.company : '');
+  const [email, setEmail] = useState<string>(props.existingRecruiter ? props.existingRecruiter.email : '');
+  const [title, setTitle] = useState<string>(props.existingRecruiter ? props.existingRecruiter.title : '');
+  const [linkedIn, setLinkedIn] = useState<string>(props.existingRecruiter ? props.existingRecruiter.linkedIn : '');
 
   const [companies, setCompanies] = useState<Company[]>([]);
 
@@ -34,9 +36,7 @@ const Form = (props: FormProps) => {
     setTitle('');
     setLinkedIn('');
   };
-  const addRecruiter = async () => {
-    // TODO: sanitize name or id input
-  };
+
   const fetchCompanyOptions = (input: string) => {
     console.log('companies fetched');
     if (input !== '') {
@@ -46,13 +46,24 @@ const Form = (props: FormProps) => {
         .catch((e) => console.log(e));
     }
   };
-  const handleSubmit = async (e: any) => {
+
+  const handleAddNewRecruiter = async (e: any) => {
     e.preventDefault();
     const newRecruiterRef = doc(collection(db, 'recruiters'));
+    setID(newRecruiterRef.id);
+    await setDoc(newRecruiterRef, {
+      id,
+      firstName,
+      lastName,
+      company,
+      email,
+      title,
+      linkedIn,
+    });
     props.setRecruiters((oldArray) => [
       ...oldArray,
       {
-        id: newRecruiterRef.id,
+        id,
         firstName,
         lastName,
         email,
@@ -61,24 +72,38 @@ const Form = (props: FormProps) => {
         linkedIn,
       },
     ]);
-    await setDoc(newRecruiterRef, {
-      id: newRecruiterRef.id,
-      firstName,
-      lastName,
-      company,
-      email,
-      title,
-      linkedIn,
-    }).then(() => {
-      props.setMessage('success!');
-      props.setPopUpOpen(false);
-    });
+    props.setPopUpOpen(false);
     clearForm();
   };
 
+  const handleEditRecruiter = async (e: any) => {
+    e.preventDefault();
+    if (props.existingRecruiter && currentUser?.role === 'admin') {
+      await setDoc(doc(db, 'recruiters', props.existingRecruiter.id), {
+        id,
+        firstName,
+        lastName,
+        company,
+        email,
+        title,
+        linkedIn,
+      });
+      props.setRecruiters((oldArray) =>
+        oldArray.map((recruiter) => {
+          if (recruiter.id === props.existingRecruiter?.id) {
+            return { id, firstName, lastName, company, email, title, linkedIn };
+          }
+          return recruiter;
+        })
+      );
+      props.setPopUpOpen(false);
+      clearForm();
+    }
+  };
+
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <p className="form-title">Add Recruiter</p>
+    <form className="form" onSubmit={props.existingRecruiter ? handleEditRecruiter : handleAddNewRecruiter}>
+      <p className="form-title">{props.existingRecruiter ? 'Edit Recruiter' : 'Add Recruiter'}</p>
       <div className="form-row">
         <input
           className="form-row-col form-row-col-left"
@@ -136,7 +161,21 @@ const Form = (props: FormProps) => {
         className="submit-button"
         type="submit"
         disabled={
-          firstName === '' || lastName === '' || email === '' || company === '' || title === '' || linkedIn === ''
+          firstName === '' ||
+          lastName === '' ||
+          email === '' ||
+          company === '' ||
+          title === '' ||
+          linkedIn === '' ||
+          _.isEqual(props.existingRecruiter, {
+            id,
+            firstName,
+            lastName,
+            email,
+            company,
+            title,
+            linkedIn,
+          })
         }
       >
         Submit

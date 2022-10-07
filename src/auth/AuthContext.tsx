@@ -26,10 +26,8 @@ interface Context {
 const AuthContext = createContext<Context | null>(null);
 
 const getUserRoleFromDb = async (uid: string) => {
-  console.log(uid);
   const userRef = doc(db, 'users', uid);
   const userSnap = await getDoc(userRef);
-  console.log(userSnap.data());
   if (userSnap.exists()) {
     return userSnap.data().role;
   }

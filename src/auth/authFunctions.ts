@@ -1,8 +1,5 @@
-import { collection, doc, setDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction } from 'react';
 import { NavigateFunction } from 'react-router-dom';
-
-import { db } from '../firebase';
 
 export const handleSignUp = async (
   e: any,
@@ -59,6 +56,7 @@ export const handleLogout = async (
   try {
     await logout();
     navigate('/login');
+    window.location.reload();
   } catch (e: any) {
     setError(JSON.stringify(e));
   }

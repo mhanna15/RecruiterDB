@@ -10,12 +10,13 @@ import CopyIcon from '../../assets/CopyIcon';
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
-import ListCard from '../ListCard/ListCard';
+import Form from '../Form/Form';
 
 const RecruiterTable = (props: {
   recruiters: RecruiterType[];
   templates: Template[];
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
+  setPopUpOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const { currentUser } = useAuth();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
@@ -53,8 +54,10 @@ const RecruiterTable = (props: {
             <div
               className="list-row-content"
               onClick={() => {
-                setSelectedRecruiter(recruiter);
-                setPopUpOpen(true);
+                if (currentUser?.role === 'admin') {
+                  setSelectedRecruiter(recruiter);
+                  setPopUpOpen(true);
+                }
               }}
             >
               <p className="list-row-title">
@@ -91,9 +94,8 @@ const RecruiterTable = (props: {
           </div>
         ))}
       </div>
-
       <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
-        <ListCard recruiter={selectedRecruiter} />
+        <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} existingRecruiter={selectedRecruiter} />
       </Dialog>
     </div>
   );

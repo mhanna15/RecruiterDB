@@ -67,7 +67,14 @@ const App = () => {
     <>
       <Route
         path="/home"
-        element={<Home templates={templates} recruiters={recruiters} setRecruiters={setRecruiters} loading={recruitersLoading}/>}
+        element={
+          <Home
+            templates={templates}
+            recruiters={recruiters}
+            setRecruiters={setRecruiters}
+            loading={recruitersLoading}
+          />
+        }
       />
       <Route path="/profile" element={<Profile />} />
       <Route

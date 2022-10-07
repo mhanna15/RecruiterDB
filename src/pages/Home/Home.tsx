@@ -14,7 +14,6 @@ const Home = (props: {
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   loading: boolean;
 }) => {
-  const [message, setMessage] = useState<string>('');
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
   return (
@@ -41,8 +40,8 @@ const Home = (props: {
               recruiters={props.recruiters}
               templates={props.templates}
               setRecruiters={props.setRecruiters}
+              setPopUpOpen={setPopUpOpen}
             />
-            {message}
           </>
         )}
       </div>
@@ -53,12 +52,7 @@ const Home = (props: {
         open={popUpOpen}
         onClose={() => setPopUpOpen(false)}
       >
-        <Form
-          setPopUpOpen={setPopUpOpen}
-          setRecruiters={props.setRecruiters}
-          setMessage={setMessage}
-          cancel={() => setPopUpOpen(false)}
-        />
+        <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} />
       </Dialog>
     </div>
   );
