@@ -19,11 +19,6 @@ const Form = (props: FormProps) => {
   const [recruiterData, setRecruiterData] = useState<RecruiterType>(
     props.existingRecruiter ? props.existingRecruiter : emptyRecruiter
   );
-  const [id, setID] = useState<string>(props.existingRecruiter ? props.existingRecruiter.id : '');
-
-  const [companies, setCompanies] = useState<Company[]>([]);
-
-  const [inputValue, setInputValue] = useState<string>('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRecruiterData((prevRecruiterData) => {
@@ -34,26 +29,13 @@ const Form = (props: FormProps) => {
     });
   };
 
-  console.log(recruiterData);
-
   const clearForm = () => {
     setRecruiterData(emptyRecruiter);
   };
 
-  // const fetchCompanyOptions = (input: string) => {
-  //   console.log('companies fetched');
-  //   if (input !== '') {
-  //     fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`)
-  //       .then(async (response) => await response.json())
-  //       .then((data) => setCompanies([...data]))
-  //       .catch((e) => console.log(e));
-  //   }
-  // };
-
   const handleAddNewRecruiter = async (e: any) => {
     e.preventDefault();
     const newRecruiterRef = doc(collection(db, 'recruiters'));
-    setID(newRecruiterRef.id);
     await setDoc(newRecruiterRef, { ...recruiterData, id: newRecruiterRef.id });
     props.setRecruiters((oldArray) => [...oldArray, { ...recruiterData, id: newRecruiterRef.id }]);
     props.setPopUpOpen(false);
