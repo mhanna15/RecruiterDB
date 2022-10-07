@@ -2,11 +2,11 @@ import './Form.css';
 
 import { collection, doc, setDoc } from 'firebase/firestore';
 import _ from 'lodash';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
-import { Company, RecruiterType } from '../../interface';
+import { Company, emptyRecruiter, RecruiterType } from '../../interface';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
@@ -16,62 +16,46 @@ interface FormProps {
 
 const Form = (props: FormProps) => {
   const { currentUser } = useAuth();
+  const [recruiterData, setRecruiterData] = useState<RecruiterType>(
+    props.existingRecruiter ? props.existingRecruiter : emptyRecruiter
+  );
   const [id, setID] = useState<string>(props.existingRecruiter ? props.existingRecruiter.id : '');
-  const [firstName, setFirstName] = useState<string>(props.existingRecruiter ? props.existingRecruiter.firstName : '');
-  const [lastName, setLastName] = useState<string>(props.existingRecruiter ? props.existingRecruiter.lastName : '');
-  const [company, setCompany] = useState<string>(props.existingRecruiter ? props.existingRecruiter.company : '');
-  const [email, setEmail] = useState<string>(props.existingRecruiter ? props.existingRecruiter.email : '');
-  const [title, setTitle] = useState<string>(props.existingRecruiter ? props.existingRecruiter.title : '');
-  const [linkedIn, setLinkedIn] = useState<string>(props.existingRecruiter ? props.existingRecruiter.linkedIn : '');
 
   const [companies, setCompanies] = useState<Company[]>([]);
 
   const [inputValue, setInputValue] = useState<string>('');
 
-  const clearForm = () => {
-    setFirstName('');
-    setLastName('');
-    setCompany('');
-    setEmail('');
-    setTitle('');
-    setLinkedIn('');
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRecruiterData((prevRecruiterData) => {
+      return {
+        ...prevRecruiterData,
+        [event.target.name]: event.target.value,
+      };
+    });
   };
 
-  const fetchCompanyOptions = (input: string) => {
-    console.log('companies fetched');
-    if (input !== '') {
-      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`)
-        .then(async (response) => await response.json())
-        .then((data) => setCompanies([...data]))
-        .catch((e) => console.log(e));
-    }
+  console.log(recruiterData);
+
+  const clearForm = () => {
+    setRecruiterData(emptyRecruiter);
   };
+
+  // const fetchCompanyOptions = (input: string) => {
+  //   console.log('companies fetched');
+  //   if (input !== '') {
+  //     fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`)
+  //       .then(async (response) => await response.json())
+  //       .then((data) => setCompanies([...data]))
+  //       .catch((e) => console.log(e));
+  //   }
+  // };
 
   const handleAddNewRecruiter = async (e: any) => {
     e.preventDefault();
     const newRecruiterRef = doc(collection(db, 'recruiters'));
     setID(newRecruiterRef.id);
-    await setDoc(newRecruiterRef, {
-      id,
-      firstName,
-      lastName,
-      company,
-      email,
-      title,
-      linkedIn,
-    });
-    props.setRecruiters((oldArray) => [
-      ...oldArray,
-      {
-        id,
-        firstName,
-        lastName,
-        email,
-        company,
-        title,
-        linkedIn,
-      },
-    ]);
+    await setDoc(newRecruiterRef, { ...recruiterData, id: newRecruiterRef.id });
+    props.setRecruiters((oldArray) => [...oldArray, { ...recruiterData, id: newRecruiterRef.id }]);
     props.setPopUpOpen(false);
     clearForm();
   };
@@ -79,19 +63,11 @@ const Form = (props: FormProps) => {
   const handleEditRecruiter = async (e: any) => {
     e.preventDefault();
     if (props.existingRecruiter && currentUser?.role === 'admin') {
-      await setDoc(doc(db, 'recruiters', props.existingRecruiter.id), {
-        id,
-        firstName,
-        lastName,
-        company,
-        email,
-        title,
-        linkedIn,
-      });
+      await setDoc(doc(db, 'recruiters', props.existingRecruiter.id), recruiterData);
       props.setRecruiters((oldArray) =>
         oldArray.map((recruiter) => {
           if (recruiter.id === props.existingRecruiter?.id) {
-            return { id, firstName, lastName, company, email, title, linkedIn };
+            return recruiterData;
           }
           return recruiter;
         })
@@ -107,75 +83,42 @@ const Form = (props: FormProps) => {
       <div className="form-row">
         <input
           className="form-row-col form-row-col-left"
-          onChange={(e) => {
-            setFirstName(e.target.value);
-          }}
+          name="firstName"
+          onChange={handleChange}
           placeholder="Recruiter First Name"
           required
-          value={firstName}
+          value={recruiterData.firstName}
         />
         <input
           className="form-row-col"
-          onChange={(e) => {
-            setLastName(e.target.value);
-          }}
+          name="lastName"
+          onChange={handleChange}
           placeholder="Recruiter Last Name"
           required
-          value={lastName}
+          value={recruiterData.lastName}
         />
       </div>
+      <input name="email" onChange={handleChange} placeholder="Email" required value={recruiterData.email} />
+      <input name="company" onChange={handleChange} placeholder="Company" required value={recruiterData.company} />
+      <input name="title" onChange={handleChange} placeholder="Job Title" required value={recruiterData.title} />
       <input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        placeholder="Email"
-        required
-        value={email}
-      />
-      <input
-        onChange={(e) => {
-          setCompany(e.target.value);
-        }}
-        placeholder="Company"
-        required
-        value={company}
-      />
-
-      <input
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
-        placeholder="Job Title"
-        required
-        value={title}
-      />
-      <input
-        onChange={(e) => {
-          setLinkedIn(e.target.value);
-        }}
+        name="linkedIn"
+        onChange={handleChange}
         placeholder="LinkedIn Profile"
         required
-        value={linkedIn}
+        value={recruiterData.linkedIn}
       />
       <button
         className="submit-button"
         type="submit"
         disabled={
-          firstName === '' ||
-          lastName === '' ||
-          email === '' ||
-          company === '' ||
-          title === '' ||
-          linkedIn === '' ||
-          _.isEqual(props.existingRecruiter, {
-            id,
-            firstName,
-            lastName,
-            email,
-            company,
-            title,
-            linkedIn,
-          })
+          recruiterData.firstName === '' ||
+          recruiterData.lastName === '' ||
+          recruiterData.email === '' ||
+          recruiterData.company === '' ||
+          recruiterData.title === '' ||
+          recruiterData.linkedIn === '' ||
+          _.isEqual(props.existingRecruiter, recruiterData)
         }
       >
         Submit
