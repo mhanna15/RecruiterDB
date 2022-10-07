@@ -106,7 +106,7 @@ button:hover:enabled {
   cursor: pointer;
   border: none;
 }
-.submit-button:hover {
+.submit-button:hover:enabled {
   background-color: #349c84;
 }
 
