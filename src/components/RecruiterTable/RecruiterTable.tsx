@@ -72,8 +72,9 @@ const RecruiterTable = (props: {
                 name="template"
                 onChange={(e) => setSelectedTemplateID(e.target.value)}
                 value={selectedTemplateID}
+                defaultValue={'DEFAULT'}
               >
-                <option disabled selected>
+                <option disabled value="DEFAULT">
                   Pick Template
                 </option>
                 {props.templates.map((template) => (
