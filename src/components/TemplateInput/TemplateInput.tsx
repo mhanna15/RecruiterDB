@@ -2,7 +2,6 @@ import './TemplateInput.css';
 
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import ListCard from '../ListCard/ListCard';
 
 import { db } from '../../firebase';
 import { emptyTemplate, Template } from '../../interface';
