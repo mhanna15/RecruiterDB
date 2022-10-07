@@ -42,11 +42,24 @@ const Form = (props: FormProps) => {
 
   useEffect(() => {
     setErrors({ email: emailIsValid(), linkedIn: linkedInIsValid() });
-    console.log(errors);
   }, [recruiterData]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setRecruiterData((prevRecruiterData) => {
+      if (
+        event.target.name === 'firstName' ||
+        event.target.name === 'lastName' ||
+        event.target.name === 'company' ||
+        event.target.name === 'title'
+      ) {
+        return {
+          ...prevRecruiterData,
+          [event.target.name]: event.target.value
+            .split(' ')
+            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(' '),
+        };
+      }
       return {
         ...prevRecruiterData,
         [event.target.name]: event.target.value,
