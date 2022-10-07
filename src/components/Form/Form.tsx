@@ -6,7 +6,7 @@ import React, { ChangeEvent, Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
-import { Company, emptyRecruiter, RecruiterType } from '../../interface';
+import { emptyRecruiter, RecruiterType } from '../../interface';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
