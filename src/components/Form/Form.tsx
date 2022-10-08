@@ -1,142 +1,161 @@
 import './Form.css';
 
 import { collection, doc, setDoc } from 'firebase/firestore';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import _ from 'lodash';
+import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
+import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
-import { Company, RecruiterType } from '../../interface';
+import { emptyRecruiter, RecruiterType } from '../../interface';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
-  setMessage: Dispatch<SetStateAction<string>>;
-  cancel: Dispatch<SetStateAction<boolean>>;
+  existingRecruiter?: RecruiterType;
 }
 
 const Form = (props: FormProps) => {
-  const [firstName, setFirstName] = useState<string>('');
-  const [lastName, setLastName] = useState<string>('');
+  const { currentUser } = useAuth();
+  const [recruiterData, setRecruiterData] = useState<RecruiterType>(
+    props.existingRecruiter ? props.existingRecruiter : emptyRecruiter
+  );
 
-  const [company, setCompany] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [title, setTitle] = useState<string>('');
-  const [linkedIn, setLinkedIn] = useState<string>('');
+  const [errors, setErrors] = useState({ email: true, linkedIn: true });
 
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const emailIsValid = () => {
+    return (
+      String(recruiterData.email)
+        .toLowerCase()
+        .match(
+          // eslint-disable-next-line no-control-regex
+          /(?:[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+\\/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/gm
+        ) === null
+    );
+  };
 
-  const [inputValue, setInputValue] = useState<string>('');
+  const linkedInIsValid = () => {
+    return (
+      String(recruiterData.linkedIn)
+        .toLowerCase()
+        .match(/(?:https?:)?\/\/(?:[\w]+\.)?linkedin\.com\/in\/([\w\-\\_À-ÿ%]+)\/?/gm) === null
+    );
+  };
+
+  useEffect(() => {
+    setErrors({ email: emailIsValid(), linkedIn: linkedInIsValid() });
+  }, [recruiterData]);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setRecruiterData((prevRecruiterData) => {
+      if (
+        event.target.name === 'firstName' ||
+        event.target.name === 'lastName' ||
+        event.target.name === 'company' ||
+        event.target.name === 'title'
+      ) {
+        return {
+          ...prevRecruiterData,
+          [event.target.name]: event.target.value
+            .split(' ')
+            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(' '),
+        };
+      }
+      return {
+        ...prevRecruiterData,
+        [event.target.name]: event.target.value,
+      };
+    });
+  };
 
   const clearForm = () => {
-    setFirstName('');
-    setLastName('');
-    setCompany('');
-    setEmail('');
-    setTitle('');
-    setLinkedIn('');
+    setRecruiterData(emptyRecruiter);
   };
-  const addRecruiter = async () => {
-    // TODO: sanitize name or id input
-  };
-  const fetchCompanyOptions = (input: string) => {
-    console.log('companies fetched');
-    if (input !== '') {
-      fetch(`https://autocomplete.clearbit.com/v1/companies/suggest?query=:${input}`)
-        .then(async (response) => await response.json())
-        .then((data) => setCompanies([...data]))
-        .catch((e) => console.log(e));
+
+  const handleAddNewRecruiter = async (e: any) => {
+    e.preventDefault();
+    if (_.isEqual(errors, { email: false, linkedIn: false })) {
+      const newRecruiterRef = doc(collection(db, 'recruiters'));
+      await setDoc(newRecruiterRef, { ...recruiterData, id: newRecruiterRef.id });
+      props.setRecruiters((oldArray) => [...oldArray, { ...recruiterData, id: newRecruiterRef.id }]);
+      props.setPopUpOpen(false);
+      clearForm();
+    } else {
+      for (const [key, value] of Object.entries(errors)) {
+        if (value) {
+          alert(`${key} is invalid`);
+        }
+      }
     }
   };
-  const handleSubmit = async (e: any) => {
+
+  const handleEditRecruiter = async (e: any) => {
     e.preventDefault();
-    const newRecruiterRef = doc(collection(db, 'recruiters'));
-    props.setRecruiters((oldArray) => [
-      ...oldArray,
-      {
-        id: newRecruiterRef.id,
-        firstName,
-        lastName,
-        email,
-        company,
-        title,
-        linkedIn,
-      },
-    ]);
-    await setDoc(newRecruiterRef, {
-      id: newRecruiterRef.id,
-      firstName,
-      lastName,
-      company,
-      email,
-      title,
-      linkedIn,
-    }).then(() => {
-      props.setMessage('success!');
-      props.setPopUpOpen(false);
-    });
-    clearForm();
+    if (_.isEqual(errors, { email: false, linkedIn: false })) {
+      if (props.existingRecruiter && currentUser?.role === 'admin') {
+        await setDoc(doc(db, 'recruiters', props.existingRecruiter.id), recruiterData);
+        props.setRecruiters((oldArray) =>
+          oldArray.map((recruiter) => {
+            if (recruiter.id === props.existingRecruiter?.id) {
+              return recruiterData;
+            }
+            return recruiter;
+          })
+        );
+        props.setPopUpOpen(false);
+        clearForm();
+      }
+    } else {
+      for (const [key, value] of Object.entries(errors)) {
+        if (value) {
+          alert(`${key} is invalid`);
+        }
+      }
+    }
   };
 
   return (
-    <form className="form" onSubmit={handleSubmit}>
-      <p className="form-title">Add Recruiter</p>
+    <form className="form" onSubmit={props.existingRecruiter ? handleEditRecruiter : handleAddNewRecruiter}>
+      <p className="form-title">{props.existingRecruiter ? 'Edit Recruiter' : 'Add Recruiter'}</p>
       <div className="form-row">
         <input
           className="form-row-col form-row-col-left"
-          onChange={(e) => {
-            setFirstName(e.target.value);
-          }}
+          name="firstName"
+          onChange={handleChange}
           placeholder="Recruiter First Name"
           required
-          value={firstName}
+          value={recruiterData.firstName}
         />
         <input
           className="form-row-col"
-          onChange={(e) => {
-            setLastName(e.target.value);
-          }}
+          name="lastName"
+          onChange={handleChange}
           placeholder="Recruiter Last Name"
           required
-          value={lastName}
+          value={recruiterData.lastName}
         />
       </div>
+      <input name="email" onChange={handleChange} placeholder="Email" required value={recruiterData.email} />
+      <input name="company" onChange={handleChange} placeholder="Company" required value={recruiterData.company} />
+      <input name="title" onChange={handleChange} placeholder="Job Title" required value={recruiterData.title} />
       <input
-        onChange={(e) => {
-          setEmail(e.target.value);
-        }}
-        placeholder="Email"
-        required
-        value={email}
-      />
-      <input
-        onChange={(e) => {
-          setCompany(e.target.value);
-        }}
-        placeholder="Company"
-        required
-        value={company}
-      />
-
-      <input
-        onChange={(e) => {
-          setTitle(e.target.value);
-        }}
-        placeholder="Job Title"
-        required
-        value={title}
-      />
-      <input
-        onChange={(e) => {
-          setLinkedIn(e.target.value);
-        }}
+        name="linkedIn"
+        onChange={handleChange}
         placeholder="LinkedIn Profile"
         required
-        value={linkedIn}
+        value={recruiterData.linkedIn}
       />
       <button
         className="submit-button"
         type="submit"
         disabled={
-          firstName === '' || lastName === '' || email === '' || company === '' || title === '' || linkedIn === ''
+          recruiterData.firstName === '' ||
+          recruiterData.lastName === '' ||
+          recruiterData.email === '' ||
+          recruiterData.company === '' ||
+          recruiterData.title === '' ||
+          recruiterData.linkedIn === '' ||
+          _.isEqual(props.existingRecruiter, recruiterData)
         }
       >
         Submit

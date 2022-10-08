@@ -1,7 +1,7 @@
 import './Home.css';
 
 import Dialog from '@mui/material/Dialog';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
@@ -14,10 +14,10 @@ const Home = (props: {
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   loading: boolean;
 }) => {
-  const [message, setMessage] = useState<string>('');
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
+  const { currentUser } = useAuth();
 
-  return (
+  return currentUser ? (
     <div className="page-root">
       <div className="page-content">
         <div className="page-header">
@@ -41,8 +41,8 @@ const Home = (props: {
               recruiters={props.recruiters}
               templates={props.templates}
               setRecruiters={props.setRecruiters}
+              setPopUpOpen={setPopUpOpen}
             />
-            {message}
           </>
         )}
       </div>
@@ -53,14 +53,11 @@ const Home = (props: {
         open={popUpOpen}
         onClose={() => setPopUpOpen(false)}
       >
-        <Form
-          setPopUpOpen={setPopUpOpen}
-          setRecruiters={props.setRecruiters}
-          setMessage={setMessage}
-          cancel={() => setPopUpOpen(false)}
-        />
+        <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} />
       </Dialog>
     </div>
+  ) : (
+    <></>
   );
 };
 

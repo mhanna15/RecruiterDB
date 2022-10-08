@@ -8,12 +8,6 @@ export interface RecruiterType {
   linkedIn: string;
 }
 
-export interface Company {
-  name: string;
-  domain: string;
-  logo: string;
-}
-
 export interface Template {
   id: string;
   name: string;
