@@ -6,6 +6,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/AuthContext';
 import Header from './components/Header/Header';
+import ProtectedRoute from './components/ProtectedRoute';
 import { db } from './firebase';
 import { RecruiterType, Template } from './interface';
 import Companies from './pages/Companies/Companies';
@@ -64,23 +65,6 @@ const App = () => {
     }
   }, [currentUser]);
 
-  const authenticatedRoutes = currentUser ? (
-    <>
-      <Route path="/profile" element={<Profile />} />
-      <Route
-        path="/templates"
-        element={<Templates userTemplates={templates} setUserTemplates={setTemplates} loading={templatesLoading} />}
-      />
-      {/* TODO: Remove */}
-      <Route path="/companies" element={<Companies />} />
-    </>
-  ) : (
-    <>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/profile" element={<Navigate to="/login" replace />} />
-    </>
-  );
-
   return (
     <div className="app">
       <div className="app-content">
@@ -97,10 +81,38 @@ const App = () => {
               />
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          {authenticatedRoutes}
-          <Route path="/companies" element={<Companies />} />
+          <Route
+            path="/templates"
+            element={
+              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+                <Templates userTemplates={templates} setUserTemplates={setTemplates} loading={templatesLoading} />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/home">
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/home">
+                <SignUp />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
