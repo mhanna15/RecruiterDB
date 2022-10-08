@@ -97,22 +97,8 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/login"
-            element={
-              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/home">
-                <Login />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/home">
-                <SignUp />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
