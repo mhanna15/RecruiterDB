@@ -17,10 +17,10 @@ interface User extends firebase.User {
 
 interface Context {
   currentUser: User | undefined;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<any>;
   loginWithGoogle: () => Promise<any>;
-  signup: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  signup: (email: string, password: string) => Promise<any>;
+  logout: () => Promise<any>;
 }
 
 const AuthContext = createContext<Context | null>(null);

@@ -9,6 +9,7 @@ import Header from './components/Header/Header';
 import { db } from './firebase';
 import { RecruiterType, Template } from './interface';
 import Companies from './pages/Companies/Companies';
+import NotFound from './pages/Error/NotFound';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
@@ -65,17 +66,6 @@ const App = () => {
 
   const authenticatedRoutes = currentUser ? (
     <>
-      <Route
-        path="/home"
-        element={
-          <Home
-            templates={templates}
-            recruiters={recruiters}
-            setRecruiters={setRecruiters}
-            loading={recruitersLoading}
-          />
-        }
-      />
       <Route path="/profile" element={<Profile />} />
       <Route
         path="/templates"
@@ -96,10 +86,22 @@ const App = () => {
       <div className="app-content">
         <Header isLoggedIn={currentUser !== undefined} />
         <Routes>
+          <Route
+            path="/home"
+            element={
+              <Home
+                templates={templates}
+                recruiters={recruiters}
+                setRecruiters={setRecruiters}
+                loading={recruitersLoading}
+              />
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           {authenticatedRoutes}
           <Route path="/companies" element={<Companies />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </div>

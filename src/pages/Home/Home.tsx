@@ -1,7 +1,7 @@
 import './Home.css';
 
 import Dialog from '@mui/material/Dialog';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
@@ -15,8 +15,9 @@ const Home = (props: {
   loading: boolean;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
+  const { currentUser } = useAuth();
 
-  return (
+  return currentUser ? (
     <div className="page-root">
       <div className="page-content">
         <div className="page-header">
@@ -55,6 +56,8 @@ const Home = (props: {
         <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} />
       </Dialog>
     </div>
+  ) : (
+    <></>
   );
 };
 
