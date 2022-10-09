@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
 
+import SignInWithGoogle from '../../assets/SignInWithGoogle';
+
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -44,7 +46,7 @@ const SignUp = () => {
           Sign Up
         </button>
         <h1 style={{ display: 'flex', alignSelf: 'center', marginTop: '1em', marginBottom: '1em' }}>or</h1>
-        <button onClick={handleGoogleLogin}>Login with Google</button>
+        <SignInWithGoogle onClick={handleGoogleLogin} />
       </div>
     </div>
   );
