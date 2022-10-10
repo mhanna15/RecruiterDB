@@ -1,12 +1,10 @@
 import './SignUp.css';
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { useAuth } from '../../auth/AuthContext';
-import AuthResults from '../../auth/AuthResults';
 
 import SignInWithGoogle from '../../assets/SignInWithGoogle';
+import { useAuth } from '../../auth/AuthContext';
+import AuthResults from '../../auth/AuthResults';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,16 +12,12 @@ const SignUp = () => {
 
   const { signup, loginWithGoogle } = useAuth();
 
-  const navigate = useNavigate();
-
   const handleSignUp = async () => {
     const res = await signup(email, password);
     const authResult = AuthResults(res);
     if (authResult) {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
-      return;
     }
-    navigate('/home');
   };
 
   const handleGoogleLogin = async () => {
@@ -31,9 +25,7 @@ const SignUp = () => {
     const authResult = AuthResults(res);
     if (authResult) {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
-      return;
     }
-    navigate('/home');
   };
 
   return (

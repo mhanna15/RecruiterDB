@@ -9,7 +9,7 @@ const Header = (props: { isLoggedIn: boolean }) => {
   const navigate = useNavigate();
   const buttons = props.isLoggedIn ? (
     <>
-      <a className="header-link" onClick={() => navigate('/home')}>
+      <a className="header-link" onClick={() => navigate('/')}>
         Home
       </a>
       <a className="header-link" onClick={() => navigate('/templates')}>
@@ -32,7 +32,7 @@ const Header = (props: { isLoggedIn: boolean }) => {
 
   return (
     <div className="header-root">
-      <p onClick={() => navigate('/home')} className="header-title">
+      <p onClick={() => navigate('/')} className="header-title">
         RecruiterDB
       </p>
       <div className="header-linksGroup">{buttons}</div>

@@ -11,7 +11,6 @@ import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import Form from '../Form/Form';
-import { template } from 'lodash';
 
 const RecruiterTable = (props: {
   recruiters: RecruiterType[];
@@ -27,9 +26,12 @@ const RecruiterTable = (props: {
 
   const deleteRecruiter = async (recruiterId: string) => {
     if (currentUser?.role === 'admin') {
-      await deleteDoc(doc(db, 'recruiters', recruiterId)).then(() =>
-        props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId))
-      );
+      try {
+        await deleteDoc(doc(db, 'recruiters', recruiterId));
+        props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId));
+      } catch (e) {
+        alert(JSON.stringify(e));
+      }
     }
   };
 

@@ -28,30 +28,31 @@ const TemplateInput = (props: TemplateInputProps) => {
       template: currentTemplate.template,
       user: props.currentUser.email,
     };
-
-    await setDoc(templateRef, templateToAdd)
-      .then(() => {
-        props.setUserTemplates((oldUserTemplates) => [...oldUserTemplates, templateToAdd]);
-        props.setPopUpOpen?.(false);
-      })
-      .catch((e) => props.setMessage(JSON.stringify(e)));
+    try {
+      await setDoc(templateRef, templateToAdd);
+      props.setUserTemplates((oldUserTemplates) => [...oldUserTemplates, templateToAdd]);
+      props.setPopUpOpen?.(false);
+    } catch (e) {
+      props.setMessage(JSON.stringify(e));
+    }
   };
 
   const editTemplate = async (template: Template, editedTemplate: string) => {
     const templateRef = doc(db, 'templates', template.id);
-    await updateDoc(templateRef, { ...currentTemplate })
-      .then(() => {
-        props.setUserTemplates([
-          ...props.userTemplates.map((templateI) => {
-            if (templateI.id === template.id) {
-              return { ...currentTemplate };
-            }
-            return templateI;
-          }),
-        ]);
-        props.setPopUpOpen?.(false);
-      })
-      .catch((e) => props.setMessage(JSON.stringify(e)));
+    try {
+      await updateDoc(templateRef, { ...currentTemplate });
+      props.setUserTemplates([
+        ...props.userTemplates.map((templateI) => {
+          if (templateI.id === template.id) {
+            return { ...currentTemplate };
+          }
+          return templateI;
+        }),
+      ]);
+      props.setPopUpOpen?.(false);
+    } catch (e) {
+      props.setMessage(JSON.stringify(e));
+    }
   };
 
   return (

@@ -1,18 +1,14 @@
 import './Login.css';
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-
-import { useAuth } from '../../auth/AuthContext';
-import AuthResults from '../../auth/AuthResults';
 
 import SignInWithGoogle from '../../assets/SignInWithGoogle';
+import { useAuth } from '../../auth/AuthContext';
+import AuthResults from '../../auth/AuthResults';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
-  const navigate = useNavigate();
 
   const { login, loginWithGoogle } = useAuth();
 
@@ -21,9 +17,7 @@ const Login = () => {
     const authResult = AuthResults(res);
     if (authResult) {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
-      return;
     }
-    navigate('/home');
   };
 
   const handleGoogleLogin = async () => {
@@ -31,9 +25,7 @@ const Login = () => {
     const authResult = AuthResults(res);
     if (authResult) {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
-      return;
     }
-    navigate('/home');
   };
 
   return (
@@ -46,7 +38,7 @@ const Login = () => {
           Login
         </button>
         <h1 style={{ display: 'flex', alignSelf: 'center', marginTop: '1em', marginBottom: '1em' }}>or</h1>
-        <SignInWithGoogle onClick={handleGoogleLogin}/>
+        <SignInWithGoogle onClick={handleGoogleLogin} />
       </div>
     </div>
   );

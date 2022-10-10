@@ -8,6 +8,7 @@ import firebase, {
 } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { auth, db } from '../firebase';
 
@@ -35,6 +36,9 @@ const getUserRoleFromDb = async (uid: string) => {
 
 export const AuthProvider = ({ children }: any) => {
   const [currentUser, setCurrentUser] = useState<User>();
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const navigate = useNavigate();
 
   const addNewUserToDb = async (uid: string, email: string) => {
     await setDoc(doc(db, 'users', uid), { email, templates: [], role: 'user', uid });
@@ -42,9 +46,9 @@ export const AuthProvider = ({ children }: any) => {
 
   const signup = async (email: string, password: string) => {
     try {
-      await createUserWithEmailAndPassword(auth, email, password).then(
-        async (res) => await addNewUserToDb(res.user.uid, email)
-      );
+      const res = await createUserWithEmailAndPassword(auth, email, password);
+      await addNewUserToDb(res.user.uid, email);
+      navigate('/');
     } catch (e: any) {
       return e.code;
     }
@@ -53,6 +57,7 @@ export const AuthProvider = ({ children }: any) => {
   const login = async (email: string, password: string) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      navigate('/');
     } catch (e: any) {
       return e.code;
     }
@@ -60,18 +65,20 @@ export const AuthProvider = ({ children }: any) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider).then(async (res) => {
-      const details = getAdditionalUserInfo(res);
-      const email = res.user.email;
-      if (details?.isNewUser && email) {
-        await addNewUserToDb(res.user.uid, email);
-      }
-    });
+    const res = await signInWithPopup(auth, provider);
+    const details = getAdditionalUserInfo(res);
+    const email = res.user.email;
+    if (details?.isNewUser && email) {
+      await addNewUserToDb(res.user.uid, email);
+    }
+    navigate('/');
   };
 
   const logout = async () => {
     try {
       await signOut(auth);
+      navigate('/login');
+      window.location.reload();
     } catch (e: any) {
       return e.code;
     }
@@ -79,12 +86,14 @@ export const AuthProvider = ({ children }: any) => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      setLoading(true);
       if (!user) {
         setCurrentUser(undefined);
       } else {
         const role = await getUserRoleFromDb(user.uid);
         setCurrentUser({ ...user, role });
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -100,7 +109,7 @@ export const AuthProvider = ({ children }: any) => {
         loginWithGoogle,
       }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

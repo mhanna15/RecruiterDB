@@ -71,14 +71,16 @@ const App = () => {
         <Header isLoggedIn={currentUser !== undefined} />
         <Routes>
           <Route
-            path="/home"
+            path="/"
             element={
-              <Home
-                templates={templates}
-                recruiters={recruiters}
-                setRecruiters={setRecruiters}
-                loading={recruitersLoading}
-              />
+              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+                <Home
+                  templates={templates}
+                  recruiters={recruiters}
+                  setRecruiters={setRecruiters}
+                  loading={recruitersLoading}
+                />
+              </ProtectedRoute>
             }
           />
           <Route
@@ -97,8 +99,22 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route
+            path="/login"
+            element={
+              <ProtectedRoute isAllowed={currentUser === undefined} redirectPath="/">
+                <Login />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <ProtectedRoute isAllowed={currentUser === undefined} redirectPath="/">
+                <SignUp />
+              </ProtectedRoute>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

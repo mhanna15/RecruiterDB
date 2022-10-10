@@ -15,9 +15,8 @@ const Home = (props: {
   loading: boolean;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
-  const { currentUser } = useAuth();
 
-  return currentUser ? (
+  return (
     <div className="page-root">
       <div className="page-content">
         <div className="page-header">
@@ -56,8 +55,6 @@ const Home = (props: {
         <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} />
       </Dialog>
     </div>
-  ) : (
-    <></>
   );
 };
 

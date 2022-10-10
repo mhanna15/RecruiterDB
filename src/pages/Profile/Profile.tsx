@@ -9,16 +9,13 @@ import AuthResults from '../../auth/AuthResults';
 const Profile = () => {
   const { currentUser } = useAuth();
   const { logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = async () => {
     const res = await logout();
     const authResult = AuthResults(res);
     if (authResult) {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
-      return;
     }
-    navigate('/login');
   };
 
   return (

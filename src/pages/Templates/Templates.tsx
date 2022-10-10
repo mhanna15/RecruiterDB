@@ -24,9 +24,12 @@ const Templates = (props: {
   const { currentUser } = useAuth();
 
   const deleteTemplate = async (template: Template) => {
-    await deleteDoc(doc(db, 'templates', template.id))
-      .then(() => props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id)))
-      .catch((e) => setMessage(JSON.stringify(e)));
+    try {
+      await deleteDoc(doc(db, 'templates', template.id));
+      props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id));
+    } catch (e) {
+      setMessage(JSON.stringify(e));
+    }
   };
 
   return (
