@@ -17,7 +17,6 @@ import { db } from '../../firebase';
 const Companies = () => {
   const [companies, setCompanies] = useState<string[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
   const [companiesAndRecruiters, setCompaniesAndRecruiters] = useState<{
     [key: string]: string[];
@@ -25,7 +24,7 @@ const Companies = () => {
 
   useEffect(() => {
     const getCompanies = async () => {
-      console.log('fetching companies from firebase')
+      console.log('fetching companies from firebase');
       const q = query(collection(db, 'companies'));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
@@ -41,7 +40,7 @@ const Companies = () => {
       //   setcompanies(mockcompanies);
       // }, 200);
     };
-    getCompanies().catch((e) => setMessage(JSON.stringify(e)));
+    getCompanies().catch((e) => alert(JSON.stringify(e)));
   }, []);
 
   return (
@@ -91,8 +90,6 @@ const Companies = () => {
       ) : (
         <></>
       )}
-
-      {message}
     </div>
   );
 };

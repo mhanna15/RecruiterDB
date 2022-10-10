@@ -19,8 +19,6 @@ const Templates = (props: {
 
   const [templateToEdit, setTemplateToEdit] = useState<Template>();
 
-  const [message, setMessage] = useState<string>('');
-
   const { currentUser } = useAuth();
 
   const deleteTemplate = async (template: Template) => {
@@ -28,7 +26,7 @@ const Templates = (props: {
       await deleteDoc(doc(db, 'templates', template.id));
       props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id));
     } catch (e) {
-      setMessage(JSON.stringify(e));
+      alert(JSON.stringify(e));
     }
   };
 
@@ -78,7 +76,6 @@ const Templates = (props: {
           userTemplates={props.userTemplates}
           setUserTemplates={props.setUserTemplates}
           setPopUpOpen={setNewTemplatePopUpOpen}
-          setMessage={setMessage}
         />
       </Dialog>
       <Dialog fullWidth sx={{ width: 1 }} open={editTemplatePopUpOpen} onClose={() => setEditTemplatePopUpOpen(false)}>
@@ -87,11 +84,9 @@ const Templates = (props: {
           userTemplates={props.userTemplates}
           setUserTemplates={props.setUserTemplates}
           setPopUpOpen={setEditTemplatePopUpOpen}
-          setMessage={setMessage}
           existingTemplate={templateToEdit}
         />
       </Dialog>
-      {message}
     </div>
   );
 };
