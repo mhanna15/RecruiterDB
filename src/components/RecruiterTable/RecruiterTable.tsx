@@ -90,10 +90,18 @@ const RecruiterTable = (props: {
                   </option>
                 ))}
               </select>
-              <button className="list-row-button" onClick={() => copyTemplate(recruiter)}>
+              <button
+                className="list-row-button"
+                disabled={selectedTemplateID === undefined}
+                onClick={() => copyTemplate(recruiter)}
+              >
                 Copy
               </button>
-              <button className="list-row-button" onClick={() => emailRecruiter(recruiter)}>
+              <button
+                className="list-row-button"
+                disabled={selectedTemplateID === undefined}
+                onClick={() => emailRecruiter(recruiter)}
+              >
                 Email
               </button>
               {currentUser?.role === 'admin' ? (

@@ -4,7 +4,7 @@
   border-top: 12px solid rgb(173, 173, 173); /* green */
   border-radius: 50%;
   animation: spin 2s linear infinite;
-  margin: 50px auto;
+  margin: 2em auto;
   text-indent: -9999em;
   width: 2em;
   height: 2em;

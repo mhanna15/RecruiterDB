@@ -48,13 +48,17 @@ const Home = (props: {
               setRecruiters={props.setRecruiters}
               setPopUpOpen={setPopUpOpen}
             />
-            <button
-              className='load-more'
-              onClick={() => props.fetchMore()}
-              disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
-            >
-              {props.moreRecruitersLoading ? <div className="loader" /> : 'Load More'}
-            </button>
+            {props.moreRecruitersLoading ? (
+              <div className="loader" />
+            ) : (
+              <button
+                className="load-more"
+                onClick={() => props.fetchMore()}
+                disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
+              >
+                Load More
+              </button>
+            )}
           </>
         )}
       </div>
