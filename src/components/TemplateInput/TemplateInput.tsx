@@ -12,7 +12,6 @@ interface TemplateInputProps {
   setUserTemplates: Dispatch<SetStateAction<Template[]>>;
   userTemplates: Template[];
   setPopUpOpen?: Dispatch<SetStateAction<boolean>>;
-  setMessage: Dispatch<SetStateAction<string>>;
 }
 
 const TemplateInput = (props: TemplateInputProps) => {
@@ -33,7 +32,7 @@ const TemplateInput = (props: TemplateInputProps) => {
       props.setUserTemplates((oldUserTemplates) => [...oldUserTemplates, templateToAdd]);
       props.setPopUpOpen?.(false);
     } catch (e) {
-      props.setMessage(JSON.stringify(e));
+      alert(JSON.stringify(e));
     }
   };
 
@@ -51,7 +50,7 @@ const TemplateInput = (props: TemplateInputProps) => {
       ]);
       props.setPopUpOpen?.(false);
     } catch (e) {
-      props.setMessage(JSON.stringify(e));
+      alert(JSON.stringify(e));
     }
   };
 

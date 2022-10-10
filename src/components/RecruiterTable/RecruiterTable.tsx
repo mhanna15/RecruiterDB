@@ -66,15 +66,7 @@ const RecruiterTable = (props: {
         </Collapse>
         {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
-            <div
-              className="list-row-content"
-              onClick={() => {
-                if (currentUser?.role === 'admin') {
-                  setSelectedRecruiter(recruiter);
-                  setPopUpOpen(true);
-                }
-              }}
-            >
+            <div className="list-row-content">
               <p className="list-row-title">
                 {recruiter.firstName} {recruiter.lastName}
               </p>
@@ -105,9 +97,22 @@ const RecruiterTable = (props: {
                 Email
               </button>
               {currentUser?.role === 'admin' ? (
-                <button className="list-row-button" onClick={async () => await deleteRecruiter(recruiter.id)}>
-                  Delete
-                </button>
+                <>
+                  <button
+                    className="list-row-button"
+                    onClick={() => {
+                      if (currentUser?.role === 'admin') {
+                        setSelectedRecruiter(recruiter);
+                        setPopUpOpen(true);
+                      }
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button className="list-row-button" onClick={async () => await deleteRecruiter(recruiter.id)}>
+                    Delete
+                  </button>
+                </>
               ) : (
                 <></>
               )}
