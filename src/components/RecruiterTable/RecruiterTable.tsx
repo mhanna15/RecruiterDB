@@ -11,6 +11,7 @@ import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import Form from '../Form/Form';
+import { template } from 'lodash';
 
 const RecruiterTable = (props: {
   recruiters: RecruiterType[];
@@ -51,7 +52,7 @@ const RecruiterTable = (props: {
         .replaceAll('{recruiter}', recruiter.firstName)
         .replaceAll('{company}', recruiter.company)
         .replaceAll('\n', '%0d%0A');
-      document.location = 'mailto:' + recruiter.email + '?subject=' + 'SUBJECT HERE' + '&body=' + emailBody;
+      document.location = 'mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody;
     }
   };
 
