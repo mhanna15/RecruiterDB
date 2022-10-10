@@ -35,11 +35,22 @@ const RecruiterTable = (props: {
   const copyTemplate = (recruiter: RecruiterType) => {
     const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
     if (selectedTemplate) {
-      let temp = selectedTemplate.template.replaceAll('{recruiter}', recruiter.firstName);
-      temp = temp.replaceAll('{company}', recruiter.company);
-      navigator.clipboard.writeText(temp).catch((e) => console.log(e));
+      const replacedTemplate = selectedTemplate.template
+        .replaceAll('{recruiter}', recruiter.firstName)
+        .replaceAll('{company}', recruiter.company);
+      navigator.clipboard.writeText(replacedTemplate).catch((e) => console.log(e));
       setCopied(true);
       setTimeout(() => setCopied(false), 750);
+    }
+  };
+
+  const emailRecruiter = (recruiter: RecruiterType) => {
+    const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
+    if (selectedTemplate) {
+      const emailBody = selectedTemplate.template
+        .replaceAll('{recruiter}', recruiter.firstName)
+        .replaceAll('{company}', recruiter.company);
+      document.location = 'mailto:' + recruiter.email + '?subject=' + 'SUBJECT HERE' + '&body=' + emailBody;
     }
   };
 
@@ -85,6 +96,9 @@ const RecruiterTable = (props: {
               </select>
               <button className="list-row-button" onClick={() => copyTemplate(recruiter)}>
                 Copy
+              </button>
+              <button className="list-row-button" onClick={() => emailRecruiter(recruiter)}>
+                Email
               </button>
               {currentUser?.role === 'admin' ? (
                 <button onClick={async () => await deleteRecruiter(recruiter.id)}>delete</button>
