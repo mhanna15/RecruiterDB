@@ -1,0 +1,17 @@
+/* Loader */
+.loader {
+  border: 12px solid #f3f3f3; /* Light grey */
+  border-top: 12px solid rgb(173, 173, 173); /* green */
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+  margin: 50px auto;
+  text-indent: -9999em;
+  width: 2em;
+  height: 2em;
+  border-radius: 100%;
+  -webkit-animation: load3 1.4s infinite linear;
+  animation: load3 1.4s infinite linear;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
