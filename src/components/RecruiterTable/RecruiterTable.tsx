@@ -105,7 +105,9 @@ const RecruiterTable = (props: {
                 Email
               </button>
               {currentUser?.role === 'admin' ? (
-                <button onClick={async () => await deleteRecruiter(recruiter.id)}>delete</button>
+                <button className="list-row-button" onClick={async () => await deleteRecruiter(recruiter.id)}>
+                  Delete
+                </button>
               ) : (
                 <></>
               )}
