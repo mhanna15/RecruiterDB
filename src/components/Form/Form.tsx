@@ -125,6 +125,8 @@ const Form = (props: FormProps) => {
           placeholder="Recruiter First Name"
           required
           value={recruiterData.firstName}
+          pattern="[A-Za-z]+"
+          title="First Name Only"
         />
         <input
           className="form-row-col"
@@ -133,6 +135,8 @@ const Form = (props: FormProps) => {
           placeholder="Recruiter Last Name"
           required
           value={recruiterData.lastName}
+          pattern="[A-Za-z]+"
+          title="Last Name Only"
         />
       </div>
       <input name="email" onChange={handleChange} placeholder="Email" required value={recruiterData.email} />

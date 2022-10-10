@@ -1,8 +1,10 @@
 import './Home.css';
 
 import Dialog from '@mui/material/Dialog';
+import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
+import { RECRUITERS_PER_PAGE } from '../../App';
 import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
 import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
@@ -13,6 +15,9 @@ const Home = (props: {
   recruiters: RecruiterType[];
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   loading: boolean;
+  fetchMore: () => void;
+  lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
+  moreRecruitersLoading: boolean;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
 
@@ -42,6 +47,12 @@ const Home = (props: {
               setRecruiters={props.setRecruiters}
               setPopUpOpen={setPopUpOpen}
             />
+            <button
+              onClick={() => props.fetchMore()}
+              disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
+            >
+              {props.moreRecruitersLoading ? <div className="loader" /> : 'Load More'}
+            </button>
           </>
         )}
       </div>
