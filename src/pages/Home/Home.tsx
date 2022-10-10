@@ -48,6 +48,7 @@ const Home = (props: {
               setPopUpOpen={setPopUpOpen}
             />
             <button
+              className='load-more'
               onClick={() => props.fetchMore()}
               disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
             >

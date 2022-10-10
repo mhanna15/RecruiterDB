@@ -261,3 +261,7 @@ button:hover:enabled {
   font-size: 1.1rem;
   font-weight: bold;
 }
+
+.load-more {
+  margin-top: 1em;
+}
