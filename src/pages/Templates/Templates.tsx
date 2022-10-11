@@ -34,7 +34,9 @@ const Templates = (props: {
   return (
     <div className="page-root">
       <div className="page-header">
-        <h1 className="page-header-title">My Templates</h1>
+        <h1 className="page-header-title" style={{ marginBottom: '1em' }}>
+          My Templates
+        </h1>
         <button
           className="submit-button"
           onClick={() => {
