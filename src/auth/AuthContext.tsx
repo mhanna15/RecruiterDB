@@ -2,6 +2,7 @@ import firebase, {
   createUserWithEmailAndPassword,
   getAdditionalUserInfo,
   GoogleAuthProvider,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -19,9 +20,10 @@ interface User extends firebase.User {
 interface Context {
   currentUser: User | undefined;
   login: (email: string, password: string) => Promise<any>;
-  loginWithGoogle: () => Promise<any>;
   signup: (email: string, password: string) => Promise<any>;
   logout: () => Promise<any>;
+  loginWithGoogle: () => Promise<any>;
+  sendEmailForVerification: () => Promise<any>;
 }
 
 const AuthContext = createContext<Context | null>(null);
@@ -48,9 +50,19 @@ export const AuthProvider = ({ children }: any) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await addNewUserToDb(res.user.uid, email);
-      navigate('/');
+      await sendEmailVerification(res.user, { url: window.location.href });
+      navigate('/profile');
     } catch (e: any) {
       return e.code;
+    }
+  };
+
+  const sendEmailForVerification = async () => {
+    try {
+      auth.currentUser && (await sendEmailVerification(auth.currentUser));
+      console.log('success');
+    } catch (e: any) {
+      return e;
     }
   };
 
@@ -85,7 +97,7 @@ export const AuthProvider = ({ children }: any) => {
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+    const unsubscribe = auth.onIdTokenChanged(async (user) => {
       setLoading(true);
       if (!user) {
         setCurrentUser(undefined);
@@ -107,6 +119,7 @@ export const AuthProvider = ({ children }: any) => {
         signup,
         logout,
         loginWithGoogle,
+        sendEmailForVerification,
       }}
     >
       {!loading && children}

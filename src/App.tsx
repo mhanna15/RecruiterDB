@@ -39,7 +39,7 @@ const App = () => {
   const [lastRecruiterSeen, setLastRecruiterSeen] = useState<QueryDocumentSnapshot<DocumentData>>();
 
   useEffect(() => {
-    if (currentUser) {
+    if (currentUser?.emailVerified === true) {
       const getTemplates = async () => {
         console.log('fetching templates');
         setTemplatesLoading(true);
@@ -122,7 +122,10 @@ const App = () => {
           <Route
             path="/"
             element={
-              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+              <ProtectedRoute
+                isAllowed={currentUser?.emailVerified === true}
+                redirectPath={currentUser?.emailVerified === false ? '/profile' : '/login'}
+              >
                 <Home
                   templates={templates}
                   recruiters={recruiters}
@@ -138,7 +141,10 @@ const App = () => {
           <Route
             path="/templates"
             element={
-              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+              <ProtectedRoute
+                isAllowed={currentUser?.emailVerified === true}
+                redirectPath={currentUser?.emailVerified === false ? '/profile' : '/login'}
+              >
                 <Templates userTemplates={templates} setUserTemplates={setTemplates} loading={templatesLoading} />
               </ProtectedRoute>
             }

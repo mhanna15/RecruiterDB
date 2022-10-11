@@ -2,9 +2,9 @@ import './SignUp.css';
 
 import React, { useState } from 'react';
 
-import SignInWithGoogle from '../../components/SignInWithGoogle/SignInWithGoogle';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
+import SignInWithGoogle from '../../components/SignInWithGoogle/SignInWithGoogle';
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('');
@@ -33,7 +33,7 @@ const SignUp = () => {
       <div className="signup-field">
         <h1 className="signup-title">Sign Up</h1>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="text" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
         <button className="submit-button" onClick={handleSignUp}>
           Sign Up
         </button>
