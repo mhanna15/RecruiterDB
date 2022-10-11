@@ -8,6 +8,7 @@ import { useAuth } from '../../auth/AuthContext';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
+import Loader from '../../components/Loader/Loader';
 
 const Templates = (props: {
   userTemplates: Template[];
@@ -33,7 +34,9 @@ const Templates = (props: {
   return (
     <div className="page-root">
       <div className="page-header">
-        <h1 className="page-header-title">My Templates</h1>
+        <h1 className="page-header-title" style={{ marginBottom: '1em' }}>
+          My Templates
+        </h1>
         <button
           className="submit-button"
           onClick={() => {
@@ -44,7 +47,7 @@ const Templates = (props: {
         </button>
       </div>
       {props.loading ? (
-        <div className="loader" />
+        <Loader />
       ) : (
         props.userTemplates.map((template) => (
           <div className="list-row" key={template.id}>

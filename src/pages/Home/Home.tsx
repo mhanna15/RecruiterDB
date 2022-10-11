@@ -9,6 +9,7 @@ import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
 import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
 import { RecruiterType, Template } from '../../interface';
+import Loader from '../../components/Loader/Loader';
 
 const Home = (props: {
   templates: Template[];
@@ -38,7 +39,7 @@ const Home = (props: {
           Add Recruiter
         </button>
         {props.loading ? (
-          <div className="loader" />
+          <Loader />
         ) : (
           <>
             <RecruiterTable
@@ -47,13 +48,17 @@ const Home = (props: {
               setRecruiters={props.setRecruiters}
               setPopUpOpen={setPopUpOpen}
             />
-            <button
-              className='load-more'
-              onClick={() => props.fetchMore()}
-              disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
-            >
-              {props.moreRecruitersLoading ? <div className="loader" /> : 'Load More'}
-            </button>
+            {props.moreRecruitersLoading ? (
+              <div className="loader" />
+            ) : (
+              <button
+                className="load-more"
+                onClick={() => props.fetchMore()}
+                disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
+              >
+                Load More
+              </button>
+            )}
           </>
         )}
       </div>

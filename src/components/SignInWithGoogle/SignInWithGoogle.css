@@ -1,0 +1,23 @@
+/* GOOGLE */
+.google-sign-in {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: solid;
+  border-color: lightgray;
+  padding: 1.25em;
+  justify-content: center;
+  color: gray;
+  border-width: 1px;
+}
+
+.google-sign-in-logo {
+  width: 2.25em;
+  height: 2.25em;
+  margin-right: 1em;
+}
+
+.google-sign-in-text {
+  font-size: 1.1rem;
+  font-weight: bold;
+}

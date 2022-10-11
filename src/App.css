@@ -187,24 +187,6 @@ button:hover:enabled {
   width: 100%;
 }
 
-/* Loader */
-.loader {
-  border: 12px solid #f3f3f3; /* Light grey */
-  border-top: 12px solid rgb(173, 173, 173); /* green */
-  border-radius: 50%;
-  animation: spin 2s linear infinite;
-  margin: 50px auto;
-  text-indent: -9999em;
-  width: 2em;
-  height: 2em;
-  border-radius: 100%;
-  -webkit-animation: load3 1.4s infinite linear;
-  animation: load3 1.4s infinite linear;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-}
-
 @keyframes load3 {
   0% {
     -webkit-transform: rotate(0deg);
@@ -236,30 +218,6 @@ button:hover:enabled {
   color: black;
   margin-top: 1em;
   margin-bottom: 1em;
-}
-
-/* GOOGLE */
-.google-sign-in {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: solid;
-  border-color: lightgray;
-  padding: 1.25em;
-  justify-content: center;
-  color: gray;
-  border-width: 1px;
-}
-
-.google-sign-in-logo {
-  width: 2.25em;
-  height: 2.25em;
-  margin-right: 1em;
-}
-
-.google-sign-in-text {
-  font-size: 1.1rem;
-  font-weight: bold;
 }
 
 .load-more {

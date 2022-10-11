@@ -2,7 +2,7 @@ import './Login.css';
 
 import React, { useState } from 'react';
 
-import SignInWithGoogle from '../../assets/SignInWithGoogle';
+import SignInWithGoogle from '../../components/SignInWithGoogle/SignInWithGoogle';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
 

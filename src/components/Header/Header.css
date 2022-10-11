@@ -129,4 +129,8 @@
     margin-left: 0;
     margin-bottom: 1em;
   }
+
+  .header-link-left {
+    margin-right: 0px;
+  }
 }

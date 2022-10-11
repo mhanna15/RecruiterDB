@@ -6,11 +6,15 @@ import Dialog from '@mui/material/Dialog';
 import { deleteDoc, doc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-import CopyIcon from '../../assets/CopyIcon';
+import CopyIcon from '../../assets/CopyIcon/CopyIcon';
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import Form from '../Form/Form';
+import EmailIcon from '../../assets/EmailIcon/EmailIcon';
+import EditIcon from '../../assets/EditIcon/EditIcon';
+import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
+import LinkedInIcon from '../../assets/LinkedInIcon/LinkedInIcon';
 
 const RecruiterTable = (props: {
   recruiters: RecruiterType[];
@@ -58,6 +62,11 @@ const RecruiterTable = (props: {
     }
   };
 
+  const openURL = (url: string) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   return (
     <div className="list-root">
       <div className="list-container">
@@ -90,11 +99,22 @@ const RecruiterTable = (props: {
                   </option>
                 ))}
               </select>
-              <button className="list-row-button" onClick={() => copyTemplate(recruiter)}>
-                Copy
+              <button
+                className="list-row-button"
+                disabled={selectedTemplateID === undefined}
+                onClick={() => copyTemplate(recruiter)}
+              >
+                <CopyIcon disabled={selectedTemplateID === undefined} />
               </button>
-              <button className="list-row-button" onClick={() => emailRecruiter(recruiter)}>
-                Email
+              <button
+                className="list-row-button"
+                disabled={selectedTemplateID === undefined}
+                onClick={() => emailRecruiter(recruiter)}
+              >
+                <EmailIcon disabled={selectedTemplateID === undefined} />
+              </button>
+              <button className="list-row-button" onClick={() => openURL(recruiter.linkedIn)}>
+                <LinkedInIcon disabled={false} />
               </button>
               {currentUser?.role === 'admin' ? (
                 <>
@@ -107,10 +127,10 @@ const RecruiterTable = (props: {
                       }
                     }}
                   >
-                    Edit
+                    <EditIcon disabled={false} />
                   </button>
                   <button className="list-row-button" onClick={async () => await deleteRecruiter(recruiter.id)}>
-                    Delete
+                    <DeleteIcon disabled={false} />
                   </button>
                 </>
               ) : (
