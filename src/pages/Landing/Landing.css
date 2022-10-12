@@ -43,3 +43,10 @@
 .login-signup-link:hover {
   color: #349c84;
 }
+
+.paper {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  border-radius: 0.375rem;
+}

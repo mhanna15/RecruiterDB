@@ -96,34 +96,48 @@ const Landing = () => {
           <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
         </Collapse>
         <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
-          <input
-            onChange={(e) => setForgotPasswordEmail(e.target.value)}
-            value={forgotPasswordEmail}
-            placeholder="Email"
-            type="email"
-          />
-          <button onClick={handleForgotPassword}>send link</button>
+          <div className="form">
+            <h1 className="form-title">Forgot Password?</h1>
+            <input
+              onChange={(e) => setForgotPasswordEmail(e.target.value)}
+              value={forgotPasswordEmail}
+              placeholder="Email"
+              type="email"
+            />
+            <button className="submit-button" onClick={handleForgotPassword}>
+              Send Login Link
+            </button>
+          </div>
         </Dialog>
         <Dialog open={signUpPopup} onClose={() => setSignUpPopup(false)} fullWidth={true}>
-          <input
-            onChange={(e) => setSignUpEmail(e.target.value)}
-            value={signUpEmail}
-            placeholder="Email"
-            type="email"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setSignUpPassword(e.target.value)}
-            value={signUpPassword}
-          />
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
-            value={signUpPasswordConfirmation}
-          />
-          <button onClick={handleSignUp}>Create Account</button>
+          <div className="form">
+            <h1 className="form-title">Sign Up</h1>
+            <input
+              onChange={(e) => setSignUpEmail(e.target.value)}
+              value={signUpEmail}
+              placeholder="Email"
+              type="email"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setSignUpPassword(e.target.value)}
+              value={signUpPassword}
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
+              value={signUpPasswordConfirmation}
+            />
+            <button className="submit-button login-button" onClick={handleSignUp}>
+              Create Account
+            </button>
+            <p style={{ display: 'flex', alignSelf: 'center', marginBottom: '1em', fontSize: '1rem', color: 'gray' }}>
+              or
+            </p>
+            <SignInWithGoogle onClick={handleGoogleLogin} />
+          </div>
         </Dialog>
       </div>
     </div>
