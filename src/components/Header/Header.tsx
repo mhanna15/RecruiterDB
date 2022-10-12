@@ -2,15 +2,17 @@ import './Header.css';
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import LogoIcon from '../../assets/LogoIcon/LogoIcon';
 
 const Header = () => {
   const navigate = useNavigate();
 
   return (
     <div className="header-root">
-      <p onClick={() => navigate('/')} className="header-title">
-        RecruiterDB
-      </p>
+      <div onClick={() => navigate('/')} className="header-title">
+        <LogoIcon />
+        <p style={{ marginLeft: '10px' }}>recruiter_db</p>
+      </div>
       <div className="header-linksGroup">
         <a className="header-link header-link-left" onClick={() => navigate('/')}>
           Home
