@@ -69,11 +69,14 @@ const Landing = () => {
       <div className="login-field">
         <h1 className="login-title">Login</h1>
         {currentUser?.emailVerified === false && (
-          <Alert severity="info">
+          <Alert severity="info" style={{ marginBottom: '1em' }}>
             An account verification email has been sent to {currentUser.email}. Please click the link in the email and
             then login using your new account (may be in spam)
           </Alert>
         )}
+        <Collapse in={forgotPasswordLinkSent} style={{ marginBottom: '1em' }}>
+          <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
+        </Collapse>
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
         <a
@@ -92,9 +95,6 @@ const Landing = () => {
             Sign Up
           </a>
         </p>
-        <Collapse in={forgotPasswordLinkSent}>
-          <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
-        </Collapse>
         <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
           <div className="form">
             <h1 className="form-title">Forgot Password?</h1>
@@ -105,7 +105,7 @@ const Landing = () => {
               type="email"
             />
             <button className="submit-button" onClick={handleForgotPassword}>
-              Send Login Link
+              Email Password Reset Link
             </button>
           </div>
         </Dialog>

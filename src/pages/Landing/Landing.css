@@ -29,6 +29,7 @@
 .login-signup-link {
   font-weight: bold;
   color: #15c39a;
+  cursor: pointer;
 }
 
 .login-signup-text {
