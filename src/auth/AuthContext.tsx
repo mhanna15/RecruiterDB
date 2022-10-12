@@ -53,8 +53,8 @@ export const AuthProvider = ({ children }: any) => {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await addNewUserToDb(res.user.uid, email);
       await sendEmailVerification(res.user);
-    } catch (e: any) {
-      return e.code;
+    } catch (error: any) {
+      return error;
     }
   };
 
@@ -62,8 +62,8 @@ export const AuthProvider = ({ children }: any) => {
     try {
       auth.currentUser && (await sendEmailVerification(auth.currentUser));
       console.log('success');
-    } catch (e: any) {
-      return e;
+    } catch (error: any) {
+      return error;
     }
   };
 
@@ -71,8 +71,8 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       navigate('/');
-    } catch (e: any) {
-      return e.code;
+    } catch (error: any) {
+      return error;
     }
   };
 
@@ -92,16 +92,16 @@ export const AuthProvider = ({ children }: any) => {
       await signOut(auth);
       navigate('/');
       window.location.reload();
-    } catch (e: any) {
-      return e.code;
+    } catch (error: any) {
+      return error;
     }
   };
 
   const resetPassword = async (email: string) => {
     try {
       await sendPasswordResetEmail(auth, email);
-    } catch (e: any) {
-      return e.code;
+    } catch (error: any) {
+      return error;
     }
   };
 
