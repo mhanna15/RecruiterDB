@@ -3,6 +3,7 @@ import firebase, {
   getAdditionalUserInfo,
   GoogleAuthProvider,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -22,6 +23,7 @@ interface Context {
   login: (email: string, password: string) => Promise<any>;
   signup: (email: string, password: string) => Promise<any>;
   logout: () => Promise<any>;
+  resetPassword: (email: string) => Promise<any>;
   loginWithGoogle: () => Promise<any>;
   sendEmailForVerification: () => Promise<any>;
 }
@@ -50,7 +52,7 @@ export const AuthProvider = ({ children }: any) => {
     try {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await addNewUserToDb(res.user.uid, email);
-      await sendEmailVerification(res.user, { url: window.location.href });
+      await sendEmailVerification(res.user);
     } catch (e: any) {
       return e.code;
     }
@@ -95,6 +97,14 @@ export const AuthProvider = ({ children }: any) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      await sendPasswordResetEmail(auth, email);
+    } catch (e: any) {
+      return e.code;
+    }
+  };
+
   useEffect(() => {
     const unsubscribe = auth.onIdTokenChanged(async (user) => {
       setLoading(true);
@@ -118,6 +128,7 @@ export const AuthProvider = ({ children }: any) => {
         signup,
         logout,
         loginWithGoogle,
+        resetPassword,
         sendEmailForVerification,
       }}
     >

@@ -1,6 +1,6 @@
 import './Landing.css';
 
-import { Alert, Collapse } from '@mui/material';
+import { Alert, Collapse, Dialog } from '@mui/material';
 import React, { useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
@@ -11,7 +11,11 @@ const Landing = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const { login, signup, loginWithGoogle, currentUser } = useAuth();
+  const [forgotPasswordPopup, setForgotPasswordPopup] = useState<boolean>(false);
+  const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>('');
+  const [forgotPasswordLinkSent, setForgotPasswordLinkSent] = useState<boolean>(false);
+
+  const { login, signup, loginWithGoogle, resetPassword, currentUser } = useAuth();
 
   const handleSignUp = async () => {
     try {
@@ -41,6 +45,16 @@ const Landing = () => {
     }
   };
 
+  const handleForgotPassword = async () => {
+    const res = await resetPassword(forgotPasswordEmail);
+    const authResult = AuthResults(res);
+    if (authResult) {
+      alert(`${authResult.title}: ${authResult.errorMessage}`);
+    }
+    setForgotPasswordPopup(false);
+    setForgotPasswordLinkSent(true);
+  };
+
   return (
     <div className="login-content">
       <div className="login-field">
@@ -60,8 +74,21 @@ const Landing = () => {
         <button className="submit-button" onClick={handleSignUp}>
           Create new account
         </button>
+        <a onClick={() => setForgotPasswordPopup(true)}>Forgot your password?</a>
+        <Collapse in={forgotPasswordLinkSent}>
+          <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
+        </Collapse>
         <h1 style={{ display: 'flex', alignSelf: 'center', marginTop: '1em', marginBottom: '1em' }}>or</h1>
         <SignInWithGoogle onClick={handleGoogleLogin} />
+        <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
+          <input
+            onChange={(e) => setForgotPasswordEmail(e.target.value)}
+            value={forgotPasswordEmail}
+            placeholder="Email"
+            type="email"
+          />
+          <button onClick={handleForgotPassword}>send link</button>
+        </Dialog>
       </div>
     </div>
   );
