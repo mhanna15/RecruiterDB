@@ -12,14 +12,13 @@ import {
   where,
 } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/AuthContext';
 import Header from './components/Header/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { db } from './firebase';
 import { RecruiterType, Template } from './interface';
-import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
 import Home from './pages/Home/Home';
 import Profile from './pages/Profile/Profile';

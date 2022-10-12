@@ -7,14 +7,14 @@ import { deleteDoc, doc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import CopyIcon from '../../assets/CopyIcon/CopyIcon';
+import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
+import EditIcon from '../../assets/EditIcon/EditIcon';
+import EmailIcon from '../../assets/EmailIcon/EmailIcon';
+import LinkedInIcon from '../../assets/LinkedInIcon/LinkedInIcon';
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
 import { emptyRecruiter, RecruiterType, Template } from '../../interface';
 import Form from '../Form/Form';
-import EmailIcon from '../../assets/EmailIcon/EmailIcon';
-import EditIcon from '../../assets/EditIcon/EditIcon';
-import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
-import LinkedInIcon from '../../assets/LinkedInIcon/LinkedInIcon';
 
 const RecruiterTable = (props: {
   recruiters: RecruiterType[];

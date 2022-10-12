@@ -1,5 +1,6 @@
-import React from 'react';
 import './SignInWithGoogle.css';
+
+import React from 'react';
 
 interface Google {
   onClick?: React.MouseEventHandler;
