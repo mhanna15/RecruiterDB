@@ -7,9 +7,10 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import { RECRUITERS_PER_PAGE } from '../../App';
 import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
+import Loader from '../../components/Loader/Loader';
 import RecruiterTable from '../../components/RecruiterTable/RecruiterTable';
 import { RecruiterType, Template } from '../../interface';
-import Loader from '../../components/Loader/Loader';
+import Landing from '../Landing/Landing';
 
 const Home = (props: {
   templates: Template[];
@@ -21,8 +22,9 @@ const Home = (props: {
   moreRecruitersLoading: boolean;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
+  const { currentUser } = useAuth();
 
-  return (
+  return currentUser?.emailVerified ? (
     <div className="page-root">
       <div className="page-content">
         <div className="page-header">
@@ -72,6 +74,8 @@ const Home = (props: {
         <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} />
       </Dialog>
     </div>
+  ) : (
+    <Landing />
   );
 };
 

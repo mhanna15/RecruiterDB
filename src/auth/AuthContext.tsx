@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }: any) => {
       const res = await createUserWithEmailAndPassword(auth, email, password);
       await addNewUserToDb(res.user.uid, email);
       await sendEmailVerification(res.user, { url: window.location.href });
-      navigate('/profile');
     } catch (e: any) {
       return e.code;
     }
@@ -89,7 +88,7 @@ export const AuthProvider = ({ children }: any) => {
   const logout = async () => {
     try {
       await signOut(auth);
-      navigate('/login');
+      navigate('/');
       window.location.reload();
     } catch (e: any) {
       return e.code;

@@ -22,9 +22,7 @@ import { RecruiterType, Template } from './interface';
 import Companies from './pages/Companies/Companies';
 import NotFound from './pages/Error/NotFound';
 import Home from './pages/Home/Home';
-import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
-import SignUp from './pages/SignUp/SignUp';
 import Templates from './pages/Templates/Templates';
 
 export const RECRUITERS_PER_PAGE = 5;
@@ -117,34 +115,26 @@ const App = () => {
   return (
     <div className="app">
       <div className="app-content">
-        <Header isLoggedIn={currentUser !== undefined} />
+        {currentUser?.emailVerified ? <Header /> : <></>}
         <Routes>
           <Route
             path="/"
             element={
-              <ProtectedRoute
-                isAllowed={currentUser?.emailVerified === true}
-                redirectPath={currentUser?.emailVerified === false ? '/profile' : '/login'}
-              >
-                <Home
-                  templates={templates}
-                  recruiters={recruiters}
-                  setRecruiters={setRecruiters}
-                  loading={recruitersLoading}
-                  fetchMore={fetchMore}
-                  lastRecruiterSeen={lastRecruiterSeen}
-                  moreRecruitersLoading={moreRecruitersLoading}
-                />
-              </ProtectedRoute>
+              <Home
+                templates={templates}
+                recruiters={recruiters}
+                setRecruiters={setRecruiters}
+                loading={recruitersLoading}
+                fetchMore={fetchMore}
+                lastRecruiterSeen={lastRecruiterSeen}
+                moreRecruitersLoading={moreRecruitersLoading}
+              />
             }
           />
           <Route
             path="/templates"
             element={
-              <ProtectedRoute
-                isAllowed={currentUser?.emailVerified === true}
-                redirectPath={currentUser?.emailVerified === false ? '/profile' : '/login'}
-              >
+              <ProtectedRoute isAllowed={currentUser?.emailVerified === true} redirectPath="/">
                 <Templates userTemplates={templates} setUserTemplates={setTemplates} loading={templatesLoading} />
               </ProtectedRoute>
             }
@@ -152,24 +142,8 @@ const App = () => {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute isAllowed={currentUser !== undefined} redirectPath="/login">
+              <ProtectedRoute isAllowed={currentUser?.emailVerified === true} redirectPath="/">
                 <Profile />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <ProtectedRoute isAllowed={currentUser === undefined} redirectPath="/">
-                <Login />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/signup"
-            element={
-              <ProtectedRoute isAllowed={currentUser === undefined} redirectPath="/">
-                <SignUp />
               </ProtectedRoute>
             }
           />
