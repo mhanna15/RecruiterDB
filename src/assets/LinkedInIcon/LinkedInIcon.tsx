@@ -1,7 +1,6 @@
-import * as React from 'react';
-import { SVGProps } from 'react';
+import React from 'react';
 
-const SvgComponent = (props: { disabled: boolean }) => (
+const LinkedInIcon = (props: { disabled: boolean }) => (
   <svg
     width={20}
     height={20}
@@ -17,4 +16,4 @@ const SvgComponent = (props: { disabled: boolean }) => (
   </svg>
 );
 
-export default SvgComponent;
+export default LinkedInIcon;
