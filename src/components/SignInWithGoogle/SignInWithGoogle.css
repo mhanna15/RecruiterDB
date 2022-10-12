@@ -5,15 +5,15 @@
   background-color: white;
   border: solid;
   border-color: lightgray;
-  padding: 1.25em;
+  padding: 1em;
   justify-content: center;
   color: gray;
   border-width: 1px;
 }
 
 .google-sign-in-logo {
-  width: 2.25em;
-  height: 2.25em;
+  width: 2.1em;
+  height: 2.1em;
   margin-right: 1em;
 }
 

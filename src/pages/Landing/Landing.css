@@ -21,3 +21,25 @@
   margin-bottom: 1em;
   color: black;
 }
+
+.login-button {
+  margin-bottom: 1em;
+}
+
+.login-signup-link {
+  font-weight: bold;
+  color: #15c39a;
+}
+
+.login-signup-text {
+  display: flex;
+  align-self: center;
+  margin-top: 2.5em;
+  margin-bottom: 1em;
+  font-size: 1rem;
+  color: gray;
+}
+
+.login-signup-link:hover {
+  color: #349c84;
+}

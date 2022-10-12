@@ -11,6 +11,7 @@ const Landing = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const [signUpPopup, setSignUpPopup] = useState<boolean>(false);
   const [forgotPasswordPopup, setForgotPasswordPopup] = useState<boolean>(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>('');
   const [forgotPasswordLinkSent, setForgotPasswordLinkSent] = useState<boolean>(false);
@@ -67,19 +68,25 @@ const Landing = () => {
         )}
         <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
         <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-        <button className="submit-button" onClick={handleLogin}>
+        <a
+          style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
+          onClick={() => setForgotPasswordPopup(true)}
+        >
+          Forgot Password?
+        </a>
+        <button className="submit-button login-button" onClick={handleLogin}>
           Login
         </button>
-        or
-        <button className="submit-button" onClick={handleSignUp}>
-          Create new account
-        </button>
-        <a onClick={() => setForgotPasswordPopup(true)}>Forgot your password?</a>
+        <SignInWithGoogle onClick={handleGoogleLogin} />
+        <p className="login-signup-text">
+          Don&apos;t have an account?&nbsp;
+          <a className="login-signup-link" onClick={() => setSignUpPopup(true)}>
+            Sign Up
+          </a>
+        </p>
         <Collapse in={forgotPasswordLinkSent}>
           <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
         </Collapse>
-        <h1 style={{ display: 'flex', alignSelf: 'center', marginTop: '1em', marginBottom: '1em' }}>or</h1>
-        <SignInWithGoogle onClick={handleGoogleLogin} />
         <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
           <input
             onChange={(e) => setForgotPasswordEmail(e.target.value)}
@@ -88,6 +95,15 @@ const Landing = () => {
             type="email"
           />
           <button onClick={handleForgotPassword}>send link</button>
+        </Dialog>
+        <Dialog open={signUpPopup} onClose={() => setSignUpPopup(false)} fullWidth={true}>
+          <input
+            onChange={(e) => setForgotPasswordEmail(e.target.value)}
+            value={forgotPasswordEmail}
+            placeholder="Email"
+            type="email"
+          />
+          <button onClick={handleSignUp}>Create Account</button>
         </Dialog>
       </div>
     </div>
