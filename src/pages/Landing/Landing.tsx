@@ -12,6 +12,10 @@ const Landing = () => {
   const [password, setPassword] = useState<string>('');
 
   const [signUpPopup, setSignUpPopup] = useState<boolean>(false);
+  const [signUpEmail, setSignUpEmail] = useState<string>('');
+  const [signUpPassword, setSignUpPassword] = useState<string>('');
+  const [signUpPasswordConfirmation, setSignUpPasswordConfirmation] = useState<string>('');
+
   const [forgotPasswordPopup, setForgotPasswordPopup] = useState<boolean>(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>('');
   const [forgotPasswordLinkSent, setForgotPasswordLinkSent] = useState<boolean>(false);
@@ -19,8 +23,12 @@ const Landing = () => {
   const { login, signup, loginWithGoogle, resetPassword, currentUser } = useAuth();
 
   const handleSignUp = async () => {
+    if (signUpPassword !== signUpPasswordConfirmation) {
+      alert('Passwords do not match');
+      return;
+    }
     try {
-      const res = await signup(email, password);
+      const res = await signup(signUpEmail, signUpPassword);
       const authResult = AuthResults(res);
       if (authResult) {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
@@ -66,8 +74,8 @@ const Landing = () => {
             then login using your new account (may be in spam)
           </Alert>
         )}
-        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} />
-        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
+        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
         <a
           style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
           onClick={() => setForgotPasswordPopup(true)}
@@ -98,10 +106,22 @@ const Landing = () => {
         </Dialog>
         <Dialog open={signUpPopup} onClose={() => setSignUpPopup(false)} fullWidth={true}>
           <input
-            onChange={(e) => setForgotPasswordEmail(e.target.value)}
-            value={forgotPasswordEmail}
+            onChange={(e) => setSignUpEmail(e.target.value)}
+            value={signUpEmail}
             placeholder="Email"
             type="email"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setSignUpPassword(e.target.value)}
+            value={signUpPassword}
+          />
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
+            value={signUpPasswordConfirmation}
           />
           <button onClick={handleSignUp}>Create Account</button>
         </Dialog>
