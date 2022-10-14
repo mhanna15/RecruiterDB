@@ -6,7 +6,7 @@
 .login-field {
   font-size: small;
   display: flex;
-  flex-direction: column;
+  /* flex-direction: column; */
   justify-content: space-between;
   border: solid;
   padding: 2em;
@@ -15,6 +15,34 @@
   border-color: lightgray;
   color: black;
   margin-bottom: 1em;
+}
+
+.login-about {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+}
+
+.login-about-header {
+  font-size: 2rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.login-about-subheader {
+  font-size: 2em;
+  margin-top: 1em;
+  /* font-weight: bold; */
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 2em;
 }
 
 .login-title {

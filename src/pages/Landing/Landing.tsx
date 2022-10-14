@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
 import SignInWithGoogle from '../../components/SignInWithGoogle/SignInWithGoogle';
+import LogoIcon from '../../assets/LogoIcon/LogoIcon';
 
 const Landing = () => {
   const [email, setEmail] = useState<string>('');
@@ -67,34 +68,51 @@ const Landing = () => {
   return (
     <div className="login-content">
       <div className="login-field">
-        <h1 className="login-title">Login</h1>
-        {currentUser?.emailVerified === false && (
-          <Alert severity="info" style={{ marginBottom: '1em' }}>
-            An account verification email has been sent to {currentUser.email}. Please click the link in the email and
-            then login using your new account (may be in spam)
-          </Alert>
-        )}
-        <Collapse in={forgotPasswordLinkSent} style={{ marginBottom: '1em' }}>
-          <Alert severity="info">A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)</Alert>
-        </Collapse>
-        <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
-        <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} value={password} />
-        <a
-          style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
-          onClick={() => setForgotPasswordPopup(true)}
-        >
-          Forgot Password?
-        </a>
-        <button className="submit-button login-button" onClick={handleLogin}>
-          Login
-        </button>
-        <SignInWithGoogle onClick={handleGoogleLogin} />
-        <p className="login-signup-text">
-          Don&apos;t have an account?&nbsp;
-          <a className="login-signup-link" onClick={() => setSignUpPopup(true)}>
-            Sign Up
+        <div className="login-about">
+          <div className="login-about-header">
+            <LogoIcon />
+            <p style={{ marginLeft: '10px' }}>RecruiterDB</p>
+          </div>
+          <p className="login-about-subheader">Skip the application. Reach out to tech recruiters.</p>
+        </div>
+        <div className="login-form">
+          <h1 className="login-title">Login</h1>
+          {currentUser?.emailVerified === false && (
+            <Alert severity="info" style={{ marginBottom: '1em' }}>
+              An account verification email has been sent to {currentUser.email}. Please click the link in the email and
+              then login using your new account (may be in spam)
+            </Alert>
+          )}
+          <Collapse in={forgotPasswordLinkSent}>
+            <Alert severity="info" style={{ marginBottom: '1em' }}>
+              A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)
+            </Alert>
+          </Collapse>
+          <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+          />
+          <a
+            style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
+            onClick={() => setForgotPasswordPopup(true)}
+          >
+            Forgot Password?
           </a>
-        </p>
+          <button className="submit-button login-button" onClick={handleLogin}>
+            Login
+          </button>
+          <SignInWithGoogle onClick={handleGoogleLogin} />
+          <p className="login-signup-text">
+            Don&apos;t have an account?&nbsp;
+            <a className="login-signup-link" onClick={() => setSignUpPopup(true)}>
+              Sign Up
+            </a>
+          </p>
+        </div>
+
         <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
           <div className="form">
             <h1 className="form-title">Forgot Password?</h1>
@@ -105,7 +123,7 @@ const Landing = () => {
               type="email"
             />
             <button className="submit-button" onClick={handleForgotPassword}>
-              Email Password Reset Link
+              Send Password Reset
             </button>
           </div>
         </Dialog>
