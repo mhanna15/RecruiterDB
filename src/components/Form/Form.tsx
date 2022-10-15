@@ -76,8 +76,17 @@ const Form = (props: FormProps) => {
     e.preventDefault();
     if (_.isEqual(errors, { email: false, linkedIn: false })) {
       const newRecruiterRef = doc(collection(db, 'recruiters'));
-      await setDoc(newRecruiterRef, { ...recruiterData, id: newRecruiterRef.id });
-      props.setRecruiters((oldArray) => [...oldArray, { ...recruiterData, id: newRecruiterRef.id }]);
+      const time = new Date().getTime();
+      await setDoc(newRecruiterRef, {
+        ...recruiterData,
+        id: newRecruiterRef.id,
+        dateAddedMillis: time,
+        seenBy: [],
+      });
+      props.setRecruiters((oldArray) => [
+        { ...recruiterData, id: newRecruiterRef.id, dateAddedMillis: time },
+        ...oldArray,
+      ]);
       props.setPopUpOpen(false);
       clearForm();
     } else {

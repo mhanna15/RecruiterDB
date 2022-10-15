@@ -51,7 +51,7 @@ const App = () => {
       const getRecruiters = async () => {
         console.log('fetching recruiters from firebase');
         setRecruitersLoading(true);
-        const q = query(collection(db, 'recruiters'), orderBy('firstName'), limit(RECRUITERS_PER_PAGE));
+        const q = query(collection(db, 'recruiters'), orderBy('dateAddedMillis', 'desc'), limit(RECRUITERS_PER_PAGE));
         const querySnapshot = await getDocs(q);
         setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
         querySnapshot.forEach((doc) => {
@@ -66,9 +66,20 @@ const App = () => {
               company: recruiter.company,
               title: recruiter.title,
               linkedIn: recruiter.linkedIn,
+              seenBy: recruiter.seenBy,
+              dateAddedMillis: recruiter.dateAddedMillis,
             },
           ]);
         });
+        setRecruiters((oldRecruiters) =>
+          oldRecruiters.sort((a, b) => {
+            if (a.seenBy.includes(currentUser.uid) && !b.seenBy.includes(currentUser.uid)) {
+              return 1;
+            } else if (b.seenBy.includes(currentUser.uid) && !a.seenBy.includes(currentUser.uid)) {
+              return -1;
+            } else return a.dateAddedMillis < b.dateAddedMillis ? 1 : -1;
+          })
+        );
         setRecruitersLoading(false);
       };
 
@@ -78,37 +89,53 @@ const App = () => {
   }, [currentUser]);
 
   const fetchMore = async () => {
-    setMoreRecruitersLoading(true);
-    console.log('fetching more recruiters');
-    const q = query(
-      collection(db, 'recruiters'),
-      orderBy('firstName'),
-      limit(RECRUITERS_PER_PAGE),
-      startAfter(lastRecruiterSeen)
-    );
-    const querySnapshot = await getDocs(q);
-    setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
-    if (querySnapshot.docs[querySnapshot.docs.length - 1] === undefined) {
+    if (currentUser) {
+      setMoreRecruitersLoading(true);
+      console.log('fetching more recruiters');
+      const q = query(
+        collection(db, 'recruiters'),
+        orderBy('dateAddedMillis', 'desc'),
+        limit(RECRUITERS_PER_PAGE),
+        startAfter(lastRecruiterSeen)
+      );
+      const querySnapshot = await getDocs(q);
+      setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
+      if (querySnapshot.docs[querySnapshot.docs.length - 1] === undefined) {
+        setMoreRecruitersLoading(false);
+        alert('No more recruiters for now!');
+        return;
+      }
+      querySnapshot.forEach((doc) => {
+        const recruiter = doc.data();
+        setRecruiters((oldArray) => [
+          ...oldArray,
+          {
+            id: recruiter.id,
+            firstName: recruiter.firstName,
+            lastName: recruiter.lastName,
+            email: recruiter.email,
+            company: recruiter.company,
+            title: recruiter.title,
+            linkedIn: recruiter.linkedIn,
+            seenBy: recruiter.seenBy,
+            dateAddedMillis: recruiter.dateAddedMillis,
+          },
+        ]);
+      });
+      setRecruiters((oldRecruiters) =>
+        oldRecruiters.sort((a, b) => {
+          const aIncludesUser = a.seenBy.includes(currentUser.uid);
+          const bIncludesUser = b.seenBy.includes(currentUser.uid);
+
+          if (aIncludesUser && !bIncludesUser) {
+            return 1;
+          } else if (bIncludesUser && !aIncludesUser) {
+            return -1;
+          } else return a.dateAddedMillis < b.dateAddedMillis ? 1 : -1;
+        })
+      );
       setMoreRecruitersLoading(false);
-      alert('No more recruiters for now!');
-      return;
     }
-    querySnapshot.forEach((doc) => {
-      const recruiter = doc.data();
-      setRecruiters((oldArray) => [
-        ...oldArray,
-        {
-          id: recruiter.id,
-          firstName: recruiter.firstName,
-          lastName: recruiter.lastName,
-          email: recruiter.email,
-          company: recruiter.company,
-          title: recruiter.title,
-          linkedIn: recruiter.linkedIn,
-        },
-      ]);
-    });
-    setMoreRecruitersLoading(false);
   };
 
   return (

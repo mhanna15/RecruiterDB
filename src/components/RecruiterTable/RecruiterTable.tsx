@@ -3,7 +3,7 @@ import './RecruiterTable.css';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import CopyIcon from '../../assets/CopyIcon/CopyIcon';
@@ -62,6 +62,54 @@ const RecruiterTable = (props: {
     }
   };
 
+  const markSeen = async (recruiter: RecruiterType) => {
+    if (currentUser?.emailVerified) {
+      try {
+        const recruiterRef = doc(db, 'recruiters', recruiter.id);
+        await updateDoc(recruiterRef, {
+          seenBy: arrayUnion(currentUser.uid),
+        });
+        props.setRecruiters((oldRecruiters) =>
+          oldRecruiters.filter((recruiterI) => {
+            if (recruiterI.id === recruiter.id) {
+              const editedRecruiter = recruiterI;
+              editedRecruiter.seenBy.push(currentUser.uid);
+              return editedRecruiter;
+            }
+            return recruiterI;
+          })
+        );
+      } catch (e) {
+        alert(JSON.stringify(e));
+      }
+    }
+  };
+
+  const markUnseen = async (recruiter: RecruiterType) => {
+    if (currentUser?.emailVerified) {
+      try {
+        const recruiterRef = doc(db, 'recruiters', recruiter.id);
+        await updateDoc(recruiterRef, {
+          seenBy: arrayRemove(currentUser?.uid),
+        });
+        props.setRecruiters((oldRecruiters) =>
+          oldRecruiters.filter((recruiterI) => {
+            if (recruiterI.id === recruiter.id) {
+              const editedRecruiter = recruiterI;
+              const index = editedRecruiter.seenBy.indexOf(currentUser.uid);
+              if (index > -1) {
+                editedRecruiter.seenBy.splice(index, 1);
+              }
+            }
+            return recruiterI;
+          })
+        );
+      } catch (e) {
+        alert(JSON.stringify(e));
+      }
+    }
+  };
+
   const openURL = (url: string) => {
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
@@ -105,6 +153,16 @@ const RecruiterTable = (props: {
                 onClick={() => copyTemplate(recruiter)}
               >
                 <CopyIcon disabled={selectedTemplateID === undefined} />
+              </button>
+              <button
+                className="list-row-button"
+                onClick={async () =>
+                  currentUser && recruiter.seenBy.includes(currentUser.uid)
+                    ? await markUnseen(recruiter)
+                    : await markSeen(recruiter)
+                }
+              >
+                {currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'mark unseen' : 'mark seen'}
               </button>
               <button
                 className="list-row-button"
