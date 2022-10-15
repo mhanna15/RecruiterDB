@@ -123,10 +123,26 @@ const RecruiterTable = (props: {
         </Collapse>
         {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
+            <div
+              className="list-row-status"
+              style={{
+                backgroundColor: currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'white' : '#117cee',
+                border:
+                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? '1px solid black' : '1px solid $117cee',
+                boxShadow:
+                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'none' : '0 0px 6px 0 rgb(0 0 0 / 15%)',
+              }}
+              onClick={async () =>
+                currentUser && recruiter.seenBy.includes(currentUser.uid)
+                  ? await markUnseen(recruiter)
+                  : await markSeen(recruiter)
+              }
+              title={currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'Mark as unseen' : 'Mark as seen'}
+            />
             <div className="list-row-content">
-              <p className="list-row-title">
+              <a className="list-row-title" onClick={() => openURL(recruiter.linkedIn)}>
                 {recruiter.firstName} {recruiter.lastName}
-              </p>
+              </a>
               <p className="list-row-subtitle">{recruiter.company}</p>
               <p className="list-row-body-text">{recruiter.title}</p>
             </div>
@@ -147,32 +163,19 @@ const RecruiterTable = (props: {
                   </option>
                 ))}
               </select>
-              <button
+              {/* <button
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
                 onClick={() => copyTemplate(recruiter)}
               >
                 <CopyIcon disabled={selectedTemplateID === undefined} />
-              </button>
-              <button
-                className="list-row-button"
-                onClick={async () =>
-                  currentUser && recruiter.seenBy.includes(currentUser.uid)
-                    ? await markUnseen(recruiter)
-                    : await markSeen(recruiter)
-                }
-              >
-                {currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'mark unseen' : 'mark seen'}
-              </button>
+              </button> */}
               <button
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
                 onClick={() => emailRecruiter(recruiter)}
               >
                 <EmailIcon disabled={selectedTemplateID === undefined} />
-              </button>
-              <button className="list-row-button" onClick={() => openURL(recruiter.linkedIn)}>
-                <LinkedInIcon disabled={false} />
               </button>
               {currentUser?.role === 'admin' ? (
                 <>

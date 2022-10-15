@@ -23,6 +23,7 @@ import NotFound from './pages/Error/NotFound';
 import Home from './pages/Home/Home';
 import Profile from './pages/Profile/Profile';
 import Templates from './pages/Templates/Templates';
+import Footer from './components/Footer/Footer';
 
 export const RECRUITERS_PER_PAGE = 5;
 
@@ -175,6 +176,7 @@ const App = () => {
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        {currentUser?.emailVerified ? <Footer /> : <></>}
       </div>
     </div>
   );
