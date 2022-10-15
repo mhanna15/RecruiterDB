@@ -1,6 +1,6 @@
 import './Form.css';
 
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, increment, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
@@ -73,28 +73,34 @@ const Form = (props: FormProps) => {
   };
 
   const handleAddNewRecruiter = async (e: any) => {
-    e.preventDefault();
-    if (_.isEqual(errors, { email: false, linkedIn: false })) {
-      const newRecruiterRef = doc(collection(db, 'recruiters'));
-      const time = new Date().getTime();
-      await setDoc(newRecruiterRef, {
-        ...recruiterData,
-        id: newRecruiterRef.id,
-        dateAddedMillis: time,
-        seenBy: [],
-      });
-      props.setRecruiters((oldArray) => [
-        { ...recruiterData, id: newRecruiterRef.id, dateAddedMillis: time },
-        ...oldArray,
-      ]);
-      props.setPopUpOpen(false);
-      clearForm();
-    } else {
-      for (const [key, value] of Object.entries(errors)) {
-        if (value) {
-          alert(`${key} is invalid`);
+    try {
+      e.preventDefault();
+      if (_.isEqual(errors, { email: false, linkedIn: false }) && currentUser) {
+        const newRecruiterRef = doc(collection(db, 'recruiters'));
+        const time = new Date().getTime();
+        await setDoc(newRecruiterRef, {
+          ...recruiterData,
+          id: newRecruiterRef.id,
+          dateAddedMillis: time,
+          seenBy: [],
+        });
+        props.setRecruiters((oldArray) => [
+          { ...recruiterData, id: newRecruiterRef.id, dateAddedMillis: time },
+          ...oldArray,
+        ]);
+        props.setPopUpOpen(false);
+        clearForm();
+        const userRef = doc(db, 'users', currentUser?.uid);
+        await updateDoc(userRef, { recruitersAdded: increment(1) });
+      } else {
+        for (const [key, value] of Object.entries(errors)) {
+          if (value) {
+            alert(`${key} is invalid`);
+          }
         }
       }
+    } catch (error: any) {
+      alert(JSON.stringify(error));
     }
   };
 
