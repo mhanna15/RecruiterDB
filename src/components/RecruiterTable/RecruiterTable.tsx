@@ -128,7 +128,7 @@ const RecruiterTable = (props: {
               style={{
                 backgroundColor: currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'white' : '#117cee',
                 border:
-                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? '1px solid black' : '1px solid $117cee',
+                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? '1px solid black' : '1px solid #117cee',
                 boxShadow:
                   currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'none' : '0 0px 6px 0 rgb(0 0 0 / 15%)',
               }}
