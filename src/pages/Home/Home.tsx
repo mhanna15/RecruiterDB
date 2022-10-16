@@ -19,6 +19,8 @@ const Home = (props: {
   loading: boolean;
   fetchMore: () => void;
   lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
+  lastRecruiter: DocumentData | undefined;
+
   moreRecruitersLoading: boolean;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
@@ -53,13 +55,17 @@ const Home = (props: {
             {props.moreRecruitersLoading ? (
               <div className="loader" />
             ) : (
-              <button
-                className="load-more"
-                onClick={() => props.fetchMore()}
-                disabled={props.lastRecruiterSeen === undefined || props.recruiters.length % RECRUITERS_PER_PAGE !== 0}
-              >
-                Load More
-              </button>
+              <>
+                {props.recruiters.find((recruiter) => recruiter.id === props.lastRecruiter?.id) === undefined ? (
+                  <button className="load-more" onClick={() => props.fetchMore()}>
+                    Load More
+                  </button>
+                ) : (
+                  <p className="load-more" style={{ display: 'flex', justifyContent: 'center' }}>
+                    {"You've reached the bottom!"}
+                  </p>
+                )}
+              </>
             )}
           </>
         )}

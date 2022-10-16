@@ -35,6 +35,7 @@ const App = () => {
   const [recruitersLoading, setRecruitersLoading] = useState<boolean>(false);
   const [moreRecruitersLoading, setMoreRecruitersLoading] = useState<boolean>(false);
   const [lastRecruiterSeen, setLastRecruiterSeen] = useState<QueryDocumentSnapshot<DocumentData>>();
+  const [lastRecruiter, setLastRecruiter] = useState<DocumentData>();
 
   useEffect(() => {
     if (currentUser?.emailVerified === true) {
@@ -50,6 +51,11 @@ const App = () => {
 
       const getRecruiters = async () => {
         setRecruitersLoading(true);
+        // Get last recruiter
+        const lastRecruiterQuery = query(collection(db, 'recruiters'), orderBy('dateAddedMillis'), limit(1));
+        const lastRecruiter = await getDocs(lastRecruiterQuery);
+        lastRecruiter.forEach((recruiter) => setLastRecruiter(recruiter.data()));
+
         const q = query(collection(db, 'recruiters'), orderBy('dateAddedMillis', 'desc'), limit(RECRUITERS_PER_PAGE));
         const querySnapshot = await getDocs(q);
         setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
@@ -150,6 +156,7 @@ const App = () => {
                 setRecruiters={setRecruiters}
                 loading={recruitersLoading}
                 fetchMore={fetchMore}
+                lastRecruiter={lastRecruiter}
                 lastRecruiterSeen={lastRecruiterSeen}
                 moreRecruitersLoading={moreRecruitersLoading}
               />
