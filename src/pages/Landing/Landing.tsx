@@ -3,10 +3,10 @@ import './Landing.css';
 import { Alert, Collapse, Dialog } from '@mui/material';
 import React, { useState } from 'react';
 
+import LogoIcon from '../../assets/LogoIcon/LogoIcon';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
 import SignInWithGoogle from '../../components/SignInWithGoogle/SignInWithGoogle';
-import LogoIcon from '../../assets/LogoIcon/LogoIcon';
 
 const Landing = () => {
   const [email, setEmail] = useState<string>('');
