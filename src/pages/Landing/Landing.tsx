@@ -40,29 +40,41 @@ const Landing = () => {
   };
 
   const handleLogin = async () => {
-    const res = await login(email, password);
-    const authResult = AuthResults(res);
-    if (authResult) {
-      alert(`${authResult.title}: ${authResult.errorMessage}`);
+    try {
+      const res = await login(email, password);
+      const authResult = AuthResults(res);
+      if (authResult) {
+        alert(`${authResult.title}: ${authResult.errorMessage}`);
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
     }
   };
 
   const handleGoogleLogin = async () => {
-    const res = await loginWithGoogle();
-    const authResult = AuthResults(res);
-    if (authResult) {
-      alert(`${authResult.title}: ${authResult.errorMessage}`);
+    try {
+      const res = await loginWithGoogle();
+      const authResult = AuthResults(res);
+      if (authResult) {
+        alert(`${authResult.title}: ${authResult.errorMessage}`);
+      }
+    } catch (error) {
+      alert(JSON.stringify(error));
     }
   };
 
   const handleForgotPassword = async () => {
-    const res = await resetPassword(forgotPasswordEmail);
-    const authResult = AuthResults(res);
-    if (authResult) {
-      alert(`${authResult.title}: ${authResult.errorMessage}`);
+    try {
+      const res = await resetPassword(forgotPasswordEmail);
+      const authResult = AuthResults(res);
+      if (authResult) {
+        alert(`${authResult.title}: ${authResult.errorMessage}`);
+      }
+      setForgotPasswordPopup(false);
+      setForgotPasswordLinkSent(true);
+    } catch (error) {
+      alert(JSON.stringify(error));
     }
-    setForgotPasswordPopup(false);
-    setForgotPasswordLinkSent(true);
   };
 
   return (
