@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "recruiterdb"
-  }
+    "default": "recruiterdb-4d8b4",
+    "production": "recruiterdb-4d8b4"
+  },
+  "targets": {},
+  "etags": {}
 }
