@@ -45,7 +45,7 @@ const RecruiterTable = (props: {
       const replacedTemplate = selectedTemplate.template
         .replaceAll('{recruiter}', recruiter.firstName)
         .replaceAll('{company}', recruiter.company);
-      navigator.clipboard.writeText(replacedTemplate).catch((e) => console.log(e));
+      navigator.clipboard.writeText(replacedTemplate).catch((e) => alert(JSON.stringify(e)));
       setCopied(true);
       setTimeout(() => setCopied(false), 750);
     }

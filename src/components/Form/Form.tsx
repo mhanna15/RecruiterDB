@@ -1,6 +1,6 @@
 import './Form.css';
 
-import { collection, doc, increment, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, collection, doc, increment, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
@@ -91,7 +91,7 @@ const Form = (props: FormProps) => {
         props.setPopUpOpen(false);
         clearForm();
         const userRef = doc(db, 'users', currentUser?.uid);
-        await updateDoc(userRef, { recruitersAdded: increment(1) });
+        await updateDoc(userRef, { recruitersAdded: arrayUnion(newRecruiterRef.id) });
       } else {
         for (const [key, value] of Object.entries(errors)) {
           if (value) {

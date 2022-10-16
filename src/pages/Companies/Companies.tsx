@@ -24,7 +24,6 @@ const Companies = () => {
 
   useEffect(() => {
     const getCompanies = async () => {
-      console.log('fetching companies from firebase');
       const q = query(collection(db, 'companies'));
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {

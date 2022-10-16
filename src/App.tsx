@@ -15,6 +15,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import { useAuth } from './auth/AuthContext';
+import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import { db } from './firebase';
@@ -23,7 +24,6 @@ import NotFound from './pages/Error/NotFound';
 import Home from './pages/Home/Home';
 import Profile from './pages/Profile/Profile';
 import Templates from './pages/Templates/Templates';
-import Footer from './components/Footer/Footer';
 
 export const RECRUITERS_PER_PAGE = 5;
 
@@ -39,7 +39,6 @@ const App = () => {
   useEffect(() => {
     if (currentUser?.emailVerified === true) {
       const getTemplates = async () => {
-        console.log('fetching templates');
         setTemplatesLoading(true);
         const q = query(collection(db, 'templates'), where('user', '==', currentUser.email));
         const querySnapshot = await getDocs(q);
@@ -50,7 +49,6 @@ const App = () => {
       };
 
       const getRecruiters = async () => {
-        console.log('fetching recruiters from firebase');
         setRecruitersLoading(true);
         const q = query(collection(db, 'recruiters'), orderBy('dateAddedMillis', 'desc'), limit(RECRUITERS_PER_PAGE));
         const querySnapshot = await getDocs(q);
@@ -84,15 +82,14 @@ const App = () => {
         setRecruitersLoading(false);
       };
 
-      getRecruiters().catch((e) => console.log(JSON.stringify(e)));
-      getTemplates().catch((e) => console.log(JSON.stringify(e)));
+      getRecruiters().catch((e) => alert(JSON.stringify(e)));
+      getTemplates().catch((e) => alert(JSON.stringify(e)));
     }
   }, [currentUser]);
 
   const fetchMore = async () => {
     if (currentUser) {
       setMoreRecruitersLoading(true);
-      console.log('fetching more recruiters');
       const q = query(
         collection(db, 'recruiters'),
         orderBy('dateAddedMillis', 'desc'),

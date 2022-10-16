@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate();
 
   const addNewUserToDb = async (uid: string, email: string) => {
-    await setDoc(doc(db, 'users', uid), { email, templates: [], role: 'user', uid });
+    await setDoc(doc(db, 'users', uid), { email, recruitersAdded: [], role: 'user', uid });
   };
 
   const signup = async (email: string, password: string) => {
@@ -61,7 +61,6 @@ export const AuthProvider = ({ children }: any) => {
   const sendEmailForVerification = async () => {
     try {
       auth.currentUser && (await sendEmailVerification(auth.currentUser));
-      console.log('success');
     } catch (error: any) {
       return error;
     }

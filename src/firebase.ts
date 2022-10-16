@@ -3,13 +3,13 @@ import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDjDPJs2iwQZeycvE0vFGS6GNHd_56cM_I',
-  authDomain: 'reverseio.firebaseapp.com',
-  projectId: 'reverseio',
-  storageBucket: 'reverseio.appspot.com',
-  messagingSenderId: '835148773451',
-  appId: '1:835148773451:web:392bd39856222fee3475ce',
-  measurementId: 'G-8GTK3WPKVQ',
+  apiKey: 'AIzaSyC29zroDc5CpzGsFQLd9vxOi6quVd49hl8',
+  authDomain: 'recruiterdb-4d8b4.firebaseapp.com',
+  projectId: 'recruiterdb-4d8b4',
+  storageBucket: 'recruiterdb-4d8b4.appspot.com',
+  messagingSenderId: '800609750464',
+  appId: '1:800609750464:web:0f09831795cdef1cf8cc25',
+  measurementId: 'G-EHWKNK6V1R',
 };
 
 // Initialize Firebase
