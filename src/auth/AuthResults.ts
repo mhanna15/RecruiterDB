@@ -8,7 +8,7 @@ const createResultObject = (title: string, errorMessage: string) => {
 };
 
 const AuthResults = (error: AuthError) => {
-  switch (error.code) {
+  switch (error?.code) {
     case undefined: // Login or SignUp Succeeded
       return;
     case 'auth/email-already-exists':
