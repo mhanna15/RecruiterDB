@@ -174,6 +174,7 @@ const RecruiterTable = (props: {
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
                 onClick={() => emailRecruiter(recruiter)}
+                title='Click to open new email draft'
               >
                 <EmailIcon disabled={selectedTemplateID === undefined} />
               </button>
