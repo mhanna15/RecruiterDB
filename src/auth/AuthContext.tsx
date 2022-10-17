@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }: any) => {
   const navigate = useNavigate();
 
   const addNewUserToDb = async (uid: string, email: string) => {
-    await setDoc(doc(db, 'users', uid), { email, recruitersAdded: [], role: 'user', uid });
+    await setDoc(doc(db, 'users', uid), { email, recruitersAdded: 0, role: 'user', uid });
   };
 
   const signup = async (email: string, password: string) => {

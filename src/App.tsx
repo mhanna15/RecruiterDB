@@ -73,6 +73,7 @@ const App = () => {
               linkedIn: recruiter.linkedIn,
               seenBy: recruiter.seenBy,
               dateAddedMillis: recruiter.dateAddedMillis,
+              addedBy: recruiter.addedBy,
             },
           ]);
         });
@@ -129,6 +130,7 @@ const App = () => {
             linkedIn: recruiter.linkedIn,
             seenBy: recruiter.seenBy,
             dateAddedMillis: recruiter.dateAddedMillis,
+            addedBy: recruiter.addedBy,
           },
         ]);
       });

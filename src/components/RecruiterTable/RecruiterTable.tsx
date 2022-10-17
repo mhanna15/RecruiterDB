@@ -3,7 +3,7 @@ import './RecruiterTable.css';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
-import { arrayRemove, arrayUnion, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import CopyIcon from '../../assets/CopyIcon/CopyIcon';
@@ -33,6 +33,8 @@ const RecruiterTable = (props: {
       try {
         await deleteDoc(doc(db, 'recruiters', recruiterId));
         props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId));
+        const userRef = doc(db, 'users', currentUser.uid);
+        await updateDoc(userRef, { recruitersAdded: increment(-1) });
       } catch (e) {
         alert('There was an error, try again');
       }

@@ -8,6 +8,7 @@ export interface RecruiterType {
   linkedIn: string;
   seenBy: string[];
   dateAddedMillis: number;
+  addedBy: string;
 }
 
 export interface Template {
@@ -34,4 +35,5 @@ export const emptyRecruiter = {
   linkedIn: '',
   seenBy: [],
   dateAddedMillis: new Date().getTime(),
+  addedBy: '',
 };
