@@ -32,7 +32,7 @@ const TemplateInput = (props: TemplateInputProps) => {
       props.setUserTemplates((oldUserTemplates) => [...oldUserTemplates, templateToAdd]);
       props.setPopUpOpen?.(false);
     } catch (e) {
-      alert(JSON.stringify(e));
+      alert('There was an error, try again');
     }
   };
 
@@ -50,7 +50,7 @@ const TemplateInput = (props: TemplateInputProps) => {
       ]);
       props.setPopUpOpen?.(false);
     } catch (e) {
-      alert(JSON.stringify(e));
+      alert('There was an error, try again');
     }
   };
 

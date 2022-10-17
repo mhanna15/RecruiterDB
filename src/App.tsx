@@ -88,8 +88,14 @@ const App = () => {
         setRecruitersLoading(false);
       };
 
-      getRecruiters().catch((e) => alert(JSON.stringify(e)));
-      getTemplates().catch((e) => alert(JSON.stringify(e)));
+      getRecruiters().catch((e) => {
+        alert('There was an error, try again');
+        console.log(e);
+      });
+      getTemplates().catch((e) => {
+        alert('There was an error, try again');
+        console.log(e);
+      });
     }
   }, [currentUser]);
 

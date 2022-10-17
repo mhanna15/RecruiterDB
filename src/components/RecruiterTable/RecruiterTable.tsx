@@ -34,7 +34,7 @@ const RecruiterTable = (props: {
         await deleteDoc(doc(db, 'recruiters', recruiterId));
         props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId));
       } catch (e) {
-        alert(JSON.stringify(e));
+        alert('There was an error, try again');
       }
     }
   };
@@ -45,7 +45,9 @@ const RecruiterTable = (props: {
       const replacedTemplate = selectedTemplate.template
         .replaceAll('{recruiter}', recruiter.firstName)
         .replaceAll('{company}', recruiter.company);
-      navigator.clipboard.writeText(replacedTemplate).catch((e) => alert(JSON.stringify(e)));
+      navigator.clipboard.writeText(replacedTemplate).catch((e) => {
+        alert('There was an error, try again');
+      });
       setCopied(true);
       setTimeout(() => setCopied(false), 750);
     }
@@ -80,7 +82,7 @@ const RecruiterTable = (props: {
           })
         );
       } catch (e) {
-        alert(JSON.stringify(e));
+        alert('There was an error, try again');
       }
     }
   };
@@ -105,7 +107,7 @@ const RecruiterTable = (props: {
           })
         );
       } catch (e) {
-        alert(JSON.stringify(e));
+        alert('There was an error, try again');
       }
     }
   };
@@ -174,7 +176,7 @@ const RecruiterTable = (props: {
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
                 onClick={() => emailRecruiter(recruiter)}
-                title='Click to open new email draft'
+                title="Click to open new email draft"
               >
                 <EmailIcon disabled={selectedTemplateID === undefined} />
               </button>

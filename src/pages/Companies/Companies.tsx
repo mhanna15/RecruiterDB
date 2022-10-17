@@ -39,7 +39,9 @@ const Companies = () => {
       //   setcompanies(mockcompanies);
       // }, 200);
     };
-    getCompanies().catch((e) => alert(JSON.stringify(e)));
+    getCompanies().catch((e) => {
+      alert('There was an error, try again');
+    });
   }, []);
 
   return (

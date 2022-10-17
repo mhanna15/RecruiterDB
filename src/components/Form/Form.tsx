@@ -1,6 +1,6 @@
 import './Form.css';
 
-import { arrayUnion, collection, doc, increment, setDoc, updateDoc } from 'firebase/firestore';
+import { arrayUnion, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
@@ -100,7 +100,7 @@ const Form = (props: FormProps) => {
         }
       }
     } catch (error: any) {
-      alert(JSON.stringify(error));
+      alert('There was an error, try again');
     }
   };
 

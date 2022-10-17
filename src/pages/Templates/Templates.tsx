@@ -27,7 +27,7 @@ const Templates = (props: {
       await deleteDoc(doc(db, 'templates', template.id));
       props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id));
     } catch (e) {
-      alert(JSON.stringify(e));
+      alert('There was an error, try again');
     }
   };
 

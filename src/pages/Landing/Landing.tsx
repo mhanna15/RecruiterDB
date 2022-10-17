@@ -35,7 +35,7 @@ const Landing = () => {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
       }
     } catch (e) {
-      alert(e);
+      alert('There was an error, try again');
     }
   };
 
@@ -46,8 +46,8 @@ const Landing = () => {
       if (authResult) {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
       }
-    } catch (error) {
-      alert(JSON.stringify(error));
+    } catch (e) {
+      alert('There was an error, try again');
     }
   };
 
@@ -58,8 +58,8 @@ const Landing = () => {
       if (authResult) {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
       }
-    } catch (error) {
-      alert(JSON.stringify(error));
+    } catch (e) {
+      alert('There was an error, try again');
     }
   };
 
@@ -72,8 +72,8 @@ const Landing = () => {
       }
       setForgotPasswordPopup(false);
       setForgotPasswordLinkSent(true);
-    } catch (error) {
-      alert(JSON.stringify(error));
+    } catch (e) {
+      alert('There was an error, try again');
     }
   };
 

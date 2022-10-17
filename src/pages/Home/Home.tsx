@@ -4,7 +4,6 @@ import Dialog from '@mui/material/Dialog';
 import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-import { RECRUITERS_PER_PAGE } from '../../App';
 import { useAuth } from '../../auth/AuthContext';
 import Form from '../../components/Form/Form';
 import Loader from '../../components/Loader/Loader';
