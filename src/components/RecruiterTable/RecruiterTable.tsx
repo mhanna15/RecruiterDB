@@ -62,7 +62,7 @@ const RecruiterTable = (props: {
         .replaceAll('{recruiter}', recruiter.firstName)
         .replaceAll('{company}', recruiter.company)
         .replaceAll('\n', '%0d%0A');
-      document.location = 'mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody;
+      window.open('mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody);
     }
   };
 
