@@ -4,6 +4,11 @@
   align-items: center;
 }
 
+select {
+  max-width: 150px;
+  text-overflow: ellipsis;
+}
+
 .list-row-status {
   margin-right: 1em;
   min-width: 20px;

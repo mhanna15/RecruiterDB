@@ -163,6 +163,7 @@ const RecruiterTable = (props: {
                     {template.name}
                   </option>
                 ))}
+                {props.templates.length === 0 && <option disabled>Create new templates in the templates tab!</option>}
               </select>
               <button
                 className="list-row-button"
