@@ -100,13 +100,15 @@ const Landing = () => {
               A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)
             </Alert>
           </Collapse>
-          <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
-          <input
-            type="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-          />
+          <form style={{display: 'grid'}}>
+            <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+            />
+          </form>
           <a
             style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
             onClick={() => setForgotPasswordPopup(true)}
@@ -142,24 +144,26 @@ const Landing = () => {
         <Dialog open={signUpPopup} onClose={() => setSignUpPopup(false)} fullWidth={true}>
           <div className="form">
             <h1 className="form-title">Sign Up</h1>
-            <input
-              onChange={(e) => setSignUpEmail(e.target.value)}
-              value={signUpEmail}
-              placeholder="Email"
-              type="email"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setSignUpPassword(e.target.value)}
-              value={signUpPassword}
-            />
-            <input
-              type="password"
-              placeholder="Confirm Password"
-              onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
-              value={signUpPasswordConfirmation}
-            />
+            <form style={{display: 'grid'}}>
+              <input
+                onChange={(e) => setSignUpEmail(e.target.value)}
+                value={signUpEmail}
+                placeholder="Email"
+                type="email"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setSignUpPassword(e.target.value)}
+                value={signUpPassword}
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
+                value={signUpPasswordConfirmation}
+              />
+            </form>
             <button className="submit-button login-button" onClick={handleSignUp}>
               Create Account
             </button>
