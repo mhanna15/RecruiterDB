@@ -179,14 +179,14 @@ const App = () => {
               </ProtectedRoute>
             }
           />
-          <Route
+          {/* <Route
             path="/profile"
             element={
               <ProtectedRoute isAllowed={currentUser?.emailVerified === true} redirectPath="/">
                 <Profile />
               </ProtectedRoute>
             }
-          />
+          /> */}
           <Route path="/faqs" element={<FAQs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

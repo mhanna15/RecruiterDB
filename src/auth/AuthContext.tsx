@@ -90,7 +90,6 @@ export const AuthProvider = ({ children }: any) => {
     try {
       await signOut(auth);
       navigate('/');
-      window.location.reload();
     } catch (error: any) {
       return error;
     }
