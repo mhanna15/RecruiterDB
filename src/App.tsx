@@ -21,6 +21,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import { db } from './firebase';
 import { RecruiterType, Template } from './interface';
 import NotFound from './pages/Error/NotFound';
+import FAQs from './pages/FAQS/FAQS';
 import Home from './pages/Home/Home';
 import Profile from './pages/Profile/Profile';
 import Templates from './pages/Templates/Templates';
@@ -186,6 +187,7 @@ const App = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="/faqs" element={<FAQs />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         {currentUser?.emailVerified ? <Footer /> : <></>}

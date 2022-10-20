@@ -24,6 +24,9 @@ const Header = () => {
         <a className="header-link input" onClick={() => navigate('/profile')}>
           Profile
         </a>
+        <a className="header-link input" onClick={() => navigate('/faqs')}>
+          FAQs
+        </a>
       </div>
     </div>
   );
