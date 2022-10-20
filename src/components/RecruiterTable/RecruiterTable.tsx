@@ -25,7 +25,7 @@ const RecruiterTable = (props: {
   const { currentUser } = useAuth();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
-  const [selectedTemplateID, setSelectedTemplateID] = useState<string>();
+  const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
   const [copied, setCopied] = useState<boolean>(false);
 
   const deleteRecruiter = async (recruiterId: string) => {
@@ -156,11 +156,8 @@ const RecruiterTable = (props: {
                 name="template"
                 onChange={(e) => setSelectedTemplateID(e.target.value)}
                 value={selectedTemplateID}
-                defaultValue={'DEFAULT'}
               >
-                <option disabled value="DEFAULT">
-                  Pick Template
-                </option>
+                <option value="No template">No Template</option>
                 {props.templates.map((template) => (
                   <option key={template.id} value={template.id}>
                     {template.name}
@@ -169,18 +166,21 @@ const RecruiterTable = (props: {
               </select>
               <button
                 className="list-row-button"
-                disabled={selectedTemplateID === undefined}
+                disabled={selectedTemplateID === 'No template'}
                 onClick={() => copyTemplate(recruiter)}
               >
-                <CopyIcon disabled={selectedTemplateID === undefined} />
+                <CopyIcon disabled={selectedTemplateID === 'No template'} />
               </button>
               <button
                 className="list-row-button"
-                disabled={selectedTemplateID === undefined}
-                onClick={() => emailRecruiter(recruiter)}
+                onClick={() =>
+                  selectedTemplateID !== 'No template'
+                    ? emailRecruiter(recruiter)
+                    : window.open('mailto:' + recruiter.email)
+                }
                 title="Click to open new email draft"
               >
-                <EmailIcon disabled={selectedTemplateID === undefined} />
+                <EmailIcon disabled={false} />
               </button>
               {currentUser?.role === 'admin' ? (
                 <>
