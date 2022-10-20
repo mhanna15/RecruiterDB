@@ -167,13 +167,13 @@ const RecruiterTable = (props: {
                   </option>
                 ))}
               </select>
-              {/* <button
+              <button
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
                 onClick={() => copyTemplate(recruiter)}
               >
                 <CopyIcon disabled={selectedTemplateID === undefined} />
-              </button> */}
+              </button>
               <button
                 className="list-row-button"
                 disabled={selectedTemplateID === undefined}
