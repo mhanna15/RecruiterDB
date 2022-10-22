@@ -58,8 +58,12 @@ const TemplateInput = (props: TemplateInputProps) => {
     <div className="template-form-root">
       <p className="form-title">{props.existingTemplate ? 'Edit Template' : 'New Template'}</p>
       <div className="form-description-container">
-        <p style={{ marginBottom: '1em' }}>Recruiter First Name: {'{recruiter}'}</p>
-        <p>Company Name: {'{company}'}</p>
+        {/* eslint-disable-next-line react/no-unescaped-entities */}
+        <p>
+          Type in {'{recruiter}'} in place of where you want to type in the {"recruiter's"} first name for your email
+          and it will get substituted into the email draft when you click the email button next to the {"recruiter's"}{' '}
+          name. Same concept goes for {'{company}'} and the company name
+        </p>
       </div>
       <input
         placeholder="Template Name"
