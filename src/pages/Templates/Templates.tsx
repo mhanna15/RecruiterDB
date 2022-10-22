@@ -17,18 +17,24 @@ const Templates = (props: {
 }) => {
   const [newTemplatePopUpOpen, setNewTemplatePopUpOpen] = useState<boolean>(false);
   const [editTemplatePopUpOpen, setEditTemplatePopUpOpen] = useState<boolean>(false);
+  const [deleteTemplatePopUpOpen, setDeleteTemplatePopUpOpen] = useState<boolean>(false);
+  const [deleteButtonDisabled, setDeleteButtonDisabled] = useState<boolean>(false);
 
   const [templateToEdit, setTemplateToEdit] = useState<Template>();
+  const [templateToDelete, setTemplateToDelete] = useState<Template>();
 
   const { currentUser } = useAuth();
 
   const deleteTemplate = async (template: Template) => {
+    setDeleteButtonDisabled(true);
     try {
       await deleteDoc(doc(db, 'templates', template.id));
       props.setUserTemplates(props.userTemplates.filter((templateI) => templateI.id !== template.id));
+      setDeleteTemplatePopUpOpen(false);
     } catch (e) {
       alert('There was an error, try again');
     }
+    setDeleteButtonDisabled(false);
   };
 
   return (
@@ -65,7 +71,13 @@ const Templates = (props: {
               >
                 Edit
               </button>
-              <button className="list-row-button" onClick={async () => await deleteTemplate(template)}>
+              <button
+                className="list-row-button"
+                onClick={() => {
+                  setTemplateToDelete(template);
+                  setDeleteTemplatePopUpOpen(true);
+                }}
+              >
                 Delete
               </button>
             </div>
@@ -89,6 +101,21 @@ const Templates = (props: {
           setPopUpOpen={setEditTemplatePopUpOpen}
           existingTemplate={templateToEdit}
         />
+      </Dialog>
+      <Dialog
+        fullWidth
+        sx={{ width: 1 }}
+        open={deleteTemplatePopUpOpen}
+        onClose={() => setDeleteTemplatePopUpOpen(false)}
+      >
+        <h1>Are you sure you want to delete?</h1>
+        <button
+          disabled={deleteButtonDisabled}
+          onClick={async () => templateToDelete && (await deleteTemplate(templateToDelete))}
+        >
+          Yes
+        </button>
+        <button onClick={() => setDeleteTemplatePopUpOpen(false)}>Cancel</button>
       </Dialog>
     </div>
   );

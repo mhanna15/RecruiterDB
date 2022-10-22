@@ -89,7 +89,7 @@ const TemplateInput = (props: TemplateInputProps) => {
         value={currentTemplate.template}
       />
       <button
-        className="template-form-button"
+        className="submit-button"
         onClick={async () =>
           props.existingTemplate
             ? await editTemplate(props.existingTemplate, currentTemplate?.template)
