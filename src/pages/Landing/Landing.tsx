@@ -19,11 +19,14 @@ const Landing = () => {
 
   const [forgotPasswordPopup, setForgotPasswordPopup] = useState<boolean>(false);
   const [forgotPasswordEmail, setForgotPasswordEmail] = useState<string>('');
+  const [sentForgotPasswordEmail, setSentForgotPasswordEmail] = useState<string>('');
+
   const [forgotPasswordLinkSent, setForgotPasswordLinkSent] = useState<boolean>(false);
 
   const { login, signup, loginWithGoogle, resetPassword, currentUser } = useAuth();
 
-  const handleSignUp = async () => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (signUpPassword !== signUpPasswordConfirmation) {
       alert('Passwords do not match');
       return;
@@ -39,7 +42,8 @@ const Landing = () => {
     }
   };
 
-  const handleLogin = async () => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const res = await login(email, password);
       const authResult = AuthResults(res);
@@ -59,19 +63,22 @@ const Landing = () => {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
       }
     } catch (e) {
-      alert('There was an error, try again');
+      // nothing
     }
   };
 
-  const handleForgotPassword = async () => {
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     try {
       const res = await resetPassword(forgotPasswordEmail);
       const authResult = AuthResults(res);
       if (authResult) {
         alert(`${authResult.title}: ${authResult.errorMessage}`);
+      } else {
+        setSentForgotPasswordEmail(forgotPasswordEmail);
+        setForgotPasswordPopup(false);
+        setForgotPasswordLinkSent(true);
       }
-      setForgotPasswordPopup(false);
-      setForgotPasswordLinkSent(true);
     } catch (e) {
       alert('There was an error, try again');
     }
@@ -97,10 +104,10 @@ const Landing = () => {
           )}
           <Collapse in={forgotPasswordLinkSent}>
             <Alert severity="info" style={{ marginBottom: '1em' }}>
-              A password reset email has been sent to {forgotPasswordEmail}. (may be in spam)
+              A password reset email has been sent to {sentForgotPasswordEmail} (may be in spam)
             </Alert>
           </Collapse>
-          <form style={{display: 'grid'}}>
+          <form style={{ display: 'grid' }} onSubmit={async (e) => await handleLogin(e)}>
             <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} value={email} />
             <input
               type="password"
@@ -108,16 +115,16 @@ const Landing = () => {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+            <a
+              style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
+              onClick={() => setForgotPasswordPopup(true)}
+            >
+              Forgot Password?
+            </a>
+            <button className="submit-button login-button" type="submit">
+              Login
+            </button>
           </form>
-          <a
-            style={{ display: 'flex', alignSelf: 'flex-end', marginBottom: '1em', fontSize: '1rem' }}
-            onClick={() => setForgotPasswordPopup(true)}
-          >
-            Forgot Password?
-          </a>
-          <button className="submit-button login-button" onClick={handleLogin}>
-            Login
-          </button>
           <SignInWithGoogle onClick={handleGoogleLogin} />
           <p className="login-signup-text">
             Don&apos;t have an account?&nbsp;
@@ -130,21 +137,23 @@ const Landing = () => {
         <Dialog open={forgotPasswordPopup} onClose={() => setForgotPasswordPopup(false)} fullWidth={true}>
           <div className="form">
             <h1 className="form-title">Forgot Password?</h1>
-            <input
-              onChange={(e) => setForgotPasswordEmail(e.target.value)}
-              value={forgotPasswordEmail}
-              placeholder="Email"
-              type="email"
-            />
-            <button className="submit-button" onClick={handleForgotPassword}>
-              Send Password Reset
-            </button>
+            <form style={{ display: 'grid' }} onSubmit={async (e) => await handleForgotPassword(e)}>
+              <input
+                onChange={(e) => setForgotPasswordEmail(e.target.value)}
+                value={forgotPasswordEmail}
+                placeholder="Email"
+                type="email"
+              />
+              <button className="submit-button" type="submit">
+                Send Password Reset
+              </button>
+            </form>
           </div>
         </Dialog>
         <Dialog open={signUpPopup} onClose={() => setSignUpPopup(false)} fullWidth={true}>
           <div className="form">
             <h1 className="form-title">Sign Up</h1>
-            <form style={{display: 'grid'}}>
+            <form style={{ display: 'grid' }} onSubmit={async (e) => await handleSignUp(e)}>
               <input
                 onChange={(e) => setSignUpEmail(e.target.value)}
                 value={signUpEmail}
@@ -163,10 +172,10 @@ const Landing = () => {
                 onChange={(e) => setSignUpPasswordConfirmation(e.target.value)}
                 value={signUpPasswordConfirmation}
               />
+              <button className="submit-button login-button" type="submit">
+                Create Account
+              </button>
             </form>
-            <button className="submit-button login-button" onClick={handleSignUp}>
-              Create Account
-            </button>
             <p style={{ display: 'flex', alignSelf: 'center', marginBottom: '1em', fontSize: '1rem', color: 'gray' }}>
               or
             </p>
