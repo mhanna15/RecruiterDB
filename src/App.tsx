@@ -37,6 +37,7 @@ const App = () => {
   const [moreRecruitersLoading, setMoreRecruitersLoading] = useState<boolean>(false);
   const [lastRecruiterSeen, setLastRecruiterSeen] = useState<QueryDocumentSnapshot<DocumentData>>();
   const [lastRecruiter, setLastRecruiter] = useState<DocumentData>();
+  const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
 
   useEffect(() => {
     if (currentUser?.emailVerified === true) {
@@ -168,6 +169,8 @@ const App = () => {
                 lastRecruiter={lastRecruiter}
                 lastRecruiterSeen={lastRecruiterSeen}
                 moreRecruitersLoading={moreRecruitersLoading}
+                selectedTemplateID={selectedTemplateID}
+                setSelectedTemplateID={setSelectedTemplateID}
               />
             }
           />

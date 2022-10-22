@@ -21,11 +21,13 @@ const RecruiterTable = (props: {
   templates: Template[];
   setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
+  selectedTemplateID: string;
+  setSelectedTemplateID: Dispatch<SetStateAction<string>>;
 }) => {
   const { currentUser } = useAuth();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
-  const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
+
   const [copied, setCopied] = useState<boolean>(false);
 
   const deleteRecruiter = async (recruiterId: string) => {
@@ -42,7 +44,7 @@ const RecruiterTable = (props: {
   };
 
   const copyTemplate = (recruiter: RecruiterType) => {
-    const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
+    const selectedTemplate = props.templates.find((template) => template.id === props.selectedTemplateID);
     if (selectedTemplate) {
       const replacedTemplate = selectedTemplate.template
         .replaceAll('{recruiter}', recruiter.firstName)
@@ -56,7 +58,7 @@ const RecruiterTable = (props: {
   };
 
   const emailRecruiter = (recruiter: RecruiterType) => {
-    const selectedTemplate = props.templates.find((template) => template.id === selectedTemplateID);
+    const selectedTemplate = props.templates.find((template) => template.id === props.selectedTemplateID);
     if (selectedTemplate) {
       const emailBody = selectedTemplate.template
         .replaceAll('{recruiter}', recruiter.firstName)
@@ -154,8 +156,8 @@ const RecruiterTable = (props: {
               <select
                 className="list-row-button"
                 name="template"
-                onChange={(e) => setSelectedTemplateID(e.target.value)}
-                value={selectedTemplateID}
+                onChange={(e) => props.setSelectedTemplateID(e.target.value)}
+                value={props.selectedTemplateID}
               >
                 <option value="No template">No Template</option>
                 {props.templates.map((template) => (
@@ -167,15 +169,15 @@ const RecruiterTable = (props: {
               </select>
               <button
                 className="list-row-button"
-                disabled={selectedTemplateID === 'No template'}
+                disabled={props.selectedTemplateID === 'No template'}
                 onClick={() => copyTemplate(recruiter)}
               >
-                <CopyIcon disabled={selectedTemplateID === 'No template'} />
+                <CopyIcon disabled={props.selectedTemplateID === 'No template'} />
               </button>
               <button
                 className="list-row-button"
                 onClick={() =>
-                  selectedTemplateID !== 'No template'
+                  props.selectedTemplateID !== 'No template'
                     ? emailRecruiter(recruiter)
                     : window.open('mailto:' + recruiter.email)
                 }

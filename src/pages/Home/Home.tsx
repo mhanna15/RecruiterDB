@@ -19,8 +19,9 @@ const Home = (props: {
   fetchMore: () => void;
   lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
   lastRecruiter: DocumentData | undefined;
-
   moreRecruitersLoading: boolean;
+  selectedTemplateID: string
+  setSelectedTemplateID: Dispatch<SetStateAction<string>>
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const { currentUser } = useAuth();
@@ -50,6 +51,8 @@ const Home = (props: {
               templates={props.templates}
               setRecruiters={props.setRecruiters}
               setPopUpOpen={setPopUpOpen}
+              selectedTemplateID={props.selectedTemplateID}
+              setSelectedTemplateID={props.setSelectedTemplateID}
             />
             {props.moreRecruitersLoading ? (
               <div className="loader" />
