@@ -129,22 +129,19 @@ const RecruiterTable = (props: {
         </Collapse>
         {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
-            <div
-              className="list-row-status"
+            <button
               style={{
-                backgroundColor: currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'white' : '#117cee',
-                border:
-                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? '1px solid black' : '1px solid #117cee',
-                boxShadow:
-                  currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'none' : '0 0px 6px 0 rgb(0 0 0 / 15%)',
+                color: currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'black' : '#117cee',
               }}
               onClick={async () =>
                 currentUser && recruiter.seenBy.includes(currentUser.uid)
                   ? await markUnseen(recruiter)
                   : await markSeen(recruiter)
               }
-              title={currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'Mark as unseen' : 'Mark as seen'}
-            />
+              className="list-row-status"
+            >
+              {currentUser && recruiter.seenBy.includes(currentUser.uid) ? 'Seen' : 'New!'}
+            </button>
             <div className="list-row-content">
               <a className="list-row-title" onClick={() => openURL(recruiter.linkedIn)}>
                 {recruiter.firstName} {recruiter.lastName}
@@ -171,6 +168,7 @@ const RecruiterTable = (props: {
                 className="list-row-button"
                 disabled={props.selectedTemplateID === 'No template'}
                 onClick={() => copyTemplate(recruiter)}
+                title="Click to copy templated email to clipboard"
               >
                 <CopyIcon disabled={props.selectedTemplateID === 'No template'} />
               </button>

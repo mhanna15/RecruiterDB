@@ -10,10 +10,12 @@ select {
 }
 
 .list-row-status {
+  display: flex;
   margin-right: 1em;
   min-width: 20px;
   min-height: 20px;
-  border-radius: 50%;
+  /* border-radius: 50%; */
+  justify-content: center;
   cursor: pointer;
 }
 
