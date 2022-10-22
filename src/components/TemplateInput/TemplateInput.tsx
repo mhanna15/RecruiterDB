@@ -18,8 +18,10 @@ const TemplateInput = (props: TemplateInputProps) => {
   const [currentTemplate, setCurrentTemplate] = useState<Template>(
     props.existingTemplate ? props.existingTemplate : emptyTemplate
   );
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
   const addTemplate = async () => {
+    setButtonDisabled(true);
     const templateRef = doc(collection(db, 'templates'));
     const templateToAdd: Template = {
       id: templateRef.id,
@@ -34,9 +36,11 @@ const TemplateInput = (props: TemplateInputProps) => {
     } catch (e) {
       alert('There was an error, try again');
     }
+    setButtonDisabled(false);
   };
 
   const editTemplate = async (template: Template, editedTemplate: string) => {
+    setButtonDisabled(true);
     const templateRef = doc(db, 'templates', template.id);
     try {
       await updateDoc(templateRef, { ...currentTemplate });
@@ -52,13 +56,13 @@ const TemplateInput = (props: TemplateInputProps) => {
     } catch (e) {
       alert('There was an error, try again');
     }
+    setButtonDisabled(false);
   };
 
   return (
     <div className="template-form-root">
       <p className="form-title">{props.existingTemplate ? 'Edit Template' : 'New Template'}</p>
       <div className="form-description-container">
-        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <p>
           Type in {'{recruiter}'} in place of where you want to type in the {"recruiter's"} first name for your email
           and it will get substituted into the email draft when you click the email button next to the {"recruiter's"}{' '}
@@ -95,7 +99,8 @@ const TemplateInput = (props: TemplateInputProps) => {
           (currentTemplate.template === props.existingTemplate?.template &&
             currentTemplate.name === props.existingTemplate?.name) ||
           currentTemplate.name === '' ||
-          currentTemplate.template === ''
+          currentTemplate.template === '' ||
+          buttonDisabled
         }
       >
         Done

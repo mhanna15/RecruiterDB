@@ -19,8 +19,8 @@ const Form = (props: FormProps) => {
   const [recruiterData, setRecruiterData] = useState<RecruiterType>(
     props.existingRecruiter ? props.existingRecruiter : emptyRecruiter
   );
-
   const [errors, setErrors] = useState({ email: true, linkedIn: true });
+  const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
 
   const emailIsValid = () => {
     return (
@@ -73,6 +73,7 @@ const Form = (props: FormProps) => {
   };
 
   const handleAddNewRecruiter = async (e: any) => {
+    setButtonDisabled(true);
     try {
       e.preventDefault();
       if (_.isEqual(errors, { email: false, linkedIn: false }) && currentUser) {
@@ -103,10 +104,12 @@ const Form = (props: FormProps) => {
     } catch (error: any) {
       alert('There was an error, try again');
     }
+    setButtonDisabled(false);
   };
 
   const handleEditRecruiter = async (e: any) => {
     e.preventDefault();
+    setButtonDisabled(true);
     if (_.isEqual(errors, { email: false, linkedIn: false })) {
       if (props.existingRecruiter && currentUser?.role === 'admin') {
         await setDoc(doc(db, 'recruiters', props.existingRecruiter.id), recruiterData);
@@ -128,6 +131,7 @@ const Form = (props: FormProps) => {
         }
       }
     }
+    setButtonDisabled(false);
   };
 
   return (
@@ -175,7 +179,8 @@ const Form = (props: FormProps) => {
           recruiterData.company === '' ||
           recruiterData.title === '' ||
           recruiterData.linkedIn === '' ||
-          _.isEqual(props.existingRecruiter, recruiterData)
+          _.isEqual(props.existingRecruiter, recruiterData) ||
+          buttonDisabled
         }
       >
         Submit
