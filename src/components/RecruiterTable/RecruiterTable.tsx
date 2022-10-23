@@ -195,7 +195,6 @@ const RecruiterTable = (props: {
             );
           })}
         </table>
-
         {/* {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
             <button

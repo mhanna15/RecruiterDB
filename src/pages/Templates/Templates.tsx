@@ -9,6 +9,8 @@ import Loader from '../../components/Loader/Loader';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
+import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
+import EditIcon from '../../assets/EditIcon/EditIcon';
 
 const Templates = (props: {
   userTemplates: Template[];
@@ -69,7 +71,7 @@ const Templates = (props: {
                   setTemplateToEdit(template);
                 }}
               >
-                Edit
+                <EditIcon disabled={false} />
               </button>
               <button
                 className="list-row-button"
@@ -78,7 +80,7 @@ const Templates = (props: {
                   setDeleteTemplatePopUpOpen(true);
                 }}
               >
-                Delete
+                <DeleteIcon disabled={false} />
               </button>
             </div>
           </div>
