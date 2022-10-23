@@ -84,6 +84,10 @@
   .login-content {
     margin: 0px;
   }
+  .login-about-subheader {
+    font-size: 1.5em;
+    margin-top: 1em;
+  }
   .login-field {
     font-size: small;
     display: flex;
