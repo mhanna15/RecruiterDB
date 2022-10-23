@@ -1,7 +1,11 @@
 .list-row-button {
-  margin-left: 1em;
+  margin-right: 1em;
   display: flex;
   align-items: center;
+}
+
+.list-row-buttons {
+  display: flex;
 }
 
 select {
@@ -22,3 +26,5 @@ select {
 .list-row-alert {
   margin-top: 1em;
 }
+
+

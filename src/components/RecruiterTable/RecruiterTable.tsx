@@ -121,13 +121,82 @@ const RecruiterTable = (props: {
     if (newWindow) newWindow.opener = null;
   };
 
+  console.log(props.recruiters);
+
   return (
     <div className="list-root">
       <div className="list-container">
         <Collapse className="list-row-alert" in={copied}>
           <Alert severity="success">Copied</Alert>
         </Collapse>
-        {props.recruiters.map((recruiter) => (
+        <table className="rounded-lg">
+          <tr>
+            <th>Seen</th>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Email</th>
+            <th>LinkedIn</th>
+          </tr>
+          {props.recruiters.map((recruiter) => {
+            return (
+              <tr key={recruiter.id}>
+                <td>
+                  <input
+                    className="input-checkbox"
+                    type="checkbox"
+                    onClick={async () =>
+                      currentUser && recruiter.seenBy.includes(currentUser.uid)
+                        ? await markUnseen(recruiter)
+                        : await markSeen(recruiter)
+                    }
+                  />
+                </td>
+                <td>
+                  {recruiter.firstName} {recruiter.lastName}
+                </td>
+                <td>{recruiter.company}</td>
+                <td>
+                  <div className="list-row-buttons">
+                    <select
+                      className="list-row-button"
+                      name="template"
+                      onChange={(e) => props.setSelectedTemplateID(e.target.value)}
+                      value={props.selectedTemplateID}
+                    >
+                      <option value="No template">No Template</option>
+                      {props.templates.map((template) => (
+                        <option key={template.id} value={template.id}>
+                          {template.name}
+                        </option>
+                      ))}
+                      {props.templates.length === 0 && (
+                        <option disabled>Create new templates in the templates tab!</option>
+                      )}
+                    </select>
+                    <button
+                      className="list-row-button"
+                      onClick={() =>
+                        props.selectedTemplateID !== 'No template'
+                          ? emailRecruiter(recruiter)
+                          : window.open('mailto:' + recruiter.email)
+                      }
+                      title="Click to open new email draft"
+                    >
+                      <EmailIcon disabled={false} />
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <button className="list-row-button" onClick={() => openURL(recruiter.linkedIn)}>
+                    <LinkedInIcon disabled={false} />
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </table>
+
+        {/* {props.recruiters.map((recruiter) => (
           <div className="list-row" key={recruiter.id}>
             <button
               style={{
@@ -205,7 +274,7 @@ const RecruiterTable = (props: {
               )}
             </div>
           </div>
-        ))}
+        ))} */}
       </div>
       <Dialog fullWidth open={popUpOpen} onClose={() => setPopUpOpen(false)}>
         <Form setPopUpOpen={setPopUpOpen} setRecruiters={props.setRecruiters} existingRecruiter={selectedRecruiter} />
