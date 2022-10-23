@@ -5,7 +5,7 @@
   },
   "hosting": {
     "site": "recruiterdb",
-    "public": "build",
+    "public": "./build",
     "ignore": [
       "firebase.json",
       "**/.*",
