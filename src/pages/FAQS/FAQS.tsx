@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import faqAllowHandler from './images/faqAllowHandler.jpg';
+import protocolhandlers from './images/protocolhandlers.png';
+
 const FAQs = () => {
   const navigate = useNavigate();
   return (
@@ -16,8 +19,25 @@ const FAQs = () => {
       </p>
       <h2>{"The mail button isn't working"}</h2>
       <p>
-        If you are using chrome, go to chrome://settings/handlers in a new tab, look under the email section, click the
-        3 dots next to mail.google.com, and select it as default
+        If you are using chrome, go to chrome://settings/handlers in a new tab, make sure the{' '}
+        {'"Sites can ask to handle protocols option is selected"'}
+        <img
+          src={protocolhandlers}
+          style={{ display: 'flex', margin: 'auto', padding: '1em' }}
+          height="200px"
+          width="450px"
+        />
+        Then, open{' '}
+        <a href="https://mail.google.com/mail/u/0/#inbox" target="_blank" rel="noreferrer">
+          Gmail
+        </a>{' '}
+        and check allow as shown below
+        <img
+          src={faqAllowHandler}
+          style={{ display: 'flex', margin: 'auto', paddingTop: '1em' }}
+          height="200px"
+          width="270px"
+        />
       </p>
     </div>
   );
