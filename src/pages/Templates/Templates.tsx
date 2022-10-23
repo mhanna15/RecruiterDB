@@ -4,13 +4,13 @@ import Dialog from '@mui/material/Dialog';
 import { deleteDoc, doc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
+import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
+import EditIcon from '../../assets/EditIcon/EditIcon';
 import { useAuth } from '../../auth/AuthContext';
 import Loader from '../../components/Loader/Loader';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
-import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
-import EditIcon from '../../assets/EditIcon/EditIcon';
 
 const Templates = (props: {
   userTemplates: Template[];
