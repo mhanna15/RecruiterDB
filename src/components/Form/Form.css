@@ -71,3 +71,16 @@
   margin-bottom: 1rem;
   font-weight: bold;
 }
+
+.form-button-container {
+  display: flex;
+  margin-top: 2rem;
+}
+
+.form-button {
+  width: 100%;
+}
+
+.form-button-left {
+  margin-right: 1rem;
+}

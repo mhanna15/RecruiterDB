@@ -108,14 +108,21 @@ const Templates = (props: {
         open={deleteTemplatePopUpOpen}
         onClose={() => setDeleteTemplatePopUpOpen(false)}
       >
-        <h1>Are you sure you want to delete?</h1>
-        <button
-          disabled={deleteButtonDisabled}
-          onClick={async () => templateToDelete && (await deleteTemplate(templateToDelete))}
-        >
-          Yes
-        </button>
-        <button onClick={() => setDeleteTemplatePopUpOpen(false)}>Cancel</button>
+        <div className="form">
+          <h1>Are you sure you want to delete?</h1>
+          <div className="form-button-container">
+            <button className="form-button form-button-left" onClick={() => setDeleteTemplatePopUpOpen(false)}>
+              Cancel
+            </button>
+            <button
+              className="form-button"
+              disabled={deleteButtonDisabled}
+              onClick={async () => templateToDelete && (await deleteTemplate(templateToDelete))}
+            >
+              Delete
+            </button>
+          </div>
+        </div>
       </Dialog>
     </div>
   );
