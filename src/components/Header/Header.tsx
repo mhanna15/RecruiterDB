@@ -39,7 +39,7 @@ const Header = () => {
     <div className="header-root">
       <div onClick={() => navigate('/')} className="header-title">
         <LogoIcon />
-        <p style={{ marginLeft: '10px' }}>RecruiterDB</p>
+        <p style={{ marginLeft: '10px', fontSize: '0.8em' }}>RecruiterDB</p>
       </div>
       <div className="header-linksGroup">
         <div className="dropdown">
