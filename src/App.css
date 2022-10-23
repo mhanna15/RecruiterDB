@@ -246,7 +246,7 @@ button:hover:enabled {
 
 table {
   width: 100%;
-  min-width: 600px;
+  min-width: 775px;
   border-collapse: collapse;
   border-radius: 0.375rem;
   border-style: hidden; /* hide standard table (collapsed) border */

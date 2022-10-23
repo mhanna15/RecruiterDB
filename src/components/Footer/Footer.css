@@ -46,7 +46,7 @@
   border-color: gray;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 775px) {
   .footer-root {
     display: flex;
     flex-direction: column;
