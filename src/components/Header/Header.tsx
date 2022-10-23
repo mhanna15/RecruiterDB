@@ -22,6 +22,8 @@ const Header = () => {
     }
   };
 
+  const dropDownMenu = () => {};
+
   useEffect(() => {
     function resize() {
       setWindowWidth(window.innerWidth);
@@ -39,24 +41,38 @@ const Header = () => {
         <LogoIcon />
         <p style={{ marginLeft: '10px' }}>RecruiterDB</p>
       </div>
-      {windowWidth > 600 ? (
-        <div className="header-linksGroup">
-          <a className="header-link header-link-left" onClick={() => navigate('/')}>
-            Home
-          </a>
-          <a className="header-link header-link-left" onClick={() => navigate('/templates')}>
-            Templates
-          </a>
-          <a className="header-link header-link-left" onClick={() => navigate('/faqs')}>
-            FAQs
-          </a>
-          <a className="header-link header-link-left" onClick={handleLogout}>
-            Logout
-          </a>
+      <div className="header-linksGroup">
+        <div className="dropdown">
+          <button>Menu</button>
+          <div className="dropdown-content">
+            <a className="header-link" onClick={() => navigate('/')}>
+              Home
+            </a>
+            <a className="header-link" onClick={() => navigate('/templates')}>
+              Templates
+            </a>
+            <a className="header-link" onClick={() => navigate('/faqs')}>
+              FAQs
+            </a>
+            <a className="header-link" onClick={handleLogout}>
+              Logout
+            </a>
+          </div>
         </div>
-      ) : (
-        <h1>asdfasdfads</h1>
-      )}
+
+        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/')}>
+          Home
+        </a>
+        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/templates')}>
+          Templates
+        </a>
+        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/faqs')}>
+          FAQs
+        </a>
+        <a className="header-link header-link-left header-link-large" onClick={handleLogout}>
+          Logout
+        </a>
+      </div>
     </div>
   );
 };
