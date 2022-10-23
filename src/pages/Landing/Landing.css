@@ -79,3 +79,27 @@
   padding: 1em;
   border-radius: 0.375rem;
 }
+
+@media (max-width: 580px) {
+  .login-content {
+    margin: 0px;
+  }
+  .login-field {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    border: none;
+    margin-bottom: 0px;
+  }
+  .login-form {
+    margin-left: 0px;
+    margin-top: 2rem;
+    text-align: center;
+    padding: 2em;
+    border: solid;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: 0.375rem;
+    width: fit-content;
+  }
+}
