@@ -20,8 +20,8 @@ const Home = (props: {
   lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
   lastRecruiter: DocumentData | undefined;
   moreRecruitersLoading: boolean;
-  selectedTemplateID: string
-  setSelectedTemplateID: Dispatch<SetStateAction<string>>
+  selectedTemplateID: string;
+  setSelectedTemplateID: Dispatch<SetStateAction<string>>;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const { currentUser } = useAuth();
@@ -29,7 +29,7 @@ const Home = (props: {
   return currentUser?.emailVerified ? (
     <div className="page-root">
       <div className="page-content">
-        <div className="page-header">
+        <div>
           <h1 className="page-header-title" style={{ marginBottom: '1em' }}>
             Dashboard
           </h1>

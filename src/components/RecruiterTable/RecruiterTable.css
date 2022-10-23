@@ -1,7 +1,16 @@
+.list-container {
+  overflow-x: scroll;
+  width: 100%;
+}
+
 .list-row-button {
   margin-left: 1em;
   display: flex;
   align-items: center;
+}
+
+.list-row-buttons {
+  display: flex;
 }
 
 select {
