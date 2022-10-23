@@ -43,33 +43,33 @@ const Header = () => {
       </div>
       <div className="header-linksGroup">
         <div className="dropdown">
-          <button>Menu</button>
+          <button className="dropdown-button">Menu</button>
           <div className="dropdown-content">
-            <a className="header-link" onClick={() => navigate('/')}>
+            <a className="dropdown-link" onClick={() => navigate('/')}>
               Home
             </a>
-            <a className="header-link" onClick={() => navigate('/templates')}>
+            <a className="dropdown-link" onClick={() => navigate('/templates')}>
               Templates
             </a>
-            <a className="header-link" onClick={() => navigate('/faqs')}>
+            <a className="dropdown-link" onClick={() => navigate('/faqs')}>
               FAQs
             </a>
-            <a className="header-link" onClick={handleLogout}>
+            <a className="dropdown-link" onClick={handleLogout}>
               Logout
             </a>
           </div>
         </div>
 
-        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/')}>
+        <a className="header-link header-link-left " onClick={() => navigate('/')}>
           Home
         </a>
-        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/templates')}>
+        <a className="header-link header-link-left" onClick={() => navigate('/templates')}>
           Templates
         </a>
-        <a className="header-link header-link-left header-link-large" onClick={() => navigate('/faqs')}>
+        <a className="header-link header-link-left" onClick={() => navigate('/faqs')}>
           FAQs
         </a>
-        <a className="header-link header-link-left header-link-large" onClick={handleLogout}>
+        <a className="header-link header-link-left" onClick={handleLogout}>
           Logout
         </a>
       </div>

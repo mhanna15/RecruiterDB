@@ -1,5 +1,10 @@
+.list-container {
+  overflow-x: scroll;
+  width: 100%;
+}
+
 .list-row-button {
-  margin-right: 1em;
+  margin-left: 1em;
   display: flex;
   align-items: center;
 }
@@ -26,5 +31,3 @@ select {
 .list-row-alert {
   margin-top: 1em;
 }
-
-
