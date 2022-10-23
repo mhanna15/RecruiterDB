@@ -5,7 +5,13 @@
   },
   "hosting": {
     "site": "recruiterdb",
-    "public": "./build",
+    "public": "build",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",
