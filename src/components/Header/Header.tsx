@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import LogoIcon from '../../assets/LogoIcon/LogoIcon';
 import { useAuth } from '../../auth/AuthContext';
 import AuthResults from '../../auth/AuthResults';
+import MenuIcon from '../../assets/MenuIcon/MenuIcon';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Header = () => {
       <div className="header-linksGroup">
         <div className="dropdown">
           <button className="dropdown-button" onClick={() => setShowDropDown(!showDropDown)}>
-            Menu
+            <MenuIcon />
           </button>
           {showDropDown ? (
             <div className="dropdown-content">
