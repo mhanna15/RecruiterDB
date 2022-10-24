@@ -1,10 +1,6 @@
 .list-container {
-  overflow-x: scroll;
+  overflow-x: auto;
   width: 100%;
-}
-
-.list-container::-webkit-scrollbar {
-  display: none;
 }
 
 .list-row-button {
