@@ -10,6 +10,7 @@ import AuthResults from '../../auth/AuthResults';
 const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const [showDropDown, setShowDropDown] = useState(false);
 
   const handleLogout = async () => {
     const res = await logout();
@@ -27,21 +28,25 @@ const Header = () => {
       </div>
       <div className="header-linksGroup">
         <div className="dropdown">
-          <button className="dropdown-button">Menu</button>
-          <div className="dropdown-content">
-            <a className="dropdown-link" onClick={() => navigate('/')}>
-              Home
-            </a>
-            <a className="dropdown-link" onClick={() => navigate('/templates')}>
-              Templates
-            </a>
-            <a className="dropdown-link" onClick={() => navigate('/faqs')}>
-              FAQs
-            </a>
-            <a className="dropdown-link" onClick={handleLogout}>
-              Logout
-            </a>
-          </div>
+          <button className="dropdown-button" onClick={() => setShowDropDown(!showDropDown)}>
+            Menu
+          </button>
+          {showDropDown ? (
+            <div className="dropdown-content">
+              <a className="dropdown-link" onClick={() => navigate('/')}>
+                Home
+              </a>
+              <a className="dropdown-link" onClick={() => navigate('/templates')}>
+                Templates
+              </a>
+              <a className="dropdown-link" onClick={() => navigate('/faqs')}>
+                FAQs
+              </a>
+              <a className="dropdown-link" onClick={handleLogout}>
+                Logout
+              </a>
+            </div>
+          ) : null}
         </div>
 
         <a className="header-link header-link-left " onClick={() => navigate('/')}>

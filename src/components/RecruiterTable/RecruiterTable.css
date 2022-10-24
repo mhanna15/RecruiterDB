@@ -4,9 +4,12 @@
 }
 
 .list-row-button {
-  margin-left: 1em;
   display: flex;
   align-items: center;
+}
+
+.list-row-button-right {
+  margin-left: 1em;
 }
 
 .list-row-buttons {

@@ -74,7 +74,7 @@ const Templates = (props: {
                 <EditIcon disabled={false} />
               </button>
               <button
-                className="list-row-button"
+                className="list-row-button list-row-button-right"
                 onClick={() => {
                   setTemplateToDelete(template);
                   setDeleteTemplatePopUpOpen(true);

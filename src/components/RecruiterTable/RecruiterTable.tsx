@@ -137,8 +137,7 @@ const RecruiterTable = (props: {
               <th>LinkedIn</th>
               {currentUser?.role === 'admin' ? (
                 <>
-                  <th>Edit</th>
-                  <th>Delete</th>
+                  <th>Admin</th>
                 </>
               ) : (
                 <></>
@@ -182,7 +181,7 @@ const RecruiterTable = (props: {
                         )}
                       </select>
                       <button
-                        className="list-row-button"
+                        className="list-row-button list-row-button-right"
                         onClick={() =>
                           props.selectedTemplateID !== 'No template'
                             ? emailRecruiter(recruiter)
@@ -214,15 +213,17 @@ const RecruiterTable = (props: {
                           >
                             <EditIcon disabled={false} />
                           </button>
-                        </div>
-                      </td>
-                      <td>
-                        <div className="list-row-buttons">
-                          <button className="list-row-button" onClick={async () => await deleteRecruiter(recruiter.id)}>
+                          <button
+                            className="list-row-button list-row-button-right"
+                            onClick={async () => await deleteRecruiter(recruiter.id)}
+                          >
                             <DeleteIcon disabled={false} />
                           </button>
                         </div>
                       </td>
+                      {/* <td>
+                        <div className="list-row-buttons"></div>
+                      </td> */}
                     </>
                   ) : (
                     <></>
