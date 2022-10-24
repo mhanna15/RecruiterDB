@@ -133,6 +133,7 @@ const RecruiterTable = (props: {
               <th style={{ display: 'flex', justifyContent: 'center' }}>New</th>
               <th>Name</th>
               <th>Company</th>
+              <th>Title</th>
               <th>Email</th>
               <th>LinkedIn</th>
               {currentUser?.role === 'admin' ? (
@@ -162,6 +163,7 @@ const RecruiterTable = (props: {
                     {recruiter.firstName} {recruiter.lastName}
                   </td>
                   <td>{recruiter.company}</td>
+                  <td>{recruiter.title}</td>
                   <td>
                     <div className="list-row-buttons">
                       <select
