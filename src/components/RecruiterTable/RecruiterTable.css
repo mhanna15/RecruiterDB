@@ -3,6 +3,10 @@
   width: 100%;
 }
 
+.list-container::-webkit-scrollbar {
+  display: none;
+}
+
 .list-row-button {
   margin-left: 1em;
   display: flex;

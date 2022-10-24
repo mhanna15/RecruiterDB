@@ -1,6 +1,6 @@
 import './Header.css';
 
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import LogoIcon from '../../assets/LogoIcon/LogoIcon';
@@ -11,9 +11,6 @@ const Header = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
-
   const handleLogout = async () => {
     const res = await logout();
     const authResult = AuthResults(res);
@@ -21,19 +18,6 @@ const Header = () => {
       alert(`${authResult.title}: ${authResult.errorMessage}`);
     }
   };
-
-  const dropDownMenu = () => {};
-
-  useEffect(() => {
-    function resize() {
-      setWindowWidth(window.innerWidth);
-      setWindowHeight(window.innerHeight);
-      console.log(windowWidth);
-    }
-
-    window.addEventListener('resize', resize.bind(this));
-    resize();
-  });
 
   return (
     <div className="header-root">
