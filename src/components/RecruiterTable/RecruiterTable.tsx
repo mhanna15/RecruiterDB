@@ -3,6 +3,7 @@ import './RecruiterTable.css';
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
 import Dialog from '@mui/material/Dialog';
+import { getAnalytics, logEvent } from 'firebase/analytics';
 import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
@@ -24,6 +25,7 @@ const RecruiterTable = (props: {
   selectedTemplateID: string;
   setSelectedTemplateID: Dispatch<SetStateAction<string>>;
 }) => {
+  const analytics = getAnalytics();
   const { currentUser } = useAuth();
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
@@ -184,11 +186,14 @@ const RecruiterTable = (props: {
                       </select>
                       <button
                         className="list-row-button list-row-button-right"
-                        onClick={() =>
+                        onClick={() => {
+                          logEvent(analytics, 'email_button_clicked', {
+                            with_template: props.selectedTemplateID !== 'No template',
+                          });
                           props.selectedTemplateID !== 'No template'
                             ? emailRecruiter(recruiter)
-                            : window.open('mailto:' + recruiter.email)
-                        }
+                            : window.open('mailto:' + recruiter.email);
+                        }}
                         title="Click to open new email draft"
                       >
                         <EmailIcon disabled={false} />
