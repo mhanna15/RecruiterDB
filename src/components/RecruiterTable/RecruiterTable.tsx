@@ -174,7 +174,7 @@ const RecruiterTable = (props: {
                         onChange={(e) => props.setSelectedTemplateID(e.target.value)}
                         value={props.selectedTemplateID}
                       >
-                        <option value="No template">No Template</option>
+                        <option value="No template">No Email Template</option>
                         {props.templates.map((template) => (
                           <option key={template.id} value={template.id}>
                             {template.name}

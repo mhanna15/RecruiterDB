@@ -43,7 +43,7 @@ const Templates = (props: {
     <div className="page-root">
       <div className="page-header">
         <h1 className="page-header-title" style={{ marginBottom: '1em' }}>
-          My Templates
+          My Email Templates
         </h1>
         <button
           className="submit-button"
@@ -51,7 +51,7 @@ const Templates = (props: {
             setNewTemplatePopUpOpen(true);
           }}
         >
-          New Template
+          New Email Template
         </button>
       </div>
       {props.loading ? (

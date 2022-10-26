@@ -38,7 +38,7 @@ const Header = () => {
                 Home
               </a>
               <a className="dropdown-link" onClick={() => navigate('/templates')}>
-                Templates
+                Email Templates
               </a>
               <a className="dropdown-link" onClick={() => navigate('/faqs')}>
                 FAQs
@@ -54,7 +54,7 @@ const Header = () => {
           Home
         </a>
         <a className="header-link header-link-left" onClick={() => navigate('/templates')}>
-          Templates
+          Email Templates
         </a>
         <a className="header-link header-link-left" onClick={() => navigate('/faqs')}>
           FAQs
