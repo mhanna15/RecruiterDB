@@ -12,16 +12,18 @@ import { RecruiterType, Template } from '../../interface';
 import Landing from '../Landing/Landing';
 
 const Home = (props: {
-  templates: Template[];
-  recruiters: RecruiterType[];
-  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
   loading: boolean;
+  searchQuery: string;
+  templates: Template[];
   fetchMore: () => void;
-  lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
-  lastRecruiter: DocumentData | undefined;
-  moreRecruitersLoading: boolean;
   selectedTemplateID: string;
+  recruiters: RecruiterType[];
+  moreRecruitersLoading: boolean;
+  lastRecruiter: DocumentData | undefined;
+  setSearchQuery: Dispatch<SetStateAction<string>>;
   setSelectedTemplateID: Dispatch<SetStateAction<string>>;
+  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
+  lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const { currentUser } = useAuth();
@@ -46,11 +48,11 @@ const Home = (props: {
           <Loader />
         ) : (
           <>
+            <input onChange={(e) => props.setSearchQuery(e.target.value)} value={props.searchQuery} />
             <RecruiterTable
               recruiters={props.recruiters}
               templates={props.templates}
               setRecruiters={props.setRecruiters}
-              setPopUpOpen={setPopUpOpen}
               selectedTemplateID={props.selectedTemplateID}
               setSelectedTemplateID={props.setSelectedTemplateID}
             />

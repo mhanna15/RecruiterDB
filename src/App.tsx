@@ -38,6 +38,7 @@ const App = () => {
   const [lastRecruiterSeen, setLastRecruiterSeen] = useState<QueryDocumentSnapshot<DocumentData>>();
   const [lastRecruiter, setLastRecruiter] = useState<DocumentData>();
   const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     if (currentUser?.emailVerified === true) {
@@ -161,15 +162,17 @@ const App = () => {
             path="/"
             element={
               <Home
+                fetchMore={fetchMore}
                 templates={templates}
                 recruiters={recruiters}
-                setRecruiters={setRecruiters}
+                searchQuery={searchQuery}
                 loading={recruitersLoading}
-                fetchMore={fetchMore}
+                setRecruiters={setRecruiters}
                 lastRecruiter={lastRecruiter}
+                setSearchQuery={setSearchQuery}
                 lastRecruiterSeen={lastRecruiterSeen}
-                moreRecruitersLoading={moreRecruitersLoading}
                 selectedTemplateID={selectedTemplateID}
+                moreRecruitersLoading={moreRecruitersLoading}
                 setSelectedTemplateID={setSelectedTemplateID}
               />
             }
