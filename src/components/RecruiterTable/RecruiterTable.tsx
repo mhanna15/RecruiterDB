@@ -132,7 +132,7 @@ const RecruiterTable = (props: {
         <table className="rounded-lg">
           <tbody>
             <tr>
-              <th style={{ display: 'flex', justifyContent: 'center' }}>Seen</th>
+              <th style={{ display: 'flex', justifyContent: 'center' }}>New</th>
               <th>Name</th>
               <th>Company</th>
               <th>Title</th>
