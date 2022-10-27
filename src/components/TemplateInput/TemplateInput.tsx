@@ -1,9 +1,10 @@
 import './TemplateInput.css';
 
+import { logEvent } from 'firebase/analytics';
 import { collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
-import { db } from '../../firebase';
+import { analytics, db } from '../../firebase';
 import { emptyTemplate, Template } from '../../interface';
 
 interface TemplateInputProps {
@@ -33,6 +34,7 @@ const TemplateInput = (props: TemplateInputProps) => {
       await setDoc(templateRef, templateToAdd);
       props.setUserTemplates((oldUserTemplates) => [...oldUserTemplates, templateToAdd]);
       props.setPopUpOpen?.(false);
+      logEvent(analytics, 'template_created');
     } catch (e) {
       alert('There was an error, try again');
     }
