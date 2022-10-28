@@ -49,7 +49,8 @@ const Home = (props: {
           Add Recruiter
         </button>
         <input
-          placeholder="Search for a company Ex. Amazon"
+          placeholder="Search for companies"
+          style={{ marginTop: '1em' }}
           onChange={async (e) => {
             props.setLoading(true);
             clearTimeout(timer);

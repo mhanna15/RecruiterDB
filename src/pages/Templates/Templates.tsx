@@ -51,40 +51,48 @@ const Templates = (props: {
             setNewTemplatePopUpOpen(true);
           }}
         >
-          New Email Template
+          Create Email Template
         </button>
       </div>
       {props.loading ? (
         <Loader />
       ) : (
-        props.userTemplates.map((template) => (
-          <div className="list-row" key={template.id}>
-            <div className="list-row-content">
-              <p className="list-row-title">{template.name}</p>
-              <p>{template.template}</p>
-            </div>
-            <div className="list-row-button-group">
-              <button
-                className="list-row-button"
-                onClick={() => {
-                  setEditTemplatePopUpOpen(true);
-                  setTemplateToEdit(template);
-                }}
-              >
-                <EditIcon disabled={false} />
-              </button>
-              <button
-                className="list-row-button list-row-button-right"
-                onClick={() => {
-                  setTemplateToDelete(template);
-                  setDeleteTemplatePopUpOpen(true);
-                }}
-              >
-                <DeleteIcon disabled={false} />
-              </button>
-            </div>
-          </div>
-        ))
+        <>
+          {props.userTemplates.length !== 0 ? (
+            props.userTemplates.map((template) => (
+              <div className="list-row" key={template.id}>
+                <div className="list-row-content">
+                  <p className="list-row-title">{template.name}</p>
+                  <p>{template.template}</p>
+                </div>
+                <div className="list-row-button-group">
+                  <button
+                    className="list-row-button"
+                    onClick={() => {
+                      setEditTemplatePopUpOpen(true);
+                      setTemplateToEdit(template);
+                    }}
+                  >
+                    <EditIcon disabled={false} />
+                  </button>
+                  <button
+                    className="list-row-button list-row-button-right"
+                    onClick={() => {
+                      setTemplateToDelete(template);
+                      setDeleteTemplatePopUpOpen(true);
+                    }}
+                  >
+                    <DeleteIcon disabled={false} />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p style={{ display: 'flex', justifyContent: 'center', marginTop: '2em' }}>
+              You have no templates, create one by clicking Create Email Template
+            </p>
+          )}
+        </>
       )}
 
       <Dialog fullWidth sx={{ width: 1 }} open={newTemplatePopUpOpen} onClose={() => setNewTemplatePopUpOpen(false)}>
