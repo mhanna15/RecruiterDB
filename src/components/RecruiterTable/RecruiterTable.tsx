@@ -1,33 +1,30 @@
 import './RecruiterTable.css';
 
-import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
+import { Hit } from '@algolia/client-search';
 import Dialog from '@mui/material/Dialog';
+import { SearchIndex } from 'algoliasearch';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
-import { emptyRecruiter, RecruiterType, Template } from '../../interface';
+import { RecruiterType, Template } from '../../interface';
 import Form from '../Form/Form';
 import Recruiter from '../Recruiter';
 
 const RecruiterTable = (props: {
+  index: SearchIndex;
   templates: Template[];
   selectedTemplateID: string;
-  recruiters: RecruiterType[];
   setSelectedTemplateID: Dispatch<SetStateAction<string>>;
-  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
+  recruiters: Array<Hit<RecruiterType>>;
+  setRecruiters: Dispatch<SetStateAction<Array<Hit<RecruiterType>>>>;
 }) => {
   const { currentUser } = useAuth();
-  const [copied, setCopied] = useState<boolean>(false);
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
-  const [selectedRecruiter, setSelectedRecruiter] = useState<RecruiterType>(emptyRecruiter);
+  const [selectedRecruiter, setSelectedRecruiter] = useState<Hit<RecruiterType>>({} as Hit<RecruiterType>);
 
   return (
     <div className="list-root">
       <div className="list-container">
-        <Collapse className="list-row-alert" in={copied}>
-          <Alert severity="success">Copied</Alert>
-        </Collapse>
         <table className="rounded-lg">
           <tbody>
             <tr>
@@ -43,15 +40,14 @@ const RecruiterTable = (props: {
               return (
                 <Recruiter
                   key={recruiter.id}
+                  index={props.index}
                   recruiter={recruiter}
-                  setCopied={setCopied}
-                  templates={props.templates}
-                  setPopUpOpen={setPopUpOpen}
-                  recruiters={props.recruiters}
                   setRecruiters={props.setRecruiters}
                   setSelectedRecruiter={setSelectedRecruiter}
+                  templates={props.templates}
                   selectedTemplateID={props.selectedTemplateID}
                   setSelectedTemplateID={props.setSelectedTemplateID}
+                  setPopUpOpen={setPopUpOpen}
                 />
               );
             })}

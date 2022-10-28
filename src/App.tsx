@@ -1,16 +1,9 @@
 import './App.css';
 
-import {
-  collection,
-  DocumentData,
-  getDocs,
-  limit,
-  orderBy,
-  query,
-  QueryDocumentSnapshot,
-  startAfter,
-  where,
-} from 'firebase/firestore';
+import { createInMemoryCache } from '@algolia/cache-in-memory';
+import { Hit } from '@algolia/client-search';
+import algoliasearch from 'algoliasearch';
+import { collection, getDocs, query, where } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
@@ -28,17 +21,50 @@ import Templates from './pages/Templates/Templates';
 
 export const RECRUITERS_PER_PAGE = 5;
 
+const client = algoliasearch('37ALA4V5GX', '716b5d3ec9a5585d268ca3596c06ad62', {
+  responsesCache: createInMemoryCache(),
+  requestsCache: createInMemoryCache({ serializable: false }),
+});
+const index = client.initIndex('recruiters');
+
 const App = () => {
   const { currentUser } = useAuth();
+
   const [templates, setTemplates] = useState<Template[]>([]);
   const [templatesLoading, setTemplatesLoading] = useState<boolean>(false);
-  const [recruiters, setRecruiters] = useState<RecruiterType[]>([]);
+  const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
+
+  const [recruiters, setRecruiters] = useState<Array<Hit<RecruiterType>>>([]);
   const [recruitersLoading, setRecruitersLoading] = useState<boolean>(false);
   const [moreRecruitersLoading, setMoreRecruitersLoading] = useState<boolean>(false);
-  const [lastRecruiterSeen, setLastRecruiterSeen] = useState<QueryDocumentSnapshot<DocumentData>>();
-  const [lastRecruiter, setLastRecruiter] = useState<DocumentData>();
-  const [selectedTemplateID, setSelectedTemplateID] = useState<string>('No template');
+  const [totalRecruiters, setTotalRecruiters] = useState<number>(0);
+
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState<string>('');
+
+  const getRecruitersFromSearch = async (query: string, page: number) => {
+    if (currentUser) {
+      const res = await index.search<RecruiterType>(query, {
+        hitsPerPage: 5,
+        page,
+      });
+      setTotalRecruiters(res.nbHits);
+      if (page === 0) {
+        setRecruiters(res.hits);
+      } else {
+        setRecruiters((oldArray) => [...oldArray, ...res.hits]);
+      }
+      setRecruiters((oldRecruiters) =>
+        oldRecruiters.sort((a, b) => {
+          if (a.seenBy.includes(currentUser.uid) && !b.seenBy.includes(currentUser.uid)) {
+            return 1;
+          } else if (b.seenBy.includes(currentUser.uid) && !a.seenBy.includes(currentUser.uid)) {
+            return -1;
+          } else return a.dateAddedMillis < b.dateAddedMillis ? 1 : -1;
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     if (currentUser?.emailVerified === true) {
@@ -51,47 +77,11 @@ const App = () => {
         });
         setTemplatesLoading(false);
       };
-
       const getRecruiters = async () => {
         setRecruitersLoading(true);
-        // Get last recruiter
-        const lastRecruiterQuery = query(collection(db, 'recruiters'), orderBy('dateAddedMillis'), limit(1));
-        const lastRecruiter = await getDocs(lastRecruiterQuery);
-        lastRecruiter.forEach((recruiter) => setLastRecruiter(recruiter.data()));
-
-        const q = query(collection(db, 'recruiters'), orderBy('dateAddedMillis', 'desc'), limit(RECRUITERS_PER_PAGE));
-        const querySnapshot = await getDocs(q);
-        setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
-        querySnapshot.forEach((doc) => {
-          const recruiter = doc.data();
-          setRecruiters((oldArray) => [
-            ...oldArray,
-            {
-              id: recruiter.id,
-              firstName: recruiter.firstName,
-              lastName: recruiter.lastName,
-              email: recruiter.email,
-              company: recruiter.company,
-              title: recruiter.title,
-              linkedIn: recruiter.linkedIn,
-              seenBy: recruiter.seenBy,
-              dateAddedMillis: recruiter.dateAddedMillis,
-              addedBy: recruiter.addedBy,
-            },
-          ]);
-        });
-        setRecruiters((oldRecruiters) =>
-          oldRecruiters.sort((a, b) => {
-            if (a.seenBy.includes(currentUser.uid) && !b.seenBy.includes(currentUser.uid)) {
-              return 1;
-            } else if (b.seenBy.includes(currentUser.uid) && !a.seenBy.includes(currentUser.uid)) {
-              return -1;
-            } else return a.dateAddedMillis < b.dateAddedMillis ? 1 : -1;
-          })
-        );
+        await getRecruitersFromSearch('', 0);
         setRecruitersLoading(false);
       };
-
       getRecruiters().catch((e) => {
         alert('There was an error, try again');
         console.log(e);
@@ -106,49 +96,8 @@ const App = () => {
   const fetchMore = async () => {
     if (currentUser) {
       setMoreRecruitersLoading(true);
-      const q = query(
-        collection(db, 'recruiters'),
-        orderBy('dateAddedMillis', 'desc'),
-        limit(RECRUITERS_PER_PAGE),
-        startAfter(lastRecruiterSeen)
-      );
-      const querySnapshot = await getDocs(q);
-      setLastRecruiterSeen(querySnapshot.docs[querySnapshot.docs.length - 1]);
-      if (querySnapshot.docs[querySnapshot.docs.length - 1] === undefined) {
-        setMoreRecruitersLoading(false);
-        alert('No more recruiters for now!');
-        return;
-      }
-      querySnapshot.forEach((doc) => {
-        const recruiter = doc.data();
-        setRecruiters((oldArray) => [
-          ...oldArray,
-          {
-            id: recruiter.id,
-            firstName: recruiter.firstName,
-            lastName: recruiter.lastName,
-            email: recruiter.email,
-            company: recruiter.company,
-            title: recruiter.title,
-            linkedIn: recruiter.linkedIn,
-            seenBy: recruiter.seenBy,
-            dateAddedMillis: recruiter.dateAddedMillis,
-            addedBy: recruiter.addedBy,
-          },
-        ]);
-      });
-      setRecruiters((oldRecruiters) =>
-        oldRecruiters.sort((a, b) => {
-          const aIncludesUser = a.seenBy.includes(currentUser.uid);
-          const bIncludesUser = b.seenBy.includes(currentUser.uid);
-
-          if (aIncludesUser && !bIncludesUser) {
-            return 1;
-          } else if (bIncludesUser && !aIncludesUser) {
-            return -1;
-          } else return a.dateAddedMillis < b.dateAddedMillis ? 1 : -1;
-        })
-      );
+      await getRecruitersFromSearch(searchQuery, currentPage + 1);
+      setCurrentPage(currentPage + 1);
       setMoreRecruitersLoading(false);
     }
   };
@@ -162,18 +111,20 @@ const App = () => {
             path="/"
             element={
               <Home
+              index={index}
                 fetchMore={fetchMore}
                 templates={templates}
-                recruiters={recruiters}
-                searchQuery={searchQuery}
-                loading={recruitersLoading}
-                setRecruiters={setRecruiters}
-                lastRecruiter={lastRecruiter}
-                setSearchQuery={setSearchQuery}
-                lastRecruiterSeen={lastRecruiterSeen}
                 selectedTemplateID={selectedTemplateID}
-                moreRecruitersLoading={moreRecruitersLoading}
                 setSelectedTemplateID={setSelectedTemplateID}
+                loading={recruitersLoading}
+                recruiters={recruiters}
+                setRecruiters={setRecruiters}
+                moreRecruitersLoading={moreRecruitersLoading}
+                setLoading={setRecruitersLoading}
+                totalRecruiters={totalRecruiters}
+                setSearchQuery={setSearchQuery}
+                setCurrentPage={setCurrentPage}
+                getRecruitersFromSearch={getRecruitersFromSearch}
               />
             }
           />

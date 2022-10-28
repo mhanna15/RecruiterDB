@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@algolia/client-search": "^4.14.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
     "@mui/icons-material": "^5.10.6",
@@ -14,6 +15,7 @@
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
+    "algoliasearch": "^4.14.2",
     "firebase": "^9.10.0",
     "firebase-tools": "^11.14.1",
     "lodash": "^4.17.21",

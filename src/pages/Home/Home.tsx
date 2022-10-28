@@ -1,7 +1,8 @@
 import './Home.css';
 
+import { Hit } from '@algolia/client-search';
 import Dialog from '@mui/material/Dialog';
-import { DocumentData, QueryDocumentSnapshot } from 'firebase/firestore';
+import { SearchIndex } from 'algoliasearch';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
@@ -12,21 +13,24 @@ import { RecruiterType, Template } from '../../interface';
 import Landing from '../Landing/Landing';
 
 const Home = (props: {
-  loading: boolean;
-  searchQuery: string;
-  templates: Template[];
+  index: SearchIndex;
   fetchMore: () => void;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  templates: Template[];
   selectedTemplateID: string;
-  recruiters: RecruiterType[];
-  moreRecruitersLoading: boolean;
-  lastRecruiter: DocumentData | undefined;
-  setSearchQuery: Dispatch<SetStateAction<string>>;
   setSelectedTemplateID: Dispatch<SetStateAction<string>>;
-  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
-  lastRecruiterSeen: QueryDocumentSnapshot<DocumentData> | undefined;
+  recruiters: Array<Hit<RecruiterType>>;
+  setRecruiters: Dispatch<SetStateAction<Array<Hit<RecruiterType>>>>;
+  moreRecruitersLoading: boolean;
+  totalRecruiters: number;
+  getRecruitersFromSearch: (query: string, page: number) => Promise<void>;
+  setSearchQuery: Dispatch<SetStateAction<string>>;
+  setCurrentPage: Dispatch<SetStateAction<number>>;
 }) => {
   const [popUpOpen, setPopUpOpen] = useState<boolean>(false);
   const { currentUser } = useAuth();
+  const [timer, setTimer] = useState<NodeJS.Timeout>();
 
   return currentUser?.emailVerified ? (
     <div className="page-root">
@@ -38,21 +42,35 @@ const Home = (props: {
         </div>
         <button
           className="submit-button home-submit-button"
-          onClick={(e) => {
+          onClick={() => {
             setPopUpOpen(true);
           }}
         >
           Add Recruiter
         </button>
+        <input
+          placeholder="Search for a company Ex. Amazon"
+          onChange={async (e) => {
+            props.setLoading(true);
+            clearTimeout(timer);
+            const newTimer = setTimeout(async () => {
+              props.setCurrentPage(0);
+              props.setSearchQuery(e.target.value);
+              await props.getRecruitersFromSearch(e.target.value, 0);
+              props.setLoading(false);
+            }, 300);
+            setTimer(newTimer);
+          }}
+        />
         {props.loading ? (
           <Loader />
         ) : (
           <>
-            <input onChange={(e) => props.setSearchQuery(e.target.value)} value={props.searchQuery} />
             <RecruiterTable
+              index={props.index}
               recruiters={props.recruiters}
-              templates={props.templates}
               setRecruiters={props.setRecruiters}
+              templates={props.templates}
               selectedTemplateID={props.selectedTemplateID}
               setSelectedTemplateID={props.setSelectedTemplateID}
             />
@@ -60,7 +78,7 @@ const Home = (props: {
               <div className="loader" />
             ) : (
               <>
-                {props.recruiters.find((recruiter) => recruiter.id === props.lastRecruiter?.id) === undefined ? (
+                {props.recruiters.length !== props.totalRecruiters ? (
                   <button className="load-more" onClick={() => props.fetchMore()}>
                     Load More
                   </button>

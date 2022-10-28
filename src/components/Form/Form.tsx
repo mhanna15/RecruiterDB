@@ -1,23 +1,24 @@
 import './Form.css';
 
+import { Hit } from '@algolia/client-search';
 import { collection, doc, increment, setDoc, updateDoc } from 'firebase/firestore';
 import _ from 'lodash';
 import React, { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { useAuth } from '../../auth/AuthContext';
 import { db } from '../../firebase';
-import { emptyRecruiter, RecruiterType } from '../../interface';
+import { RecruiterType } from '../../interface';
 
 interface FormProps {
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
-  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
-  existingRecruiter?: RecruiterType;
+  setRecruiters: Dispatch<SetStateAction<Array<Hit<RecruiterType>>>>;
+  existingRecruiter?: Hit<RecruiterType>;
 }
 
 const Form = (props: FormProps) => {
   const { currentUser } = useAuth();
-  const [recruiterData, setRecruiterData] = useState<RecruiterType>(
-    props.existingRecruiter ? props.existingRecruiter : emptyRecruiter
+  const [recruiterData, setRecruiterData] = useState<Hit<RecruiterType>>(
+    props.existingRecruiter ? props.existingRecruiter : ({} as Hit<RecruiterType>)
   );
   const [errors, setErrors] = useState({ email: true, linkedIn: true });
   const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
@@ -69,7 +70,7 @@ const Form = (props: FormProps) => {
   };
 
   const clearForm = () => {
-    setRecruiterData(emptyRecruiter);
+    setRecruiterData({} as Hit<RecruiterType>);
   };
 
   const handleAddNewRecruiter = async (e: any) => {

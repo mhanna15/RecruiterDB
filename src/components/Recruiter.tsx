@@ -1,3 +1,5 @@
+import { Hit } from '@algolia/client-search';
+import { SearchIndex } from 'algoliasearch';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction } from 'react';
@@ -11,15 +13,14 @@ import { db } from '../firebase';
 import { RecruiterType, Template } from '../interface';
 
 const Recruiter = (props: {
-  templates: Template[];
-  recruiter: RecruiterType;
-  recruiters: RecruiterType[];
-  selectedTemplateID: string;
-  setCopied: Dispatch<SetStateAction<boolean>>;
   setPopUpOpen: Dispatch<SetStateAction<boolean>>;
+  index: SearchIndex;
+  templates: Template[];
+  selectedTemplateID: string;
   setSelectedTemplateID: Dispatch<SetStateAction<string>>;
-  setRecruiters: Dispatch<SetStateAction<RecruiterType[]>>;
-  setSelectedRecruiter: Dispatch<SetStateAction<RecruiterType>>;
+  recruiter: Hit<RecruiterType>;
+  setRecruiters: Dispatch<SetStateAction<Array<Hit<RecruiterType>>>>;
+  setSelectedRecruiter: Dispatch<SetStateAction<Hit<RecruiterType>>>;
 }) => {
   const { currentUser } = useAuth();
   const analytics = getAnalytics();
@@ -44,7 +45,7 @@ const Recruiter = (props: {
     if (currentUser?.role === 'admin') {
       try {
         await deleteDoc(doc(db, 'recruiters', recruiterId));
-        props.setRecruiters(props.recruiters.filter((recruiter) => recruiter.id !== recruiterId));
+        props.setRecruiters((oldArray) => oldArray.filter((recruiter) => recruiter.id !== recruiterId));
         const userRef = doc(db, 'users', currentUser.uid);
         await updateDoc(userRef, { recruitersAdded: increment(-1) });
       } catch (e) {
@@ -53,7 +54,7 @@ const Recruiter = (props: {
     }
   };
 
-  const markSeen = async (recruiter: RecruiterType) => {
+  const markSeen = async (recruiter: Hit<RecruiterType>) => {
     if (currentUser?.emailVerified) {
       try {
         const recruiterRef = doc(db, 'recruiters', recruiter.id);
@@ -70,13 +71,17 @@ const Recruiter = (props: {
             return recruiterI;
           })
         );
+        const tempRecruiter = { objectID: recruiter.objectID, seenBy: recruiter.seenBy };
+        tempRecruiter.seenBy.push(currentUser.uid);
+        await props.index.partialUpdateObject(tempRecruiter);
       } catch (e) {
+        console.log(e);
         alert('There was an error, try again');
       }
     }
   };
 
-  const markUnseen = async (recruiter: RecruiterType) => {
+  const markUnseen = async (recruiter: Hit<RecruiterType>) => {
     if (currentUser?.emailVerified) {
       try {
         const recruiterRef = doc(db, 'recruiters', recruiter.id);
@@ -95,6 +100,9 @@ const Recruiter = (props: {
             return recruiterI;
           })
         );
+        const tempRecruiter = { objectID: recruiter.objectID, seenBy: recruiter.seenBy };
+        tempRecruiter.seenBy = tempRecruiter.seenBy.filter((id) => id !== currentUser.uid);
+        await props.index.partialUpdateObject(tempRecruiter);
       } catch (e) {
         alert('There was an error, try again');
       }
