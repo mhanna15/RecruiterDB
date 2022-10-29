@@ -71,9 +71,6 @@ const Recruiter = (props: {
             return recruiterI;
           })
         );
-        const tempRecruiter = { objectID: recruiter.objectID, seenBy: recruiter.seenBy };
-        tempRecruiter.seenBy.push(currentUser.uid);
-        await props.index.partialUpdateObject(tempRecruiter);
       } catch (e) {
         console.log(e);
         alert('There was an error, try again');
@@ -100,9 +97,6 @@ const Recruiter = (props: {
             return recruiterI;
           })
         );
-        const tempRecruiter = { objectID: recruiter.objectID, seenBy: recruiter.seenBy };
-        tempRecruiter.seenBy = tempRecruiter.seenBy.filter((id) => id !== currentUser.uid);
-        await props.index.partialUpdateObject(tempRecruiter);
       } catch (e) {
         alert('There was an error, try again');
       }

@@ -180,6 +180,12 @@ const Form = (props: FormProps) => {
           recruiterData.company === '' ||
           recruiterData.title === '' ||
           recruiterData.linkedIn === '' ||
+          recruiterData.firstName === undefined ||
+          recruiterData.lastName === undefined ||
+          recruiterData.email === undefined ||
+          recruiterData.company === undefined ||
+          recruiterData.title === undefined ||
+          recruiterData.linkedIn === undefined ||
           _.isEqual(props.existingRecruiter, recruiterData) ||
           buttonDisabled
         }
