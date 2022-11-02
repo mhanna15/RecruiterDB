@@ -32,6 +32,11 @@ const Home = (props: {
   const { currentUser } = useAuth();
   const [timer, setTimer] = useState<NodeJS.Timeout>();
 
+  const openURL = (url: string) => {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  };
+
   return currentUser?.emailVerified ? (
     <div className="page-root">
       <div className="page-content">
@@ -43,7 +48,7 @@ const Home = (props: {
         <button
           className="submit-button home-submit-button"
           onClick={() => {
-            setPopUpOpen(true);
+            currentUser.role === 'admin' ? setPopUpOpen(true) : openURL('https://forms.gle/jRgrnYoAqnCrXovp6');
           }}
         >
           Add Recruiter
