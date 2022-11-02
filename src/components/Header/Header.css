@@ -47,10 +47,41 @@
 
 .header-root {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  align-items: space-between;
   margin-top: 2em;
   margin-bottom: 2em;
+}
+
+.header-notification {
+  display: flex;
+  padding: 0.75rem;
+  margin-bottom: 2rem;
+  color: white;
+  align-items: center;
+  font-size: 1.25em;
+  /* box-shadow: 0 0px 10px 0 rgb(0 0 0 / 20%); */
+  justify-content: center;
+  background-image: linear-gradient(to right, #7c6cff, #6ca5ff, #6cefff);
+}
+
+.header-button {
+  margin-left: 1rem;
+  padding: 0.5rem;
+  background: none;
+  color: white;
+  font-weight: bold;
+  border-color: white;
+}
+
+.header-exit-button {
+  display: flex;
+  justify-self: end;
+}
+
+.header-content {
+  display: flex;
 }
 
 .header-title {
