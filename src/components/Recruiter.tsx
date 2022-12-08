@@ -3,7 +3,10 @@ import { SearchIndex } from 'algoliasearch';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction } from 'react';
+
+// analytics
 import mixpanel from 'mixpanel-browser';
+import config from '../config';
 
 import DeleteIcon from '../assets/DeleteIcon/DeleteIcon';
 import EditIcon from '../assets/EditIcon/EditIcon';
@@ -25,7 +28,7 @@ const Recruiter = (props: {
 }) => {
   const { currentUser } = useAuth();
   const analytics = getAnalytics();
-  mixpanel.init('a3fb221d891a0f400ca88c2ac1605d3a', { debug: true });
+  mixpanel.init(config.apiKey);
 
   const openURL = (url: string) => {
     mixpanel.track('LinkedIn Clicked', {});
@@ -34,8 +37,15 @@ const Recruiter = (props: {
   };
 
   const emailRecruiter = (recruiter: RecruiterType) => {
-    mixpanel.track('Email', { template: props.selectedTemplateID, recruiter_contacted: recruiter });
-
+    mixpanel.track('Email', {
+      template: props.selectedTemplateID,
+      recruiter_contacted: {
+        id: recruiter.id,
+        email: recruiter.email,
+        firstName: recruiter.firstName,
+        lastName: recruiter.lastName,
+      },
+    });
     if (props.selectedTemplateID !== 'No template') {
       const selectedTemplate = props.templates.find((template) => template.id === props.selectedTemplateID);
       if (selectedTemplate) {

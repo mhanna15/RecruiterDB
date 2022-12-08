@@ -4,6 +4,10 @@ import Dialog from '@mui/material/Dialog';
 import { deleteDoc, doc } from 'firebase/firestore';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 
+// analytics
+import mixpanel from 'mixpanel-browser';
+import config from '../../config';
+
 import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
 import EditIcon from '../../assets/EditIcon/EditIcon';
 import { useAuth } from '../../auth/AuthContext';
@@ -26,6 +30,7 @@ const Templates = (props: {
   const [templateToDelete, setTemplateToDelete] = useState<Template>();
 
   const { currentUser } = useAuth();
+  mixpanel.init(config.apiKey);
 
   const deleteTemplate = async (template: Template) => {
     setDeleteButtonDisabled(true);
@@ -48,6 +53,7 @@ const Templates = (props: {
         <button
           className="submit-button"
           onClick={() => {
+            mixpanel.track('Create New Template', {});
             setNewTemplatePopUpOpen(true);
           }}
         >
