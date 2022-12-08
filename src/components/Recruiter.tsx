@@ -169,7 +169,12 @@ const Recruiter = (props: {
         </div>
       </td>
       <td>
-        <button className="list-row-button" onClick={() => {}}>
+        <button
+          className="list-row-button"
+          onClick={() => {
+            openURL(props.recruiter.linkedIn);
+          }}
+        >
           <LinkedInIcon disabled={false} />
         </button>
       </td>
