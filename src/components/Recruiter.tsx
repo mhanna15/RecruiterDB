@@ -2,17 +2,16 @@ import { Hit } from '@algolia/client-search';
 import { SearchIndex } from 'algoliasearch';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
-import React, { Dispatch, SetStateAction } from 'react';
-
 // analytics
 import mixpanel from 'mixpanel-browser';
-import config from '../config';
+import React, { Dispatch, SetStateAction } from 'react';
 
 import DeleteIcon from '../assets/DeleteIcon/DeleteIcon';
 import EditIcon from '../assets/EditIcon/EditIcon';
 import EmailIcon from '../assets/EmailIcon/EmailIcon';
 import LinkedInIcon from '../assets/LinkedInIcon/LinkedInIcon';
 import { useAuth } from '../auth/AuthContext';
+import config from '../config';
 import { db } from '../firebase';
 import { RecruiterType, Template } from '../interface';
 

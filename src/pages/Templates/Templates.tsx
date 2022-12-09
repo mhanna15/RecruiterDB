@@ -2,17 +2,16 @@ import './Templates.css';
 
 import Dialog from '@mui/material/Dialog';
 import { deleteDoc, doc } from 'firebase/firestore';
-import React, { Dispatch, SetStateAction, useState } from 'react';
-
 // analytics
 import mixpanel from 'mixpanel-browser';
-import config from '../../config';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 
 import DeleteIcon from '../../assets/DeleteIcon/DeleteIcon';
 import EditIcon from '../../assets/EditIcon/EditIcon';
 import { useAuth } from '../../auth/AuthContext';
 import Loader from '../../components/Loader/Loader';
 import TemplateInput from '../../components/TemplateInput/TemplateInput';
+import config from '../../config';
 import { db } from '../../firebase';
 import { Template } from '../../interface';
 
