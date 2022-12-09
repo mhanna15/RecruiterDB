@@ -28,7 +28,7 @@ const Recruiter = (props: {
 }) => {
   const { currentUser } = useAuth();
   const analytics = getAnalytics();
-  mixpanel.init(config.apiKey);
+  mixpanel.init('a3fb221d891a0f400ca88c2ac1605d3a');
 
   const openURL = (url: string) => {
     mixpanel.track('LinkedIn Clicked', {});

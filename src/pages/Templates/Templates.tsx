@@ -30,7 +30,7 @@ const Templates = (props: {
   const [templateToDelete, setTemplateToDelete] = useState<Template>();
 
   const { currentUser } = useAuth();
-  mixpanel.init(config.apiKey);
+  mixpanel.init('a3fb221d891a0f400ca88c2ac1605d3a');
 
   const deleteTemplate = async (template: Template) => {
     setDeleteButtonDisabled(true);
