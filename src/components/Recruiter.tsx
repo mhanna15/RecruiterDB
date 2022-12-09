@@ -27,11 +27,10 @@ const Recruiter = (props: {
   setSelectedRecruiter: Dispatch<SetStateAction<Hit<RecruiterType>>>;
 }) => {
   const { currentUser } = useAuth();
-  const analytics = getAnalytics();
   mixpanel.init('a3fb221d891a0f400ca88c2ac1605d3a');
 
   const openURL = (url: string) => {
-    mixpanel.track('LinkedIn Clicked', {});
+    mixpanel.track('LinkedIn Clicked', { userID: currentUser?.uid, userEmail: currentUser?.email });
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   };
@@ -39,6 +38,8 @@ const Recruiter = (props: {
   const emailRecruiter = (recruiter: RecruiterType) => {
     mixpanel.track('Email', {
       template: props.selectedTemplateID,
+      userID: currentUser?.uid,
+      userEmail: currentUser?.email,
       recruiter_contacted: {
         id: recruiter.id,
         email: recruiter.email,

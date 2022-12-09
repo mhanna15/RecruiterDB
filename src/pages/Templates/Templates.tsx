@@ -53,7 +53,7 @@ const Templates = (props: {
         <button
           className="submit-button"
           onClick={() => {
-            mixpanel.track('Create New Template', {});
+            mixpanel.track('Create New Template', { userID: currentUser?.uid, userEmail: currentUser?.email });
             setNewTemplatePopUpOpen(true);
           }}
         >
