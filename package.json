@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
+    "@types/mixpanel": "^2.14.4",
     "@types/node": "^16.11.59",
     "@types/react": "^18.0.20",
     "@types/react-dom": "^18.0.6",
@@ -19,6 +20,7 @@
     "firebase": "^9.10.0",
     "firebase-tools": "^11.14.1",
     "lodash": "^4.17.21",
+    "mixpanel-browser": "^2.45.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.0",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.185",
+    "@types/mixpanel-browser": "^2.38.0",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",

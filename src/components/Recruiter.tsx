@@ -2,6 +2,8 @@ import { Hit } from '@algolia/client-search';
 import { SearchIndex } from 'algoliasearch';
 import { getAnalytics, logEvent } from 'firebase/analytics';
 import { arrayRemove, arrayUnion, deleteDoc, doc, increment, updateDoc } from 'firebase/firestore';
+// analytics
+import mixpanel from 'mixpanel-browser';
 import React, { Dispatch, SetStateAction } from 'react';
 
 import DeleteIcon from '../assets/DeleteIcon/DeleteIcon';
@@ -9,6 +11,7 @@ import EditIcon from '../assets/EditIcon/EditIcon';
 import EmailIcon from '../assets/EmailIcon/EmailIcon';
 import LinkedInIcon from '../assets/LinkedInIcon/LinkedInIcon';
 import { useAuth } from '../auth/AuthContext';
+import config from '../config';
 import { db } from '../firebase';
 import { RecruiterType, Template } from '../interface';
 
@@ -24,20 +27,35 @@ const Recruiter = (props: {
 }) => {
   const { currentUser } = useAuth();
   const analytics = getAnalytics();
+  mixpanel.init(config.apiKey);
 
   const openURL = (url: string) => {
+    mixpanel.track('LinkedIn Clicked', {});
     const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
     if (newWindow) newWindow.opener = null;
   };
 
   const emailRecruiter = (recruiter: RecruiterType) => {
-    const selectedTemplate = props.templates.find((template) => template.id === props.selectedTemplateID);
-    if (selectedTemplate) {
-      const emailBody = selectedTemplate.template
-        .replaceAll('{recruiter}', recruiter.firstName)
-        .replaceAll('{company}', recruiter.company)
-        .replaceAll('\n', '%0d%0A');
-      window.open('mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody);
+    mixpanel.track('Email', {
+      template: props.selectedTemplateID,
+      recruiter_contacted: {
+        id: recruiter.id,
+        email: recruiter.email,
+        firstName: recruiter.firstName,
+        lastName: recruiter.lastName,
+      },
+    });
+    if (props.selectedTemplateID !== 'No template') {
+      const selectedTemplate = props.templates.find((template) => template.id === props.selectedTemplateID);
+      if (selectedTemplate) {
+        const emailBody = selectedTemplate.template
+          .replaceAll('{recruiter}', recruiter.firstName)
+          .replaceAll('{company}', recruiter.company)
+          .replaceAll('\n', '%0d%0A');
+        window.open('mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody);
+      }
+    } else {
+      window.open('mailto:' + props.recruiter.email);
     }
   };
 
@@ -141,12 +159,7 @@ const Recruiter = (props: {
           <button
             className="list-row-button list-row-button-right"
             onClick={() => {
-              logEvent(analytics, 'email_button_clicked', {
-                with_template: props.selectedTemplateID !== 'No template',
-              });
-              props.selectedTemplateID !== 'No template'
-                ? emailRecruiter(props.recruiter)
-                : window.open('mailto:' + props.recruiter.email);
+              emailRecruiter(props.recruiter);
             }}
             title="Click to open new email draft"
           >
@@ -155,7 +168,12 @@ const Recruiter = (props: {
         </div>
       </td>
       <td>
-        <button className="list-row-button" onClick={() => openURL(props.recruiter.linkedIn)}>
+        <button
+          className="list-row-button"
+          onClick={() => {
+            openURL(props.recruiter.linkedIn);
+          }}
+        >
           <LinkedInIcon disabled={false} />
         </button>
       </td>
