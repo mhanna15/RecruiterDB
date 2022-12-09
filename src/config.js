@@ -1,5 +1,5 @@
 const config = {
-  apiKey: process.env.REACT_APP_API_KEY || '',
+  apiKey: 'a3fb221d891a0f400ca88c2ac1605d3a',
 };
 
 export default config;
