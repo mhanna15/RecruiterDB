@@ -35,7 +35,7 @@ const Recruiter = (props: {
     if (newWindow) newWindow.opener = null;
   };
 
-  const emailRecruiter = (recruiter: RecruiterType) => {
+  const emailRecruiter = async (recruiter: RecruiterType) => {
     mixpanel.track('Email', {
       template: props.selectedTemplateID,
       userID: currentUser?.uid,
@@ -57,6 +57,7 @@ const Recruiter = (props: {
         window.open('mailto:' + recruiter.email + '?subject=' + selectedTemplate.name + '&body=' + emailBody);
       }
     } else {
+      await markUnseen(props.recruiter);
       window.open('mailto:' + props.recruiter.email);
     }
   };
